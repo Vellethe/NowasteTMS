@@ -1,0 +1,6 @@
+@NowasteReactTMS.Server_HostAddress = http://localhost:5227
+
+GET {{NowasteReactTMS.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
