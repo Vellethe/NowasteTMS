@@ -1,3 +1,5 @@
+using WMan.Data.ConnectionFactory;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var connectionString = builder.Configuration.GetConnectionString("NowasteTMS");
+builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
+builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
+
 
 var app = builder.Build();
 
