@@ -14,8 +14,14 @@ builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(conne
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 builder.Services.AddSingleton<IOrderLineRepository, OrderLineRepository>();
-
-
+builder.Services.AddSingleton<IAgentRepository, AgentRepository>();
+builder.Services.AddSingleton<ITransportOrderRepository, TransportOrderRepository>();
+builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
+builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
+//builder.S
+//builder.S
+//builder.S
+//builder.S
 
 
 var app = builder.Build();
