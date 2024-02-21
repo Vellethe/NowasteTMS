@@ -9,8 +9,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("NowasteTMS");
+// All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
+builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IOrderLineRepository, OrderLineRepository>();
+
+
 
 
 var app = builder.Build();
