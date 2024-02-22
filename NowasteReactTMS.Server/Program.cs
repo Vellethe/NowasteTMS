@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using WMan.Data.ConnectionFactory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,14 +15,18 @@ builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(conne
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 builder.Services.AddSingleton<IOrderLineRepository, OrderLineRepository>();
-builder.Services.AddSingleton<IAgentRepository, AgentRepository>();
 builder.Services.AddSingleton<ITransportOrderRepository, TransportOrderRepository>();
+builder.Services.AddSingleton<ITransportOrderServiceRepository, TransportOrderServiceRepository>();
+builder.Services.AddSingleton<ITransportZonePriceRepository, TransportZonePriceRepository>();
+builder.Services.AddSingleton<ITransportZoneRepository, TransportZoneRepository>();
+builder.Services.AddSingleton<IAgentRepository, AgentRepository>();
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
 builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
-//builder.S
-//builder.S
-//builder.S
-//builder.S
+builder.Services.AddSingleton<IContactInformationRepository, ContactInformationRepository>();
+builder.Services.AddSingleton<IReferenceRepository, ReferenceRepository>();
+builder.Services.AddSingleton<INotificationsRepository, NotificationsRepository>();
+builder.Services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 
 
 var app = builder.Build();
