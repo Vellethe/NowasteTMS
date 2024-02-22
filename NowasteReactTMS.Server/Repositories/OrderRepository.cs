@@ -9,4 +9,9 @@ public class OrderRepository: IOrderRepository
     {
         this.connectionFactory = connectionFactory;
     }
+
+    public Task<Order> GetOrder(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 }

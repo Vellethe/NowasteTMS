@@ -1,5 +1,6 @@
-using Microsoft.Extensions.Configuration;
 using WMan.Data.ConnectionFactory;
+
+using IConnectionFactory = WMan.Data.ConnectionFactory.IConnectionFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 

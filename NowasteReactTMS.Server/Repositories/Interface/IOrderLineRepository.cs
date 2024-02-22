@@ -1,3 +1,6 @@
-﻿public interface IOrderLineRepository
+﻿using NowasteTms.Model;
+
+public interface IOrderLineRepository
 {
+    Task<Order> GetOrder(Guid Id);
 }

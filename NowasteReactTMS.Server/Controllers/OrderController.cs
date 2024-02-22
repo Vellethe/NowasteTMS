@@ -4,7 +4,8 @@ using NowasteTms.Model;
 
 namespace NowasteReactTMS.Server.Controllers
 {
-    [Area("Transpot")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class OrderController : Controller
     {
         // Keep names synchronized with OrderRepository.columnMapping (project nowaste.transport), as well in OrderController.SearchOrders().
@@ -81,70 +82,11 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            var allOrders = await GetAllOrdersAsync();
-
-            return Ok(allOrders);
+            return await GetOrders();
         }
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SingleOrderViewModel spo)
-        {
-            try
-            {
-                var user = await _userManager.GetUserAsync(User);
 
-                var lineNumber = 1;
 
-                // Mapping SingleOrderViewModel to OrderViewModel
-                var order = new OrderViewModel
-                {
-                    OrderPK = spo.OrderPK,
-                    OrderId = spo.OrderId,
-                    HandlerID = spo.HandlerID,
-                    Type = OrderType.PurchaseOrder,
-                    Origin = OrderOrigin.Portal,
-                    Status = OrderStatus.Imported, // spo.Status,
-                    CollectionDate = spo.CollectionDate,
-                    DeliveryDate = spo.DeliveryDate,
-                    SupplierPK = spo.SupplierPK,
-                    CustomerPK = spo.CustomerPK,
-                    Comment = spo.Comment,
-                    InternalComment = spo.InternalComment,
-                    UpdatedByUserId = user.Id,
-                    Email = user.Email,
-                    TransportBooking = spo.TransportBooking,
-                    Lines = spo.Lines.Select(x => new OrderLineViewModel
-                    {
-                        OrderLinePK = Guid.NewGuid(),
-                        OrderPK = spo.OrderPK,
-                        LineNumber = lineNumber++,
-                        ItemPK = x.Item?.ItemPK,
-                        ItemQty = x.ItemQty,
-                        PalletTypeId = x.PalletTypeId,
-                        PalletQty = x.PalletQty,
-                        ItemName = x.Item?.Name
-                    }).ToList()
-                };
-
-                // Calling the backend service method to add the order
-                var result = await _orderService.AddOrderAsync(order);
-
-                // Checking the result and returning appropriate response
-                if (result.Success)
-                {
-                    return Ok(new { message = "Order created successfully" });
-                }
-                else
-                {
-                    return BadRequest(new { message = $"Failed to create order: {result.ErrorMessage}" });
-                }
-            }
-            catch (Exception ex)
-            {
-                // Return error message
-                return BadRequest(new { message = $"Failed to create order: {ex.Message}" });
-            }
-        }
     }
 }
