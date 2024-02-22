@@ -1,3 +1,3 @@
-﻿internal interface IContactInformationRepository
+﻿public interface IContactInformationRepository
 {
 }

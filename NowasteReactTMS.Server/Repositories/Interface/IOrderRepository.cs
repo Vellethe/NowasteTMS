@@ -1,3 +1,3 @@
-﻿internal interface IOrderRepository
+﻿public interface IOrderRepository
 {
 }

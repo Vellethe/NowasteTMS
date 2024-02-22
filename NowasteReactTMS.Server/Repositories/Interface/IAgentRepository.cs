@@ -1,3 +1,3 @@
-﻿internal interface IAgentRepository
+﻿public interface IAgentRepository
 {
 }

@@ -1,3 +1,3 @@
-﻿internal interface IReferenceRepository
+﻿public interface IReferenceRepository
 {
 }

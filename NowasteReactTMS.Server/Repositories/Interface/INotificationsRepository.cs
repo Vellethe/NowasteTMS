@@ -1,3 +1,3 @@
-﻿internal interface INotificationsRepository
+﻿public interface INotificationsRepository
 {
 }

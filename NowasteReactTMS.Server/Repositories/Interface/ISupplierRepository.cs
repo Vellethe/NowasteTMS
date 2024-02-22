@@ -1,3 +1,3 @@
-﻿internal interface ISupplierRepository
+﻿public interface ISupplierRepository
 {
 }

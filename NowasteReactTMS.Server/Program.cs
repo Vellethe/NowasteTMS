@@ -27,6 +27,8 @@ builder.Services.AddSingleton<IReferenceRepository, ReferenceRepository>();
 builder.Services.AddSingleton<INotificationsRepository, NotificationsRepository>();
 builder.Services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddSingleton<IItemRepository, ItemRepository>();
+builder.Services.AddSingleton<IPalletInventoryRepository, PalletInventoryRepository>();
+
 
 
 var app = builder.Build();

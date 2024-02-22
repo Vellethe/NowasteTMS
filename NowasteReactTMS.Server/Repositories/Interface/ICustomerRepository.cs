@@ -1,3 +1,3 @@
-﻿internal interface ICustomerRepository
+﻿public interface ICustomerRepository
 {
 }

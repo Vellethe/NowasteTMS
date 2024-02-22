@@ -1,3 +1,3 @@
-﻿internal interface ITransportOrderServiceRepository
+﻿public interface ITransportOrderServiceRepository
 {
 }

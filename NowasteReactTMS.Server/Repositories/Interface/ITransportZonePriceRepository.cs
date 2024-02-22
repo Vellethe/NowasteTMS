@@ -1,3 +1,3 @@
-﻿internal interface ITransportZonePriceRepository
+﻿public interface ITransportZonePriceRepository
 {
 }

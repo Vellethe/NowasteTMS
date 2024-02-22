@@ -1,3 +1,3 @@
-﻿internal interface ICurrencyRepository
+﻿public interface ICurrencyRepository
 {
 }
