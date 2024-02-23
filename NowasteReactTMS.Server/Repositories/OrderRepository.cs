@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using NowasteTms.Model;
 using WMan.Data.ConnectionFactory;
-public class OrderRepository: IOrderRepository
+public class OrderRepository : IOrderRepository
 {
     private readonly IConnectionFactory connectionFactory;
 
@@ -10,7 +10,12 @@ public class OrderRepository: IOrderRepository
         this.connectionFactory = connectionFactory;
     }
 
-    public Task<Order> GetOrder(Guid id)
+    Task<List<Order>> IOrderRepository.GetOrderAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Order>> GetAllOrderAsync()
     {
         throw new NotImplementedException();
     }

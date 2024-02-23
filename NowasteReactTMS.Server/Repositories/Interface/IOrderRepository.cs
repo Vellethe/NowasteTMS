@@ -2,5 +2,6 @@
 
 public interface IOrderRepository
 {
-    Task<Order> GetOrder(Guid id);
+    Task<List<Order>> GetOrderAsync(Guid id);
+    Task<List<Order>> GetAllOrderAsync();
 }

@@ -29,6 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultTokenProviders()
                 .AddSignInManager<NowasteSignInManager<ApplicationUser>>();
+
 // All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();

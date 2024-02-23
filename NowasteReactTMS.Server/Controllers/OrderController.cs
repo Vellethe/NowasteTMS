@@ -83,10 +83,9 @@ namespace NowasteReactTMS.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            var orders = new List<Order>();
-            return await GetOrders();
+            var orders = await _orderRepo.GetAllOrderAsync();
+            return Ok(orders);
         }
-
 
     }
 }
