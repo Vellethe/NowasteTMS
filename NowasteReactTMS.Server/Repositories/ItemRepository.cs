@@ -9,4 +9,29 @@ public class ItemRepository : IItemRepository
     {
         this.connectionFactory = connectionFactory;
     }
+
+    public Task<Item> CreateItem(Item agent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Guid> DeleteItem(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item> GetItem(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Item>> GetItems()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Item> UpdateItem(Guid id, Item agent)
+    {
+        throw new NotImplementedException();
+    }
 }

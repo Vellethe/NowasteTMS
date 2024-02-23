@@ -9,4 +9,14 @@ public class CurrencyRepository : ICurrencyRepository
     {
         this.connectionFactory = connectionFactory;
     }
+
+    public Task<Currency> Get(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Currency>> GetAll()
+    {
+        throw new NotImplementedException();
+    }
 }

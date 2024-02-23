@@ -9,4 +9,29 @@ public class TransportOrderServiceRepository : ITransportOrderServiceRepository
     {
         this.connectionFactory = connectionFactory;
     }
+
+    public Task<int> Add(TransportOrderService transportOrderService)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Guid> Delete(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<TransportOrderService> Get(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<TransportOrderService>> GetAllTransportOrderServices(Guid? agentPk, bool includeInactive = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> Outdate(TransportOrderService transportOrderService)
+    {
+        throw new NotImplementedException();
+    }
 }

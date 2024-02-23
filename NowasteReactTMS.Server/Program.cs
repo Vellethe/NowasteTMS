@@ -33,7 +33,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+//builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 builder.Services.AddSingleton<IOrderLineRepository, OrderLineRepository>();
 builder.Services.AddSingleton<ITransportOrderRepository, TransportOrderRepository>();
 builder.Services.AddSingleton<ITransportOrderServiceRepository, TransportOrderServiceRepository>();
@@ -48,7 +48,7 @@ builder.Services.AddSingleton<INotificationsRepository, NotificationsRepository>
 builder.Services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 builder.Services.AddSingleton<IPalletInventoryRepository, PalletInventoryRepository>();
-
+builder.Services.AddSingleton<IBusinessUnitRepository, BusinessUnitRepository>();
 
 
 var app = builder.Build();
