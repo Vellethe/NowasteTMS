@@ -1,6 +1,9 @@
-﻿namespace NowasteReactTMS.Server.Controllers
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace NowasteReactTMS.Server.Controllers
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
+        public bool IsActive { get; set; }
     }
 }

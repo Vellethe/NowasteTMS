@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using NowastePalletPortal.Extensions.Helpers;
+using NowasteReactTMS.Server;
+using NowasteReactTMS.Server.Controllers;
 using WMan.Data.ConnectionFactory;
 
 using IConnectionFactory = WMan.Data.ConnectionFactory.IConnectionFactory;
@@ -10,7 +15,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//DB-CONTEXT
+builder.Services.AddDbContext<NowastePalletPortalContext>(options =>
+    builder.Configuration.GetConnectionString("NowastePalletPortalContext"));
+
+builder.Services.AddDbContext<NowastePalletPortalContext>(options =>
+    builder.Configuration.GetConnectionString("DefaultConnection"));
+
 var connectionString = builder.Configuration.GetConnectionString("NowasteTMS");
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<NowastePalletPortalContext>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultTokenProviders()
+                .AddSignInManager<NowasteSignInManager<ApplicationUser>>();
 // All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();

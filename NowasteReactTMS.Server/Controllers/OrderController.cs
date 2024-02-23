@@ -9,7 +9,7 @@ namespace NowasteReactTMS.Server.Controllers
     public class OrderController : Controller
     {
         // Keep names synchronized with OrderRepository.columnMapping (project nowaste.transport), as well in OrderController.SearchOrders().
-        public static string[] ColumnNames = new string[] {
+        public static string[] ColumnNames = [
                 "OrderPK",
                 "DeliveryDate",
                 "DeliveryDateTo",
@@ -45,8 +45,7 @@ namespace NowasteReactTMS.Server.Controllers
                 "SupplierPK",
                 "CustomerPK",
                 "Status"
-            };
-        private readonly IPalletReceiptRepository palletReceiptRepository;
+            ];
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IOrderRepository _orderRepo;
         private readonly INotificationsRepository _notificationsRepository;
@@ -84,6 +83,7 @@ namespace NowasteReactTMS.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
+            var orders = new List<Order>();
             return await GetOrders();
         }
 
