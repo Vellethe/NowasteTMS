@@ -556,9 +556,4 @@ public class OrderRepository : IOrderRepository
     {
         return $"{column} BETWEEN '{dateTimeFrom}' AND '{dateTimeTo}'";
     }
-
-    public Task<Order> GetOrder()
-    {
-        throw new NotImplementedException();
-    }
 }

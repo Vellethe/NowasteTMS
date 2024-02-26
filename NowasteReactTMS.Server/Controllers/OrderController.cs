@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NowasteTms.Model;
+using System.Data.SqlTypes;
+using System.Runtime.InteropServices;
 
 namespace NowasteReactTMS.Server.Controllers
 {
@@ -79,13 +82,13 @@ namespace NowasteReactTMS.Server.Controllers
             _inventoryRepository = inventoryRepository;
             _orderLineRepository = orderLineRepository;
         }
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task <IActionResult> GetOrder(Guid id)
         {
-            var orders = await _orderRepo.GetOrder();
+             var orders = await _orderRepo.GetOrder(id);
+
             return Ok(orders);
         }
-
     }
+        
 }
