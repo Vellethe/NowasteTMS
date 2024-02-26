@@ -23,23 +23,23 @@ const OrderTable = () => {
   const columns = [
     {
       header: "Id",
-      accessorKey: "Id",
+      accessorKey: "OrderPK",
     },
     {
       header: "Status",
-      accessorKey: "Status",
+      accessorKey: "OrderTransportStatusString",
     },
     {
       header: "Pickup from ",
-      accessorKey: "Pickup from ",
+      accessorKey: "CollectionDate",
     },
     {
       header: "Pickup to",
-      accessorKey: "Pickup to",
+      accessorKey: "CollectionDateTo",
     },
     {
       header: "Pickup weekday",
-      accessorKey: "Pickup weekday",
+      accessorKey: "CollectionDateWD",
     },
     {
       header: "OrderId",
@@ -47,67 +47,79 @@ const OrderTable = () => {
     },
     {
       header: "Supplier",
-      accessorKey: "Supplier",
+      accessorKey: "SupplierName",
     },
     {
       header: "From Country",
-      accessorKey: "From Country",
+      accessorKey: "SupplierCountry",
     },
     {
       header: "Eur Pallets",
-      accessorKey: "Eur Pallets",
+      accessorKey: "OrderLinesTypeId2",
     },
     {
       header: "Sea Pallets",
-      accessorKey: "Sea Pallets",
+      accessorKey: "OrderLinesTypeId8",
     },
     {
       header: "Pallet Exch",
-      accessorKey: "Pallet exch",
+      accessorKey: "PalletExchange",
     },
     {
       header: "Item Id",
-      accessorKey: "Item Id",
+      accessorKey: "ItemID",
     },
     {
       header: "Item",
-      accessorKey: "Item",
+      accessorKey: "ItemName",
     },
     {
       header: "Item Qty",
-      accessorKey: "Item Qty",
+      accessorKey: "ItemQty",
     },
     {
       header: "Lines",
-      accessorKey: "Lines",
+      accessorKey: "LineCount",
+    },
+    {
+      header: "Temp",
+      accessorKey: "TransportTemp",
     },
     {
       header: "ETA From",
-      accessorKey: "ETA From",
+      accessorKey: "DeliveryDate",
     },
     {
       header: "ETA To",
-      accessorKey: "ETA To",
+      accessorKey: "DeliveryDateTo",
     },
     {
       header: "ETA Weekday",
-      accessorKey: "ETA Weekday",
+      accessorKey: "DeliveryDateWD",
     },
     {
       header: "Customer",
-      accessorKey: "Customer",
+      accessorKey: "CustomerName",
+    },
+    {
+      header: "To Country",
+      accessorKey: "CustomerCountry",
     },
     {
       header: "Adress",
-      accessorKey: "Adress",
+      accessorKey: "CustomerAddress",
     },
     {
       header: "Item Company",
-      accessorKey: "Item Company",
+      accessorKey: "ItemCompany",
     },
     {
       header: "Origin",
       accessorKey: "Origin",
+    },
+    {
+      header: "Comment",
+      accessorKey: "InternalComment",
     },
     {
       header: "Created",
@@ -115,23 +127,23 @@ const OrderTable = () => {
     },
     {
       header: "Update from",
-      accessorKey: "Update from",
+      accessorKey: "Updated",
     },
     {
       header: "Update to",
-      accessorKey: "Update to",
+      accessorKey: "UpdatedTo",
     },
     {
       header: "Update weekday",
-      accessorKey: "Update weekday",
+      accessorKey: "UpdatedWD",
     },
     {
       header: "Updated by",
-      accessorKey: "Updated by",
+      accessorKey: "Email",
     },
     {
       header: "Transport booking",
-      accessorKey: "Transport booking",
+      accessorKey: "TransportBooking",
     },
   ];
 
@@ -161,7 +173,7 @@ const OrderTable = () => {
     setSelectedColumns(defaultSelectedColumns);
   }, []); //Empty dependency array so it only runs once
 
-  const defaultSelectedAccessorKeys = ['Id', 'OrderId', 'Supplier', 'Transport booking', 'Status'];
+  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
   const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
 
   const handleColumnSelection = (selectedOptions) => {
