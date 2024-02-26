@@ -10,28 +10,100 @@ public class ReferenceRepository : IReferenceRepository
         this.connectionFactory = connectionFactory;
     }
 
-    public Task<Reference> Add(Reference reference)
+
+    public async Task<IEnumerable<Reference>> GetAllForContactInformation(Guid? contactInformationPK)
     {
-        throw new NotImplementedException();
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var references = await connection.QueryAsync<Reference>(@"
+                SELECT * 
+                    FROM Reference
+                    WHERE ContactInformationPK = @contactInformationPK
+                ",
+                new
+                {
+                    contactInformationPK
+                });
+
+
+            return references;
+        }
+
     }
 
-    public Task Delete(Reference reference)
+    public async Task<IEnumerable<Reference>> GetAllFromListOfContactInformation(List<Guid> contactInformationPK)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var references = await connection.QueryAsync<Reference>(@"
+                SELECT * 
+                    FROM Reference
+                    WHERE ContactInformationPK IN @contactInformationPK
+                ",
+                new
+                {
+                    contactInformationPK
+                });
+
+            return references;
+        }
+    }
+    public async Task<Reference> Add(Reference reference)
+    {
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                INSERT INTO [dbo].[Reference]
+                            ([ReferencePK]
+                            ,[Name]
+                            ,[Phone]
+                            ,[Email]
+                            ,[Comment]
+                            ,[ContactInformationPK]
+                )
+                VALUES
+                            (@ReferencePK
+                            ,@Name
+                            ,@Phone
+                            ,@Email
+                            ,@Comment
+                            ,@ContactInformationPK
+                )"
+            , reference);
+
+            return reference;
+        }
     }
 
-    public Task<IEnumerable<Reference>> GetAllForContactInformation(Guid? contactInformationPK)
+    public async Task<Reference> Update(Reference reference)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                UPDATE [dbo].[Reference]
+                SET         [Name] = @Name
+                           ,[Phone] = @Phone
+                           ,[Email] = @Email
+                           ,[Comment] = @Comment
+                WHERE [ReferencePK] = @ReferencePK"
+                , reference);
+
+            return reference;
+        }
     }
 
-    public Task<IEnumerable<Reference>> GetAllFromListOfContactInformation(List<Guid> contactInformationPK)
+
+    public async Task Delete(Reference reference)
     {
-        throw new NotImplementedException();
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                DELETE FROM [dbo].[Reference]
+                WHERE [ReferencePK] = @ReferencePK"
+                , reference);
+        }
     }
 
-    public Task<Reference> Update(Reference reference)
-    {
-        throw new NotImplementedException();
-    }
 }

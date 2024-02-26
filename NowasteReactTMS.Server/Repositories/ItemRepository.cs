@@ -10,28 +10,124 @@ public class ItemRepository : IItemRepository
         this.connectionFactory = connectionFactory;
     }
 
-    public Task<Item> CreateItem(Item agent)
+    public async Task<List<Item>> GetItems()
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var items = await connection.QueryAsync<Item>(@"
+                SELECT i.[ItemPK]
+                      ,i.[ItemID] 
+                      ,i.[Name]
+                      ,i.[Weight]
+                      ,i.[Volume]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[isActive]
+                      ,i.[EditName]
+                  FROM [dbo].[Item] i");
+
+            return items.ToList();
+        }
     }
 
-    public Task<Guid> DeleteItem(Guid id)
+    public async Task<Item> GetItem(Guid id)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var item = await connection.QueryFirstOrDefaultAsync<Item>(@"
+                SELECT i.[ItemPK]
+                      ,i.[ItemID] 
+                      ,i.[Name]
+                      ,i.[Weight]
+                      ,i.[Volume]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[isActive]
+                      ,i.[EditName]
+                  FROM [dbo].[Item] i
+                WHERE i.[ItemPK] = @id",
+                new { id });
+
+            return item;
+        }
     }
 
-    public Task<Item> GetItem(Guid id)
+    public async Task<Item> UpdateItem(Guid id, Item item)
     {
-        throw new NotImplementedException();
+        if (await GetItem(id) == null)
+            throw new Exception($"Item {id} not found.");
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                UPDATE [dbo].[Item]
+                SET    [Name] = @Name
+                      ,[Weight] = @Weight
+                      ,[Volume] = @Volume
+                      ,[TransportTemp] = @TransportTemp
+                      ,[StorageTemp] = @StorageTemp
+                      ,[Company] = @Company
+                      ,[isActive] = @isActive
+                      ,[EditName] = @EditName
+                      ,[TimeStamp] = GETDATE()
+                WHERE [ItemID] = @ItemID", item);
+        }
+        return item;
     }
 
-    public Task<List<Item>> GetItems()
+    public async Task<Item> CreateItem(Item item)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                INSERT INTO [dbo].[Item]
+                            ([ItemPK]
+                            ,[ItemID]
+                            ,[Name]
+                            ,[Weight]
+                            ,[Volume]
+                            ,[TransportTemp]
+                            ,[StorageTemp]
+                            ,[Company]
+                            ,[isActive]
+                            ,[EditName]
+                            ,[TimeStamp]
+                )
+
+                VALUES
+                            (@ItemPK
+                            ,@ItemID
+                            ,@Name
+                            ,@Weight
+                            ,@Volume
+                            ,@TransportTemp
+                            ,@StorageTemp
+                            ,@Company
+                            ,@isActive
+                            ,@EditName
+                            ,GETDATE())", item);
+        }
+
+        return item;
     }
 
-    public Task<Item> UpdateItem(Guid id, Item agent)
+    public async Task<Guid> DeleteItem(Guid id)
     {
-        throw new NotImplementedException();
+        if (await GetItem(id) == null)
+            throw new Exception($"Item {id} not found.");
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                UPDATE [dbo].[Item]
+                SET    [isActive] = 0
+                      ,[TimeStamp] = GETDATE()
+                WHERE [ItemPK] = @id",
+                id);
+        }
+
+        return id;
     }
 }

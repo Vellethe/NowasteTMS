@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using NowasteTms.Model;
+using System.Data.SqlClient;
+using System.Data;
 using WMan.Data.ConnectionFactory;
 public class OrderLineRepository : IOrderLineRepository
 {
@@ -10,48 +12,313 @@ public class OrderLineRepository : IOrderLineRepository
         this.connectionFactory = connectionFactory;
     }
 
-    public Task<OrderLine> Add(OrderLine line)
+    public async Task<OrderLine> Add(OrderLine line)
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            await conn.ExecuteAsync(@"
+                INSERT INTO [dbo].[OrderLine]
+                           ([OrderLinePK]
+                           ,[OrderPK]
+                           ,[LineNumber]
+                           ,[ItemPK]
+                           ,[PalletQty]
+                           ,[PalletTypeId]
+                           ,[ItemQty]
+                           ,[ItemName]
+                           ,[TotalNetPrice])
+                     VALUES
+                           (@OrderLinePK
+                           ,@OrderPK
+                           ,@LineNumber
+                           ,@ItemPK
+                           ,@PalletQty
+                           ,@PalletTypeId
+                           ,@ItemQty
+                           ,@ItemName
+                           ,@TotalNetPrice)", line);
+            return line;
+        }
     }
 
-    public Task<int> Add(Guid pk, OrderLine orderline)
+    public async Task<IEnumerable<OrderLine>> Get()
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            var lines = await conn.QueryAsync<OrderLine, Item, PalletType, OrderLine>(@"
+                SELECT ol.[OrderLinePK]
+                      ,ol.[OrderPK]
+                      ,ol.[LineNumber]
+                      ,ol.[ItemPK]
+                      ,ol.[PalletQty]
+                      ,ol.[PalletTypeId]
+                      ,ol.[ItemQty]
+                      ,ol.[ItemName]
+                      ,ol.[TotalNetPrice]
+
+                      ,i.[ItemPK] AS Id
+                      ,i.[ItemPK]
+                      ,i.[ItemID]
+                      ,CASE WHEN i.[EditName] = 1 THEN ol.[ItemName] ELSE i.[Name] END AS [Name]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[Weight]
+
+                      ,pt.[Id]
+                      ,pt.[Description]
+                      ,pt.[FootPrint]
+                      ,pt.[Stamp]
+
+                  FROM [dbo].[OrderLine] ol
+                LEFT JOIN [dbo].[Item] i ON i.[ItemPK] = ol.[ItemPK]
+                JOIN [dbo].[PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
+                ", (line, item, palletType) =>
+            {
+                if (item.ItemPK != Guid.Empty)
+                {
+                    line.Item = item;
+                }
+
+                line.PalletType = palletType;
+
+                return line;
+            });
+
+            return lines;
+        }
     }
 
-    public Task<OrderLine> Get(Guid pk)
+    public async Task<Dictionary<Guid, List<OrderLine>>> Get(HashSet<Guid> pks)
     {
-        throw new NotImplementedException();
+        using var conn = connectionFactory.CreateConnection();
+        conn.Open();
+
+        await conn.ExecuteAsync(@"CREATE TABLE #tempIds([Id] uniqueidentifier not null primary key);");
+
+        SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)conn);
+        bulkCopy.DestinationTableName = "#tempIds";
+        DataTable dataTable = new DataTable();
+        dataTable.Columns.Add("[Id]", typeof(Guid));
+        foreach (var id in pks)
+            dataTable.Rows.Add(id);
+        await bulkCopy.WriteToServerAsync(dataTable);
+
+        var result = await conn.QueryAsync<OrderLine, Item, PalletType, OrderLine>(@"
+                SELECT ol.[OrderLinePK]
+                      ,ol.[OrderPK]
+                      ,ol.[LineNumber]
+                      ,ol.[ItemPK]
+                      ,ol.[PalletQty]
+                      ,ol.[PalletTypeId]
+                      ,ol.[ItemQty]
+                      ,ol.[ItemName]
+                      ,ol.[TotalNetPrice]
+
+                      ,i.[ItemPK] AS Id
+                      ,i.[ItemPK]
+                      ,i.[ItemID]
+                      ,CASE WHEN i.[EditName] = 1 THEN ol.[ItemName] ELSE i.[Name] END AS [Name]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[Weight]
+
+                      ,pt.[Id]
+                      ,pt.[Description]
+                      ,pt.[FootPrint]
+                      ,pt.[Stamp]
+
+                  FROM [dbo].[OrderLine] ol
+                    JOIN #tempIds ids on ids.Id = ol.OrderPK
+                    LEFT JOIN [dbo].[Item] i ON i.[ItemPK] = ol.[ItemPK]
+                    JOIN [dbo].[PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
+                ", (line, item, palletType) =>
+        {
+            if (item.ItemPK != Guid.Empty)
+            {
+                line.Item = item;
+            }
+
+            line.PalletType = palletType;
+
+            return line;
+        });
+
+        return result
+            .GroupBy(p => p.OrderPK)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.ToList());
     }
 
-    public Task<Dictionary<Guid, List<OrderLine>>> Get(HashSet<Guid> pks)
+    public async Task<IReadOnlyCollection<OrderLine>> GetByOrder(Guid pk)
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            var lines = await conn.QueryAsync<OrderLine, Item, PalletType, OrderLine>(@"
+                SELECT ol.[OrderLinePK]
+                      ,ol.[OrderPK]
+                      ,ol.[LineNumber]
+                      ,ol.[ItemPK]
+                      ,ol.[PalletQty]
+                      ,ol.[PalletTypeId]
+                      ,ol.[ItemQty]
+                      ,ol.[ItemName]
+                      ,ol.[TotalNetPrice]
+
+                      ,i.[ItemPK] AS Id
+                      ,i.[ItemPK]
+                      ,i.[ItemID]
+                      ,CASE WHEN i.[EditName] = 1 THEN ol.[ItemName] ELSE i.[Name] END AS [Name]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[Weight]
+
+                      ,pt.[Id]
+                      ,pt.[Description]
+                      ,pt.[FootPrint]
+                      ,pt.[Stamp]
+
+                  FROM [dbo].[OrderLine] ol
+                LEFT JOIN [dbo].[Item] i ON i.[ItemPK] = ol.[ItemPK]
+                JOIN [dbo].[PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
+                JOIN [dbo].[Order] o ON o.[OrderPK] = ol.[OrderPK]
+                WHERE o.[OrderPK] = @pk
+                ", (l, item, palletType) =>
+            {
+                if (item.ItemPK != Guid.Empty)
+                {
+                    l.Item = item;
+                }
+
+                l.PalletType = palletType;
+
+                return l;
+            },
+                new
+                {
+                    pk
+                });
+
+            return lines.AsList();
+        }
     }
 
-    public Task<IEnumerable<OrderLine>> Get()
+    public async Task<OrderLine> Get(Guid id)
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            var line = await conn.QueryAsync<OrderLine, Item, PalletType, OrderLine>(@"
+                SELECT ol.[OrderLinePK]
+                      ,ol.[OrderPK]
+                      ,ol.[LineNumber]
+                      ,ol.[ItemPK]
+                      ,ol.[PalletQty]
+                      ,ol.[PalletTypeId]
+                      ,ol.[ItemQty]
+                      ,ol.[ItemName]
+                      ,ol.[TotalNetPrice]
+
+                      ,i.[ItemPK] AS Id
+                      ,i.[ItemPK]
+                      ,i.[ItemID]
+                      ,CASE WHEN i.[EditName] = 1 THEN ol.[ItemName] ELSE i.[Name] END AS [Name]
+                      ,i.[TransportTemp]
+                      ,i.[StorageTemp]
+                      ,i.[Company]
+                      ,i.[Weight]
+
+                      ,pt.[Id]
+                      ,pt.[Description]
+                      ,pt.[FootPrint]
+                      ,pt.[Stamp]
+
+                  FROM [dbo].[OrderLine] ol
+                LEFT JOIN [dbo].[Item] i ON i.[ItemPK] = ol.[ItemPK]
+                JOIN [dbo].[PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
+                WHERE ol.[OrderLinePK] = @id",
+                (l, item, palletType) =>
+                {
+                    if (item.ItemPK != Guid.Empty)
+                        l.Item = item;
+
+                    l.PalletType = palletType;
+
+                    return l;
+                },
+                new
+                {
+                    id
+                });
+
+            return line.FirstOrDefault();
+        }
     }
 
-    public Task<IReadOnlyCollection<OrderLine>> GetByOrder(Guid pk)
+    public async Task<int> Add(Guid id, OrderLine line)
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            return await conn.ExecuteAsync(@"
+                INSERT INTO [dbo].[OrderLine]
+			                ([OrderLinePK],
+			                [OrderPK],
+			                [LineNumber],
+			                [ItemPK],
+			                [PalletQty],
+			                [PalletTypeId],
+			                [ItemQty],
+			                [ItemName],
+			                [TotalNetPrice],
+			                [PalletPrice])
+                VALUES
+			                (@OrderLinePK,
+			                @OrderPK,
+			                @LineNumber,
+			                @ItemPK,
+			                @PalletQty,
+			                @PalletTypeId,
+			                @ItemQty,
+			                @ItemName,
+			                @TotalNetPrice,
+			                @PalletPrice)", line);
+        }
     }
 
-    public Task<Order> GetOrder(Guid Id)
+    public async Task<int> Update(Guid id, OrderLine line)
     {
-        throw new NotImplementedException();
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            return await conn.ExecuteAsync(@"
+                UPDATE [dbo].[OrderLine]
+                   SET [OrderLinePK] = @OrderLinePK
+                      ,[OrderPK] = @OrderPK
+                      ,[LineNumber] = @LineNumber
+                      ,[ItemPK] = @ItemPK
+                      ,[PalletQty] = @PalletQty
+                      ,[PalletTypeId] = @PalletTypeId
+                      ,[ItemQty] = @ItemQty
+                      ,[ItemName] = @ItemName
+                      ,[TotalNetPrice] = @TotalNetPrice
+                 WHERE [OrderLinePK] = @OrderLinePK", line);
+        }
     }
 
-    public Task<OrderLine> Remove(Guid pk)
+    public async Task<OrderLine> Remove(Guid pk)
     {
-        throw new NotImplementedException();
-    }
+        using (var conn = connectionFactory.CreateConnection())
+        {
+            var line = await Get(pk);
 
-    public Task<int> Update(Guid pk, OrderLine orderline)
-    {
-        throw new NotImplementedException();
+            await conn.ExecuteAsync(@"
+                DELETE FROM [dbo].[OrderLine]
+                      WHERE [OrderLinePK] = @pk",
+                new
+                {
+                    pk
+                });
+
+            return line;
+        }
     }
 }

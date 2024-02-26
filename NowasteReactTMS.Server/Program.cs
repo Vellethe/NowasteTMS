@@ -33,12 +33,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
-//builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 builder.Services.AddSingleton<IOrderLineRepository, OrderLineRepository>();
 builder.Services.AddSingleton<ITransportOrderRepository, TransportOrderRepository>();
 builder.Services.AddSingleton<ITransportOrderServiceRepository, TransportOrderServiceRepository>();
+builder.Services.AddSingleton<ITransportOrderLineRepository, TransportOrderLineRepository>();
 builder.Services.AddSingleton<ITransportZonePriceRepository, TransportZonePriceRepository>();
 builder.Services.AddSingleton<ITransportZoneRepository, TransportZoneRepository>();
+builder.Services.AddSingleton<ITransportZonePriceLineRepository, TransportZonePriceLineRepository>();
 builder.Services.AddSingleton<IAgentRepository, AgentRepository>();
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
 builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();

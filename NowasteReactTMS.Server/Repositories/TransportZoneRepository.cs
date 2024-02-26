@@ -10,43 +10,160 @@ public class TransportZoneRepository : ITransportZoneRepository
         this.connectionFactory = connectionFactory;
     }
 
-    public Task<int> Connect(Guid transportZonePK, Guid contactInformationPK)
+    public async Task<List<TransportZone>> GetAll()
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var transportZone = await connection.QueryAsync<TransportZone>(@"
+                SELECT [TransportZonePK]
+                      ,[Name]
+                      ,[Description]
+                  FROM [dbo].[TransportZone]");
+
+            return transportZone.ToList();
+        }
     }
 
-    public Task<TransportZone> Create(TransportZone transportZone)
+    public async Task<TransportZone> GetForContactInformation(Guid contactInformationPK)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var transportZones = await connection.QueryAsync<TransportZone>(@"
+                    SELECT tz.[TransportZonePK]
+                          ,tz.[Name]
+                          ,tz.[Description]
+                          ,citz.[ContactInformationPK]
+                    FROM [dbo].[TransportZone] tz
+                    JOIN [dbo].[ContactInformationTransportZone] citz ON citz.TransportZonePK = tz.TransportZonePK
+                    WHERE citz.ContactInformationPK = @contactInformationPK",
+                new
+                {
+                    contactInformationPK
+                });
+
+            return transportZones.FirstOrDefault();
+        }
     }
 
-    public Task<int> Disconnect(Guid transportZonePK, Guid contactInformationPK)
+    public async Task<IEnumerable<TransportZone>> GetAllForContactInformation(Guid pk)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var transportZones = await connection.QueryAsync<TransportZone>(@"
+                    SELECT tz.[TransportZonePK]
+                          ,tz.[Name]
+                          ,tz.[Description]
+                          ,citz.[ContactInformationPK]
+                    FROM [dbo].[TransportZone] tz
+                    JOIN [dbo].[ContactInformationTransportZone] citz ON citz.TransportZonePK = tz.TransportZonePK
+                    WHERE citz.ContactInformationPK = @pk
+                       ",
+                new
+                {
+                    pk
+                });
+
+            return transportZones;
+        }
     }
 
-    public Task<TransportZone> Get(Guid pk)
+    public async Task<IEnumerable<TransportZone>> GetAllForContactInformation(List<Guid> pk)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var transportZones = await connection.QueryAsync<TransportZone>(@"
+                        SELECT tz.[TransportZonePK]
+                              ,tz.[Name]
+                              ,tz.[Description]
+                              ,citz.[ContactInformationPK]
+                        FROM [dbo].[TransportZone] tz
+                        JOIN [dbo].[ContactInformationTransportZone] citz ON citz.TransportZonePK = tz.TransportZonePK
+                        WHERE citz.ContactInformationPK IN @pk
+                         ",
+                new
+                {
+                    pk
+                });
+
+            return transportZones;
+        }
     }
 
-    public Task<List<TransportZone>> GetAll()
+    public async Task<TransportZone> Create(TransportZone transportZone)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            await connection.ExecuteAsync(@"
+                INSERT INTO [dbo].[TransportZone]
+                           ([TransportZonePK]
+                           ,[Name]
+                           ,[Description])
+                     VALUES
+                           (@TransportZonePK
+                           ,@Name
+                           ,@Description)",
+                transportZone);
+        }
+        return transportZone;
     }
 
-    public Task<IEnumerable<TransportZone>> GetAllForContactInformation(Guid pk)
+    public async Task<int> Connect(Guid transportZonePK, Guid contactInformationPK)
     {
-        throw new NotImplementedException();
+        if (await Get(transportZonePK) == null)
+            return 0;
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            return await connection.ExecuteAsync(@"
+                INSERT INTO [dbo].[ContactInformationTransportZone]
+                           ([ContactInformationPK]
+                           ,[TransportZonePK])
+                     VALUES
+                           (@contactInformationPK,
+                            @transportZonePK)",
+                 new
+                 {
+                     transportZonePK,
+                     contactInformationPK
+                 });
+        }
     }
 
-    public Task<IEnumerable<TransportZone>> GetAllForContactInformation(List<Guid> pk)
+    public async Task<int> Disconnect(Guid transportZonePK, Guid contactInformationPK)
     {
-        throw new NotImplementedException();
+        if (await Get(transportZonePK) == null)
+            return 0;
+
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            return await connection.ExecuteAsync(@"
+                DELETE FROM [dbo].[ContactInformationTransportZone]
+                      WHERE [ContactInformationPK] = @contactInformationPK
+                        AND [TransportZonePK] = @transportZonePK",
+                new
+                {
+                    transportZonePK,
+                    contactInformationPK
+                });
+        }
     }
 
-    public Task<TransportZone> GetForContactInformation(Guid contactInformationPK)
+    public async Task<TransportZone> Get(Guid pk)
     {
-        throw new NotImplementedException();
+        using (var connection = connectionFactory.CreateConnection())
+        {
+            var transportZone = await connection.QueryFirstOrDefaultAsync<TransportZone>(@"
+                SELECT [TransportZonePK]
+                      ,[Name]
+                      ,[Description]
+                  FROM [dbo].[TransportZone]
+                WHERE [TransportZonePK] = @pk",
+                new
+                {
+                    pk
+                });
+
+            return transportZone;
+        }
     }
 }
