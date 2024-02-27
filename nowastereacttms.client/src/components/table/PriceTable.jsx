@@ -14,6 +14,7 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 
+// LADDA ALLT PÅ SAMMA SIDA
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
