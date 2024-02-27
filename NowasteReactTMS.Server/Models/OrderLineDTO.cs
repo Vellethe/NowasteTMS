@@ -8,7 +8,7 @@ namespace NowasteReactTMS.Server.Models
         [Key]
         public Guid ItemPK { get; set; }
 
-        [Range(1,16)]public int PalletTypeId { get; set; }
+        [Range(1,12)]public int PalletTypeId { get; set; }
 
         [Range(1,int.MaxValue)]public int ItemQty { get; set; }
 
