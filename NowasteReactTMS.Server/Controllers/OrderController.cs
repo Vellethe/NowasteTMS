@@ -95,7 +95,6 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(orders);
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDTO dto)
         {
@@ -122,8 +121,8 @@ namespace NowasteReactTMS.Server.Controllers
                 CustomerPK = dto.CustomerPK,
                 Comment = dto.Comment,
                 InternalComment = dto.InternalComment,
-                UpdatedByUserId ="hej",
-                Email ="hej@email.com",
+                UpdatedByUserId ="hej", //user.Id
+                Email ="hej@email.com", //user.Email
                 TransportBooking = dto.TransportBooking,
                 PalletExchange = dto.PalletExchange,
                 Lines = dto.Lines.Select(x => new OrderLine
@@ -139,6 +138,18 @@ namespace NowasteReactTMS.Server.Controllers
                 })
             });
             return Ok(pk);
+        }
+        //Failed to fetch.
+        //Possible Reasons:
+        //CORS
+        //Network Failure
+        //URL scheme must be "http" or "https" for CORS request.
+        [HttpDelete]
+        public async Task <IActionResult> DeleteOrder(Guid pk)
+        {
+            var order = await _orderRepo.GetOrder(pk);
+
+            return NoContent();
         }
     }
         
