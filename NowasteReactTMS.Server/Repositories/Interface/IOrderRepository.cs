@@ -1,4 +1,6 @@
-﻿using NowasteTms.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using NowasteReactTMS.Server;
+using NowasteTms.Model;
 
 public interface IOrderRepository
 {
@@ -8,4 +10,5 @@ public interface IOrderRepository
     Task<int> UpdateOrder(Order order);
     Task<int> AddOrder(Order order);
     Task<SearchOrderResponse> SearchOrders(SearchParameters parameters);
+
 }
