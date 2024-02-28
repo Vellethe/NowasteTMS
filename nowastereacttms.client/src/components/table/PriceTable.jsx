@@ -7,145 +7,58 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import mData from "../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 
-// LADDA ALLT PÅ SAMMA SIDA
-
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => mData, [])
+  const data = useMemo(() => [])
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
-      header: "Id",
-      accessorKey: "OrderPK",
+      header: "From",
+      accessorKey: "DeliverFrom",
     },
     {
-      header: "Status",
-      accessorKey: "OrderTransportStatusString",
+      header: "To",
+      accessorKey: "DeliverTo",
     },
     {
-      header: "Pickup from ",
-      accessorKey: "CollectionDate",
+      header: "Price",
+      accessorKey: "Price",
     },
     {
-      header: "Pickup to",
-      accessorKey: "CollectionDateTo",
+      header: "Currency",
+      accessorKey: "Currency",
     },
     {
-      header: "Pickup weekday",
-      accessorKey: "CollectionDateWD",
+      header: "Agent",
+      accessorKey: "Agent",
     },
     {
-      header: "OrderId",
-      accessorKey: "OrderId",
+      header: "Type",
+      accessorKey: "Type",
     },
     {
-      header: "Supplier",
-      accessorKey: "SupplierName",
+      header: "Valid from",
+      accessorKey: "ValidFrom",
     },
     {
-      header: "From Country",
-      accessorKey: "SupplierCountry",
+      header: "Valid to",
+      accessorKey: "ValidTo",
     },
     {
-      header: "Eur Pallets",
-      accessorKey: "OrderLinesTypeId2",
+      header: "Description",
+      accessorKey: "Description",
     },
     {
-      header: "Sea Pallets",
-      accessorKey: "OrderLinesTypeId8",
-    },
-    {
-      header: "Pallet Exch",
-      accessorKey: "PalletExchange",
-    },
-    {
-      header: "Item Id",
-      accessorKey: "ItemID",
-    },
-    {
-      header: "Item",
-      accessorKey: "ItemName",
-    },
-    {
-      header: "Item Qty",
-      accessorKey: "ItemQty",
-    },
-    {
-      header: "Lines",
-      accessorKey: "LineCount",
-    },
-    {
-      header: "Temp",
-      accessorKey: "TransportTemp",
-    },
-    {
-      header: "ETA From",
-      accessorKey: "DeliveryDate",
-    },
-    {
-      header: "ETA To",
-      accessorKey: "DeliveryDateTo",
-    },
-    {
-      header: "ETA Weekday",
-      accessorKey: "DeliveryDateWD",
-    },
-    {
-      header: "Customer",
-      accessorKey: "CustomerName",
-    },
-    {
-      header: "To Country",
-      accessorKey: "CustomerCountry",
-    },
-    {
-      header: "Adress",
-      accessorKey: "CustomerAddress",
-    },
-    {
-      header: "Item Company",
-      accessorKey: "ItemCompany",
-    },
-    {
-      header: "Origin",
-      accessorKey: "Origin",
-    },
-    {
-      header: "Comment",
-      accessorKey: "InternalComment",
-    },
-    {
-      header: "Created",
-      accessorKey: "Created",
-    },
-    {
-      header: "Update from",
-      accessorKey: "Updated",
-    },
-    {
-      header: "Update to",
-      accessorKey: "UpdatedTo",
-    },
-    {
-      header: "Update weekday",
-      accessorKey: "UpdatedWD",
-    },
-    {
-      header: "Updated by",
-      accessorKey: "Email",
-    },
-    {
-      header: "Transport booking",
-      accessorKey: "TransportBooking",
-    },
+      header: "",
+      accessorKey: "EditAndDelete"
+    }
   ];
 
   const [sorting, setSorting] = useState([]);
@@ -153,10 +66,10 @@ const OrderTable = () => {
 
   const table = useReactTable({
     data,
-    columns: selectedColumns,
+    columns,
     initialState: {
       pagination: {
-        pageSize: 25,
+        pageSize: 150,
       },
     },
     getCoreRowModel: getCoreRowModel(),
@@ -169,41 +82,6 @@ const OrderTable = () => {
   });
 
   const tableRef = useRef(null);
-
-  useEffect(() => {
-    setSelectedColumns(defaultSelectedColumns);
-  }, []); //Empty dependency array so it only runs once
-
-  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
-  const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
-
-  const handleColumnSelection = (selectedOptions) => {
-    if (!selectedOptions) {
-      return;
-    }
-
-    if (selectedOptions.some(option => option.value === 'select-all')) {
-      // Select All
-      setSelectedColumns(columns);
-      return;
-    }
-
-    const selectedColumns = selectedOptions
-      .filter(option => !defaultSelectedAccessorKeys.includes(option.value)) // Filter out default selected columns
-      .map(option => columns.find(column => column && column.accessorKey === option.value))
-      .filter(column => column); // Filter out undefined or null columns
-
-    // Merge default  columns with new columns
-    const updatedSelectedColumns = [...defaultSelectedColumns, ...selectedColumns];
-    setSelectedColumns(updatedSelectedColumns);
-  };
-
-  const selectAllOption = { value: 'select-all', label: 'Select All' };
-  const options = [selectAllOption, ...columns.map(column => ({
-    value: column.accessorKey,
-    label: column.header
-  }))];
-
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -235,21 +113,6 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green text-sm w-full">
-      <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-3 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
-        type="button"
-      >
-        Columns
-        <Select
-          options={options}
-          isMulti
-          onChange={handleColumnSelection}
-          defaultValue={selectedColumns.map(column => ({
-            value: column.accessorKey,
-            label: column.header,
-          }))}
-        />
-      </button>
       <div className="overflow-auto relative">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border">
@@ -304,56 +167,6 @@ const OrderTable = () => {
               ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="flex justify-center gap-3 mt-2">
-        <button
-          onClick={() => table.setPageIndex(0)}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
-        >
-          First
-        </button>
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
-        >
-          Prev
-        </button>
-        <span className="flex items-center gap-1">
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
-        >
-          Next
-        </button>
-        <button
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          className="bg-medium-green duration-200 hover:bg-brown text-gray-800 py-2 px-3 rounded-lg text-white"
-        >
-          Last
-        </button>
-        <select
-          id="showbutton"
-          className="cursor-pointer"
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[25, 50, 75, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-
       </div>
       <div className="flex gap-2 justify-end mr-2">
         <button onClick={exportToExcel} className="flex items-center gap-2 text-2xl">

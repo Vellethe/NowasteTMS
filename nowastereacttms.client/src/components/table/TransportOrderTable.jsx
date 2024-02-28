@@ -7,9 +7,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import mData from "../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { useDownloadExcel } from 'react-export-table-to-excel';
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
@@ -22,12 +20,12 @@ const OrderTable = () => {
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
-      header: "Id",
-      accessorKey: "OrderPK",
+      header: "OrderId",
+      accessorKey: "OrderIds",
     },
     {
       header: "Status",
-      accessorKey: "OrderTransportStatusString",
+      accessorKey: "OrderStatusString",
     },
     {
       header: "Pickup from ",
@@ -42,48 +40,48 @@ const OrderTable = () => {
       accessorKey: "CollectionDateWD",
     },
     {
-      header: "OrderId",
-      accessorKey: "OrderId",
-    },
-    {
-      header: "Supplier",
-      accessorKey: "SupplierName",
+      header: "Ref",
+      accessorKey: "TransportOrderID",
     },
     {
       header: "From Country",
-      accessorKey: "SupplierCountry",
+      accessorKey: "FromCountry",
     },
     {
-      header: "Eur Pallets",
-      accessorKey: "OrderLinesTypeId2",
-    },
-    {
-      header: "Sea Pallets",
-      accessorKey: "OrderLinesTypeId8",
-    },
-    {
-      header: "Pallet Exch",
-      accessorKey: "PalletExchange",
-    },
-    {
-      header: "Item Id",
-      accessorKey: "ItemID",
-    },
-    {
-      header: "Item",
-      accessorKey: "ItemName",
-    },
-    {
-      header: "Item Qty",
-      accessorKey: "ItemQty",
+      header: "From City",
+      accessorKey: "FromCity",
     },
     {
       header: "Lines",
-      accessorKey: "LineCount",
+      accessorKey: "TransportOrderLineCount",
     },
     {
-      header: "Temp",
-      accessorKey: "TransportTemp",
+      header: "Sea Pallets",
+      accessorKey: "PalletQty",
+    },
+    {
+      header: "Eur Pallets",
+      accessorKey: "EurPalletQty",
+    },
+    {
+      header: "Transporter",
+      accessorKey: "AgentName",
+    },
+    {
+      header: "Vehicle",
+      accessorKey: "VehicleRegistrationPlate",
+    },
+    {
+      header: "Services",
+      accessorKey: "Services",
+    },
+    {
+      header: "Price",
+      accessorKey: "Price",
+    },
+    {
+      header: "Currency",
+      accessorKey: "TOCurrencyShortName",
     },
     {
       header: "ETA From",
@@ -91,39 +89,35 @@ const OrderTable = () => {
     },
     {
       header: "ETA To",
-      accessorKey: "DeliveryDateTo",
+      accessorKey: "EtaTo",
     },
     {
       header: "ETA Weekday",
-      accessorKey: "DeliveryDateWD",
-    },
-    {
-      header: "Customer",
-      accessorKey: "CustomerName",
+      accessorKey: "EtaWeekDay",
     },
     {
       header: "To Country",
-      accessorKey: "CustomerCountry",
+      accessorKey: "ToCountry",
     },
     {
-      header: "Adress",
-      accessorKey: "CustomerAddress",
+      header: "To City",
+      accessorKey: "ToCity",
     },
     {
-      header: "Item Company",
-      accessorKey: "ItemCompany",
+      header: "Customer Name",
+      accessorKey: "ToCustomerName",
     },
     {
-      header: "Origin",
-      accessorKey: "Origin",
+      header: "Supplier name",
+      accessorKey: "FromSupplierName",
     },
     {
-      header: "Comment",
+      header: "Internal comment",
       accessorKey: "InternalComment",
     },
     {
-      header: "Created",
-      accessorKey: "Created",
+      header: "Updated by",
+      accessorKey: "Email",
     },
     {
       header: "Update from",
@@ -131,19 +125,11 @@ const OrderTable = () => {
     },
     {
       header: "Update to",
-      accessorKey: "UpdatedTo",
+      accessorKey: "UpdateTo",
     },
     {
-      header: "Update weekday",
-      accessorKey: "UpdatedWD",
-    },
-    {
-      header: "Updated by",
-      accessorKey: "Email",
-    },
-    {
-      header: "Transport booking",
-      accessorKey: "TransportBooking",
+      header: "Update Week Day",
+      accessorKey: "UpdateWeekDay",
     },
   ];
 
@@ -173,7 +159,7 @@ const OrderTable = () => {
     setSelectedColumns(defaultSelectedColumns);
   }, []); //Empty dependency array so it only runs once
 
-  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
+  const defaultSelectedAccessorKeys = [ 'OrderIds', 'OrderTransportStatusString', 'Price', 'EtaTo', 'VehicleRegistrationPlate'];
   const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
 
   const handleColumnSelection = (selectedOptions) => {

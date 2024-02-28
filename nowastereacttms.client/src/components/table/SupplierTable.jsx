@@ -7,7 +7,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import mData from "../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { SiMicrosoftexcel } from "react-icons/si";
@@ -22,128 +21,24 @@ const OrderTable = () => {
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
-      header: "Id",
-      accessorKey: "OrderPK",
+      header: "SupplierID",
+      accessorKey: "SupplierId",
     },
     {
-      header: "Status",
-      accessorKey: "OrderTransportStatusString",
-    },
-    {
-      header: "Pickup from ",
-      accessorKey: "CollectionDate",
-    },
-    {
-      header: "Pickup to",
-      accessorKey: "CollectionDateTo",
-    },
-    {
-      header: "Pickup weekday",
-      accessorKey: "CollectionDateWD",
-    },
-    {
-      header: "OrderId",
-      accessorKey: "OrderId",
-    },
-    {
-      header: "Supplier",
+      header: "Name",
       accessorKey: "SupplierName",
     },
     {
-      header: "From Country",
-      accessorKey: "SupplierCountry",
+      header: "Country",
+      accessorKey: "Country",
     },
     {
-      header: "Eur Pallets",
-      accessorKey: "OrderLinesTypeId2",
+      header: "Currency",
+      accessorKey: "Currency",
     },
     {
-      header: "Sea Pallets",
-      accessorKey: "OrderLinesTypeId8",
-    },
-    {
-      header: "Pallet Exch",
-      accessorKey: "PalletExchange",
-    },
-    {
-      header: "Item Id",
-      accessorKey: "ItemID",
-    },
-    {
-      header: "Item",
-      accessorKey: "ItemName",
-    },
-    {
-      header: "Item Qty",
-      accessorKey: "ItemQty",
-    },
-    {
-      header: "Lines",
-      accessorKey: "LineCount",
-    },
-    {
-      header: "Temp",
-      accessorKey: "TransportTemp",
-    },
-    {
-      header: "ETA From",
-      accessorKey: "DeliveryDate",
-    },
-    {
-      header: "ETA To",
-      accessorKey: "DeliveryDateTo",
-    },
-    {
-      header: "ETA Weekday",
-      accessorKey: "DeliveryDateWD",
-    },
-    {
-      header: "Customer",
-      accessorKey: "CustomerName",
-    },
-    {
-      header: "To Country",
-      accessorKey: "CustomerCountry",
-    },
-    {
-      header: "Adress",
-      accessorKey: "CustomerAddress",
-    },
-    {
-      header: "Item Company",
-      accessorKey: "ItemCompany",
-    },
-    {
-      header: "Origin",
-      accessorKey: "Origin",
-    },
-    {
-      header: "Comment",
-      accessorKey: "InternalComment",
-    },
-    {
-      header: "Created",
-      accessorKey: "Created",
-    },
-    {
-      header: "Update from",
-      accessorKey: "Updated",
-    },
-    {
-      header: "Update to",
-      accessorKey: "UpdatedTo",
-    },
-    {
-      header: "Update weekday",
-      accessorKey: "UpdatedWD",
-    },
-    {
-      header: "Updated by",
-      accessorKey: "Email",
-    },
-    {
-      header: "Transport booking",
-      accessorKey: "TransportBooking",
+      header: "",
+      accessorKey: "EditAndDelete",
     },
   ];
 
@@ -152,7 +47,7 @@ const OrderTable = () => {
 
   const table = useReactTable({
     data,
-    columns: selectedColumns,
+    columns,
     initialState: {
       pagination: {
         pageSize: 25,
@@ -170,39 +65,8 @@ const OrderTable = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setSelectedColumns(defaultSelectedColumns);
+    setSelectedColumns(columns);
   }, []); //Empty dependency array so it only runs once
-
-  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
-  const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
-
-  const handleColumnSelection = (selectedOptions) => {
-    if (!selectedOptions) {
-      return;
-    }
-
-    if (selectedOptions.some(option => option.value === 'select-all')) {
-      // Select All
-      setSelectedColumns(columns);
-      return;
-    }
-
-    const selectedColumns = selectedOptions
-      .filter(option => !defaultSelectedAccessorKeys.includes(option.value)) // Filter out default selected columns
-      .map(option => columns.find(column => column && column.accessorKey === option.value))
-      .filter(column => column); // Filter out undefined or null columns
-
-    // Merge default  columns with new columns
-    const updatedSelectedColumns = [...defaultSelectedColumns, ...selectedColumns];
-    setSelectedColumns(updatedSelectedColumns);
-  };
-
-  const selectAllOption = { value: 'select-all', label: 'Select All' };
-  const options = [selectAllOption, ...columns.map(column => ({
-    value: column.accessorKey,
-    label: column.header
-  }))];
-
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -234,21 +98,6 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green text-sm w-full">
-      <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-3 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
-        type="button"
-      >
-        Columns
-        <Select
-          options={options}
-          isMulti
-          onChange={handleColumnSelection}
-          defaultValue={selectedColumns.map(column => ({
-            value: column.accessorKey,
-            label: column.header,
-          }))}
-        />
-      </button>
       <div className="overflow-auto relative">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border">

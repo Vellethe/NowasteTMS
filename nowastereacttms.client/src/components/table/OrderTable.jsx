@@ -7,7 +7,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import mData from "../data/MOCK_DATA.json";
+import mData from "../../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { SiMicrosoftexcel } from "react-icons/si";
