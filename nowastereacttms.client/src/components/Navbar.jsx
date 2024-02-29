@@ -12,7 +12,7 @@ const NavMenu = [
     link: "/Transport/Order/AllOrders"
   },
   {
-    name: "Historical Orders",
+    name: "Transport Orders",
     link: "/Transport/TransportOrder/AllTransportOrders"
   },
   {
@@ -49,7 +49,7 @@ const Navbar = () => {
   return (
     <header className=" flex items-center justify-between flex-wrap bg-gradient-to-l from-dark-green via-medium-green to-white w-full top-0 left-0 p-6 text-white">
       <img className="w-[80px] rounded " src={NWLlogo} />
-      <ul className="hidden md:flex  md:items-center gap-4 text-2xl">
+      <ul className="hidden md:flex md:items-center gap-4 text-2xl">
         {NavMenu.map((NavMenu) => (
           <Link
             to={NavMenu.link}

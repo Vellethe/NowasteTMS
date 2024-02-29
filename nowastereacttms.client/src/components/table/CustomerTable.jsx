@@ -65,39 +65,8 @@ const OrderTable = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setSelectedColumns(defaultSelectedColumns);
+    setSelectedColumns(columns);
   }, []); //Empty dependency array so it only runs once
-
-  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
-  const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
-
-  const handleColumnSelection = (selectedOptions) => {
-    if (!selectedOptions) {
-      return;
-    }
-
-    if (selectedOptions.some(option => option.value === 'select-all')) {
-      // Select All
-      setSelectedColumns(columns);
-      return;
-    }
-
-    const selectedColumns = selectedOptions
-      .filter(option => !defaultSelectedAccessorKeys.includes(option.value)) // Filter out default selected columns
-      .map(option => columns.find(column => column && column.accessorKey === option.value))
-      .filter(column => column); // Filter out undefined or null columns
-
-    // Merge default  columns with new columns
-    const updatedSelectedColumns = [...defaultSelectedColumns, ...selectedColumns];
-    setSelectedColumns(updatedSelectedColumns);
-  };
-
-  const selectAllOption = { value: 'select-all', label: 'Select All' };
-  const options = [selectAllOption, ...columns.map(column => ({
-    value: column.accessorKey,
-    label: column.header
-  }))];
-
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
