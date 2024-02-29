@@ -122,8 +122,7 @@ public class CustomerRepository : ICustomerRepository
         using (var connection = connectionFactory.CreateConnection())
         {
             await connection.ExecuteAsync(@"
-                UPDATE [dbo].[Customer]
-                SET         [isActive] = 0
+                DELETE FROM [dbo].[Customer]
                 WHERE [CustomerPK] = @id",
                 new { id }
             );
