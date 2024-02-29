@@ -37,8 +37,8 @@ const NavMenu = [
   }
 
 ];
-//TODO Fixa logga in,
-// TODO Fixa mobilanpassad navbar
+
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
