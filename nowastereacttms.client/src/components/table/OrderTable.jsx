@@ -9,9 +9,8 @@ import {
 } from "@tanstack/react-table";
 import mData from "../../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { useDownloadExcel } from 'react-export-table-to-excel';
-import { SiMicrosoftexcel } from "react-icons/si";
-import * as XLSX from "xlsx";
+
+
 import SearchBar from '../Searchbar';
 
 
@@ -204,12 +203,7 @@ const OrderTable = () => {
   }))];
 
 
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, "Orders.xlsx");
-  };
+
 
   const [columnFilters, setColumnFilters] = useState({});
 
@@ -354,12 +348,7 @@ const OrderTable = () => {
         </select>
 
       </div>
-      <div className="flex gap-2 justify-end mr-2">
-        <button onClick={exportToExcel} className="flex items-center gap-2 text-2xl">
-          <SiMicrosoftexcel />
-          Excel {/*  Detta kan tas bort eller bytas mot en tydligare excel icon*/}
-        </button>
-      </div>
+    
     </div>
   );
 }
