@@ -129,6 +129,8 @@ public class CustomerRepository : ICustomerRepository
         }
         return id;
     }
+    //UPDATE[dbo].[Customer]
+    //SET[isActive] = 0
 
     public async Task<List<Customer>> SearchCustomers(SearchParameters parameters)
     {

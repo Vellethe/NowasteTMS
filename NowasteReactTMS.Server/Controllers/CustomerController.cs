@@ -24,6 +24,7 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok(customer);
         }
 
+        //ANVÄND ENDAST PÅ EGENSKAPADE CUSTOMERS
         [HttpDelete]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
