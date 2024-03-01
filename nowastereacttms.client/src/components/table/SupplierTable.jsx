@@ -8,7 +8,6 @@ import {
   getSortedRowModel
 } from "@tanstack/react-table";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { useDownloadExcel } from 'react-export-table-to-excel';
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
