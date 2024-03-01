@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DevTool } from "@hookform/devtools";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -114,7 +113,7 @@ const CreateForm = () => {
         </div>
 
         <div className="flex flex-wrap mx-3 mb-6">
-        <div className="w-full md:w-1/2 px-3 text-center">
+          <div className="w-full md:w-1/2 px-3 text-center">
             <label htmlFor="palletexchange"
               className="block tracking-wide text-gray-700 text-center font-bold mb-2"
             >
@@ -143,15 +142,15 @@ const CreateForm = () => {
         </div>
 
         <div className="flex flex-wrap mx-3 mb-6">
-        <div className="w-full md:w-1/2 px-3 text-center font-bold">
-      <label htmlFor="collectiondate">Collection Date</label>
-        <input
-          type="date"
-          id="collectiondate"
-          value={collectionDate}
-          onChange={handleDateChange}
-         className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-        />
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="collectiondate">Collection Date</label>
+            <input
+              type="date"
+              id="collectiondate"
+              value={collectionDate}
+              onChange={handleDateChange}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            />
             {errors.collectiondate && <p className="text-sm text-red">Collection Date is required</p>}
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
@@ -159,9 +158,9 @@ const CreateForm = () => {
             <input
               type="date"
               id="collectiondate"
-             value={collectionDate}
+              value={collectionDate}
               onChange={handleDateChange}
-            className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
             {errors.deliverydate && <p className="text-sm text-red">Delivery Date is required</p>}
           </div>
@@ -217,7 +216,7 @@ const CreateForm = () => {
           ></textarea>
         </div>
         {/* End of General Information Section */}
-        
+
         {/* Lines Section */}
         <div className="w-full bg-gray h-12 text-center mb-5 pt-3">Lines</div>
         <table className="w-full">
@@ -228,7 +227,7 @@ const CreateForm = () => {
               <th>Description</th>
               <th>Pallet qty.</th>
               <th>Pallet type</th>
-              
+
             </tr>
           </thead>
           <tbody>
@@ -290,11 +289,11 @@ const CreateForm = () => {
                   </select>
                 </td>
                 <td>
-                <div className="flex gap-5 justify-center m-6 ">
-                  <button 
-                    className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
-                    onClick={() => handleRemoveLine(index)}>
-                  Remove</button>
+                  <div className="flex gap-5 justify-center m-6 ">
+                    <button
+                      className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
+                      onClick={() => handleRemoveLine(index)}>
+                      Remove</button>
                   </div>
                 </td>
               </tr>
@@ -302,7 +301,7 @@ const CreateForm = () => {
           </tbody>
         </table>
         <div className="flex gap-5 justify-center m-6 ">
-        <button 
+          <button
             className="hover:bg-medium-green hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
             onClick={handleAddLine}>
             Add Line</button>
