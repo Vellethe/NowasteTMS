@@ -8,18 +8,18 @@ namespace NowasteReactTMS.Server.Controllers
     [ApiController]
     public class CustomerController : Controller
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerRepository _customerRepo;
         private readonly ICurrencyRepository _currencyRepo;
         public CustomerController(ICustomerRepository customerRepository, ICurrencyRepository currencyRepo)
         {
-            _customerRepository = customerRepository;
+            _customerRepo = customerRepository;
             _currencyRepo = currencyRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCustomer(Guid id)
         {
-            var customer = await _customerRepository.GetCustomer(id);
+            var customer = await _customerRepo.GetCustomer(id);
 
             return Ok(customer);
         }
@@ -30,8 +30,8 @@ namespace NowasteReactTMS.Server.Controllers
         {
             try
             {
-                await _customerRepository.DeleteCustomer(id);
-                return Ok();
+                await _customerRepo.DeleteCustomer(id);
+                return Ok("Customer set to 0, deleted successfully.");
             }
             catch (Exception ex)
             {
@@ -42,7 +42,7 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         [HttpPost]
-            public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO customerViewModel)
+            public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO dto)
             {
                 if (!ModelState.IsValid)
                 {
@@ -50,30 +50,30 @@ namespace NowasteReactTMS.Server.Controllers
                 }
 
                 // Generate GUIDs
-                customerViewModel.CustomerPK = Guid.NewGuid();
-                customerViewModel.BusinessUnit.BusinessUnitPK = Guid.NewGuid();
-                customerViewModel.BusinessUnit.FinanceInformationPK = Guid.NewGuid();
+                dto.CustomerPK = Guid.NewGuid();
+                dto.BusinessUnit.BusinessUnitPK = Guid.NewGuid();
+                dto.BusinessUnit.FinanceInformationPK = Guid.NewGuid();
 
                 // Map ViewModel to Entity
                 var customer = new Customer
                 {
-                    CustomerID = customerViewModel.CustomerID,
-                    CustomerPK = customerViewModel.CustomerPK,
-                    BusinessUnitPK = customerViewModel.BusinessUnitPK,
+                    CustomerID = dto.CustomerID,
+                    CustomerPK = dto.CustomerPK,
+                    BusinessUnitPK = dto.BusinessUnitPK,
                     BusinessUnit = new BusinessUnit
                     {
-                        Name = customerViewModel.BusinessUnit.Name,
-                        Company = customerViewModel.BusinessUnit.Company,
-                        BusinessUnitPK = customerViewModel.BusinessUnit.BusinessUnitPK,
+                        Name = dto.BusinessUnit.Name,
+                        Company = dto.BusinessUnit.Company,
+                        BusinessUnitPK = dto.BusinessUnit.BusinessUnitPK,
                         FinanceInformation = new FinanceInformation
                         {
-                            FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
-                            CurrencyPK = customerViewModel.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
-                            VAT = customerViewModel.BusinessUnit.FinanceInformation.VAT
+                            FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK,
+                            CurrencyPK = dto.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
+                            VAT = dto.BusinessUnit.FinanceInformation.VAT
                         },
-                        ContactInformations = customerViewModel.BusinessUnit.ContactInformations?.Select(c => new ContactInformation
+                        ContactInformations = dto.BusinessUnit.ContactInformations?.Select(c => new ContactInformation
                         {
-                            BusinessUnitPK = customerViewModel.BusinessUnitPK,
+                            BusinessUnitPK = dto.BusinessUnitPK,
                             IsDefault = c.IsDefault,
                             References = c.References,
                             ContactInformationPK = c.ContactInformationPK,
@@ -88,14 +88,14 @@ namespace NowasteReactTMS.Server.Controllers
                             Description = c.Description,
                             IsEditable = c.IsEditable,
                         }).ToList(),
-                        FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
-                        IsEditable = customerViewModel.BusinessUnit.IsEditable
+                        FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK,
+                        IsEditable = dto.BusinessUnit.IsEditable
                     }
                 };
 
                 try
                 {
-                    await _customerRepository.CreateCustomer(customer);
+                    await _customerRepo.CreateCustomer(customer);
                 }
                 catch (Exception ex)
                 {
@@ -104,5 +104,68 @@ namespace NowasteReactTMS.Server.Controllers
 
                 return Ok(customer.CustomerPK); // Return the created customer's PK
             }
-        }
+
+        //Kraschar swagger atm, ingen aning varför
+
+        //[HttpPost]
+        //public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel)
+        //{
+        //    var ci = new List<ContactInformation>();
+
+        //    if (customerViewModel.BusinessUnit?.ContactInformations != null)
+        //    {
+        //        foreach (var c in customerViewModel.BusinessUnit.ContactInformations)
+        //        {
+        //            if (c != null)
+        //            {
+        //                ci.Add(new ContactInformation
+        //                {
+        //                    BusinessUnitPK = c.BusinessUnitPK,
+        //                    IsDefault = c.IsDefault,
+        //                    References = c.References,
+        //                    ContactInformationPK = c.ContactInformationPK,
+        //                    Email = c.Email,
+        //                    Phone = c.Phone,
+        //                    CellularPhone = c.CellularPhone,
+        //                    Fax = c.Fax,
+        //                    Address = c.Address,
+        //                    Zipcode = c.Zipcode,
+        //                    City = c.City,
+        //                    Country = c.Country,
+        //                    IsActive = c.IsActive,
+        //                    ExternalId = c.ExternalId,
+        //                    Description = c.Description,
+        //                    IsEditable = c.IsEditable
+        //                });
+        //            }
+        //        }
+        //    }
+
+        //    var customer = new Customer
+        //    {
+        //        CustomerPK = customerViewModel.CustomerPK,
+        //        CustomerID = customerViewModel.CustomerID,
+        //        BusinessUnitPK = customerViewModel.BusinessUnitPK,
+        //        BusinessUnit = new BusinessUnit
+        //        {
+        //            Name = customerViewModel.BusinessUnit.Name,
+        //            IsEditable = customerViewModel.BusinessUnit.IsEditable,
+        //            Company = customerViewModel.BusinessUnit.Company,
+        //            BusinessUnitPK = customerViewModel.BusinessUnit.BusinessUnitPK,
+        //            FinanceInformation = new FinanceInformation
+        //            {
+        //                FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
+        //                CurrencyPK = customerViewModel.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
+        //                VAT = customerViewModel.BusinessUnit.FinanceInformation.VAT
+        //            },
+        //            ContactInformations = ci.AsEnumerable(),
+        //            FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK
+        //        }
+        //    };
+
+        //    await _customerRepository.UpdateCustomer(customerViewModel.CustomerPK, customer);
+
+        //    return Ok(new { message = "Edit successful" });
+        //}
     }
+}

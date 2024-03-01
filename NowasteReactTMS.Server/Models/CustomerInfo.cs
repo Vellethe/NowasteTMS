@@ -9,11 +9,21 @@ namespace NowasteReactTMS.Server.Models
         public Guid BusinessUnitPK { get; set; }
         public string Name { get; set; }
         public Guid FinanceInformationPK { get; set; }
-        public FinanceInformation FinanceInformation { get; set; }
+        public CustomerFinanceInformation FinanceInformation { get; set; }
         public List<ContactInformation> ContactInformations { get; set; }
         public string Company { get; set; }
         public bool IsEditable { get; set; }
+
     }
+    public class CustomerFinanceInformation
+    {
+        public string VAT { get; set; }
+        [DisplayName("Currency")]
+        public Currency Currency { get; set; }
+        [DisplayName("Self billing settings")]
+        public List<Currency> Currencies { get; set; }
+    }
+
     //public class CustomerContactInformation
     //{
     //    [Key]
@@ -36,12 +46,4 @@ namespace NowasteReactTMS.Server.Models
     //    public string Description { get; set; }
     //    public bool IsEditable { get; set; }
     //}
-    public class CustomerFinanceInformation
-    {
-        public string VAT { get; set; }
-        [DisplayName("Currency")]
-        public Currency Currency { get; set; }
-        [DisplayName("Self billing settings")]
-        public List<Currency> Currencies { get; set; }
-    }
 }
