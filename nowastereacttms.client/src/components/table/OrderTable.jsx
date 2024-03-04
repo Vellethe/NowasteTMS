@@ -12,12 +12,9 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineSmartDisplay } from "react-icons/md";
-
-
-
-
-
 import SearchBar from '../Searchbar';
+
+
 
 
 const OrderTable = () => {
@@ -163,12 +160,12 @@ const OrderTable = () => {
         pageSize: 25,
       },
     },
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     state: {
       sorting: sorting,
     },
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
   });
 
@@ -253,7 +250,6 @@ const OrderTable = () => {
         className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-1 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
         type="button"
       >
-        Columns
         <Select
           options={options}
           isMulti
@@ -270,9 +266,7 @@ const OrderTable = () => {
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
                 <tr>
-                  <th className="border p-2 bg-white relative">
-                    
-                  </th>
+                  <th className="border p-2 bg-white relative"></th>
                   {headerGroup.headers.map((header) => (
                     <th
                       className="border p-2 bg-white relative"
@@ -316,10 +310,30 @@ const OrderTable = () => {
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                   <td className=" border p-1 text-center flex gap-2">
-                    <IoIosWarning className="text-2xl text-red" />
-                    <FaRegComment className="text-2xl" />
+                    <input
+                      className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                      type="checkbox"
+                    />
+                   
+                    <div className="relative group">
+                      <IoIosWarning className="text-2xl text-red" />
+                      <span className="absolute top-5 left-5 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                        This order has transportbooking set to no in M3 and can not be transport booked.
+                      </span>
+                    </div>
+                    <div className="relative group">
+                    <FaRegComment className="text-2xl relative group" />
+                    <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                        Edit internal comment.
+                      </span>
+                    </div>
+                    <div className="relative group" >
                     <MdOutlineSmartDisplay className="text-2xl" />
-                    <input className="accent-medium-green h-5 w-5 rounded-xl ml-1" type="checkbox" />
+                    <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                        Note! Order is already transportbooked.
+                      </span>
+                    </div>
+                    
                   </td>
                   {row.getVisibleCells().map((cell) => (
                     <td className="border p-1 text-center" key={cell.id}>
