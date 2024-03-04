@@ -39,22 +39,31 @@ const AllOrders = () => {
       <div>
         <hr className="m-4"></hr>
 
-        <div className="flex gap-2 justify-between mr-7">
-          <Link
-            to="/Transport/Order/Create"
-            className=" p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mb-5 ml-6 text-2xl border border-medium-green "
-          >
-            Edit ETA
-          </Link>
-          <button
-            onClick={exportToExcel}
-            className="flex items-center gap-2 text-2xl hover:text-3xl duration-200"
-          >
-            <SiMicrosoftexcel />
-            Excel{" "}
-            {/*  Detta kan tas bort eller bytas mot en tydligare excel icon*/}
-          </button>
-        </div>
+        <div className="flex justify-between">
+  <Link
+    to="/Transport/Order/Create"
+    className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mb-10 ml-6 text-2xl border border-medium-green"
+  >
+    Edit Order
+  </Link>
+  <div className="flex gap-2">
+  <button
+  onClick={exportToExcel}
+  className="p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg mb-10 mr-3 text-2xl border border-medium-green flex items-center"
+>
+  <SiMicrosoftexcel className="mr-2" />
+  Excel
+</button>
+
+    <Link 
+      to="/Transport/OrderDetails/Details"
+      className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mb-10 mr-6 text-2xl border border-medium-green"
+    >
+      Group
+    </Link>
+  </div>
+</div>
+
       </div>
     </>
   );
