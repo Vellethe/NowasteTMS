@@ -234,6 +234,7 @@ const OrderTable = () => {
       .then(data => {
         // Update state with fetched data
         setOrders(data);
+        console.log(data)
       })
       .catch(error => {
         console.error('Error fetching data:', error);
