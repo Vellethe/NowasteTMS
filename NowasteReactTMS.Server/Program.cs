@@ -30,6 +30,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddSignInManager<NowasteSignInManager<ApplicationUser>>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173") // Ange din React-apps URL här
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // All repositories
 builder.Services.AddSingleton<IConnectionFactory>(new SqlConnectionFactory(connectionString));
 builder.Services.AddSingleton<IPalletReceiptRepository, PalletReceiptRepository>();
@@ -53,6 +64,7 @@ builder.Services.AddSingleton<IPalletInventoryRepository, PalletInventoryReposit
 builder.Services.AddSingleton<IBusinessUnitRepository, BusinessUnitRepository>();
 
 
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -63,7 +75,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
 }
+
+app.UseCors("MyAllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 

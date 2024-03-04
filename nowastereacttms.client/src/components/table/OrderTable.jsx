@@ -226,8 +226,22 @@ const OrderTable = () => {
     return true; // Include row if all filters match
   };
 
+  fetch('https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1')
+  .then(response => response.json()) // Parse the response as JSON
+  .then(data => {
+    // Handle the data received from the API
+    console.log(data);
+    // You can process the data further here
+  })
+  .catch(error => {
+    // Handle any errors that occur during the fetch
+    console.error('Error fetching data:', error);
+  });
+
   return (
     <div className="text-dark-green text-sm w-full">
+
+      <div>Order: {data.created}</div>
       <button
         className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-3 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
         type="button"
