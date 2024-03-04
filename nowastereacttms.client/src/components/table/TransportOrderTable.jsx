@@ -236,7 +236,7 @@ const OrderTable = () => {
         />
       </button>
       <div className="overflow-auto relative">
-        <table ref={tableRef} className="table-fixed border-x border-b w-full">
+        <table ref={tableRef} className="border-x border-b w-full">
           <thead className="border">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>

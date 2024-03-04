@@ -15,8 +15,8 @@ const AllOrders = () => {
   };
   return (
     <>
-      <div className="m-7">
-        <div className="text-3xl text-center mt-6 text-dark-green">Orders</div>
+      <div className="m-4">
+        <div className="text-3xl text-center text-dark-green">Orders</div>
 
         <div className=" m-3 text-xl flex justify-end  text-medium-green">
           <div className="flex gap-3">
@@ -42,14 +42,14 @@ const AllOrders = () => {
         <div className="flex justify-between">
   <Link
     to="/Transport/Order/Create"
-    className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mb-10 ml-6 text-2xl border border-medium-green"
+    className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg ml-6 text-2xl border border-medium-green"
   >
     Edit Order
   </Link>
   <div className="flex gap-2">
   <button
   onClick={exportToExcel}
-  className="p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg mb-10 mr-3 text-2xl border border-medium-green flex items-center"
+  className="p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg mr-3 text-2xl border border-medium-green flex items-center"
 >
   <SiMicrosoftexcel className="mr-2" />
   Excel
@@ -57,7 +57,7 @@ const AllOrders = () => {
 
     <Link 
       to="/Transport/OrderDetails/Details"
-      className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mb-10 mr-6 text-2xl border border-medium-green"
+      className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mr-6 text-2xl border border-medium-green"
     >
       Group
     </Link>

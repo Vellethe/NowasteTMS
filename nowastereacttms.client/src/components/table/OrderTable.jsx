@@ -250,7 +250,7 @@ const OrderTable = () => {
     <div className="text-dark-green text-sm w-full">
       <div>Order: {orders.orderPK}</div>
       <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-3 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
+        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-1 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
         type="button"
       >
         Columns
@@ -265,7 +265,7 @@ const OrderTable = () => {
         />
       </button>
       <div className="overflow-auto relative">
-        <table ref={tableRef} className=" border-x border-b w-full">
+        <table ref={tableRef} className="border-x border-b w-full">
           <thead className="border">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
