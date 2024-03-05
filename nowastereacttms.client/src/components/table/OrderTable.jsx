@@ -315,22 +315,22 @@ const OrderTable = () => {
                       type="checkbox"
                     />
                    
-                    <div className="relative group">
+                   <div className="relative group">
                       <IoIosWarning className="text-2xl text-red" />
-                      <span className="absolute top-5 left-5 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-                        This order has transportbooking set to no in M3 and can not be transport booked.
+                      <span className="absolute top-5 left-5 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                        This order has transport booking set to no in M3 and can not be transport booked.
                       </span>
                     </div>
                     <div className="relative group">
-                    <FaRegComment className="text-2xl relative group" />
-                    <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                      <FaRegComment className="text-2xl relative group" />
+                      <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Edit internal comment.
                       </span>
                     </div>
-                    <div className="relative group" >
-                    <MdOutlineSmartDisplay className="text-2xl" />
-                    <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-                        Note! Order is already transportbooked.
+                    <div className="relative group">
+                      <MdOutlineSmartDisplay className="text-2xl" />
+                      <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                        Note! Order is already transport booked.
                       </span>
                     </div>
                     
