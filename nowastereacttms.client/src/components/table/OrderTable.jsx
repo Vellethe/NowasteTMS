@@ -327,8 +327,7 @@ const OrderTable = () => {
                     <div className="relative group">
                       <IoIosWarning className="text-2xl text-red" />
                       <span className="absolute top-5 left-5 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        This order has transport booking set to no in M3 and can
-                        not be transport booked.
+                        This order has transport booking set to no in M3 and cannot be transport booked.
                       </span>
                     </div>
 
