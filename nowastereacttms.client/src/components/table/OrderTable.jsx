@@ -1,32 +1,26 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
-import Select from 'react-select';
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import Select from "react-select";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import mData from "../../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
-import { MdOutlineSmartDisplay, MdOutlineStopCircle } from "react-icons/md";
-import SearchBar from '../Searchbar';
-
-
-
+import { MdOutlineStopCircle } from "react-icons/md";
+import { BiSolidPlusSquare } from "react-icons/bi";
+import SearchBar from "../Searchbar";
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => mData, [])
+  const data = useMemo(() => mData, []);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
-    {
-      header: "Id",
-      accessorKey: "OrderPK",
-    },
     {
       header: "Status",
       accessorKey: "OrderTransportStatusString",
@@ -175,38 +169,51 @@ const OrderTable = () => {
     setSelectedColumns(defaultSelectedColumns);
   }, []); //Empty dependency array so it only runs once
 
-  const defaultSelectedAccessorKeys = ['OrderPK', 'OrderId', 'SupplierName', 'TransportBooking', 'OrderTransportStatusString'];
-  const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
+  const defaultSelectedAccessorKeys = [
+    "OrderPK",
+    "OrderId",
+    "SupplierName",
+    "TransportBooking",
+    "OrderTransportStatusString",
+  ];
+  const defaultSelectedColumns = columns.filter((column) =>
+    defaultSelectedAccessorKeys.includes(column.accessorKey)
+  );
 
   const handleColumnSelection = (selectedOptions) => {
     if (!selectedOptions) {
       return;
     }
 
-    if (selectedOptions.some(option => option.value === 'select-all')) {
+    if (selectedOptions.some((option) => option.value === "select-all")) {
       // Select All
       setSelectedColumns(columns);
       return;
     }
 
     const selectedColumns = selectedOptions
-      .filter(option => !defaultSelectedAccessorKeys.includes(option.value)) // Filter out default selected columns
-      .map(option => columns.find(column => column && column.accessorKey === option.value))
-      .filter(column => column); // Filter out undefined or null columns
+      .filter((option) => !defaultSelectedAccessorKeys.includes(option.value)) // Filter out default selected columns
+      .map((option) =>
+        columns.find((column) => column && column.accessorKey === option.value)
+      )
+      .filter((column) => column); // Filter out undefined or null columns
 
     // Merge default  columns with new columns
-    const updatedSelectedColumns = [...defaultSelectedColumns, ...selectedColumns];
+    const updatedSelectedColumns = [
+      ...defaultSelectedColumns,
+      ...selectedColumns,
+    ];
     setSelectedColumns(updatedSelectedColumns);
   };
 
-  const selectAllOption = { value: 'select-all', label: 'Select All' };
-  const options = [selectAllOption, ...columns.map(column => ({
-    value: column.accessorKey,
-    label: column.header
-  }))];
-
-
-
+  const selectAllOption = { value: "select-all", label: "Select All" };
+  const options = [
+    selectAllOption,
+    ...columns.map((column) => ({
+      value: column.accessorKey,
+      label: column.header,
+    })),
+  ];
 
   const [columnFilters, setColumnFilters] = useState({});
 
@@ -221,7 +228,9 @@ const OrderTable = () => {
   const filterData = (row) => {
     for (const columnId in columnFilters) {
       const filterValue = columnFilters[columnId];
-      const cellValue = row[columnId] ? row[columnId].toString().toLowerCase() : "";
+      const cellValue = row[columnId]
+        ? row[columnId].toString().toLowerCase()
+        : "";
       if (cellValue.indexOf(filterValue.toLowerCase()) === -1) {
         return false; // Do not include row if any filter does not match
       }
@@ -232,38 +241,37 @@ const OrderTable = () => {
 
   useEffect(() => {
     // Fetch data from your API
-    fetch('https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1')
-      .then(response => response.json())
-      .then(data => {
+    fetch(
+      "https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1"
+    )
+      .then((response) => response.json())
+      .then((data) => {
         // Update state with fetched data
         setOrders(data);
-        console.log(data)
+        console.log(data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
 
   return (
     <div className="text-dark-green w-full">
-      <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-1 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
-        type="button"
-      >
-        <Select
-          options={options}
-          isMulti
-          onChange={handleColumnSelection}
-          placeholder="Select columns"
-          defaultValue={selectedColumns.map((column) => ({
-            value: column.accessorKey,
-            label: column.header,
-          }))}
-        />
-      </button>
+      <Select
+        className="text-dark-green duration-500  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex"
+        options={options}
+        isMulti
+        onChange={handleColumnSelection}
+        placeholder="Columns"
+        defaultValue={selectedColumns.map((column) => ({
+          value: column.accessorKey,
+          label: column.header,
+        }))}
+      />
+
       <div className="mb-5">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
-          <thead className="border">
+          <thead className="border ">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
                 <tr>
@@ -310,7 +318,7 @@ const OrderTable = () => {
               .rows.filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className=" border p-1 text-center flex gap-2">
+                  <td className=" border-b p-1 text-center flex gap-2">
                     <input
                       className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                       type="checkbox"
@@ -325,13 +333,13 @@ const OrderTable = () => {
                     </div>
 
                     <div className="relative group">
-                      <FaRegComment className="text-2xl relative group" />
-                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                      <FaRegComment className="text-2xl relative group cursor-pointer" />
+                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded hover:border opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Edit internal comment.
                       </span>
                     </div>
                     <div className="relative group">
-                      <MdOutlineSmartDisplay className="text-2xl relative group" />
+                      <BiSolidPlusSquare className="text-2xl relative group text-blue cursor-pointer " />
                       <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Create new transport order.
                       </span>
@@ -407,5 +415,5 @@ const OrderTable = () => {
       </div>
     </div>
   );
-}
+};
 export default OrderTable;
