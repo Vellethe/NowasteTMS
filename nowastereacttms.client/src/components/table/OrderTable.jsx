@@ -316,32 +316,32 @@ const OrderTable = () => {
                       type="checkbox"
                     />
 
-                   <div className="relative group">
+                    <div className="relative group">
                       <IoIosWarning className="text-2xl text-red" />
-                      <span className="absolute top-5 left-5 bg-white border w-60 text-sm text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        This order has transport booking set to "No" in M3 and can not be transport booked.
+                      <span className="absolute top-5 left-5 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                        This order has transport booking set to no in M3 and can
+                        not be transport booked.
                       </span>
                     </div>
-                    <div>
-                    <div className="relative group">
-                        <MdOutlineSmartDisplay className="text-2xl relative group" />
-                        <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                            Create new transport order.
-                        </span>
-                    </div>
-                    </div>
+
                     <div className="relative group">
                       <FaRegComment className="text-2xl relative group" />
-                      <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Edit internal comment.
-                   
+                      </span>
+                    </div>
                     <div className="relative group">
-                      <MdOutlineSmartDisplay className="text-2xl" />
+                      <MdOutlineSmartDisplay className="text-2xl relative group" />
+                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                        Create new transport order.
+                      </span>
+                    </div>
+                    <div className="relative group">
+                      <MdOutlineStopCircle className="text-2xl" />
                       <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Note! Order is already transport booked.
                       </span>
                     </div>
-                    
                   </td>
                   {row.getVisibleCells().map((cell) => (
                     <td className="border p-1 text-center" key={cell.id}>
