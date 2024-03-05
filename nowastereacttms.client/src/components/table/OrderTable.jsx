@@ -11,7 +11,7 @@ import mData from "../../data/MOCK_DATA.json";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
-import { MdOutlineSmartDisplay } from "react-icons/md";
+import { MdOutlineSmartDisplay, MdOutlineStopCircle } from "react-icons/md";
 import SearchBar from '../Searchbar';
 
 
@@ -243,9 +243,9 @@ const OrderTable = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
+
   return (
-    <div className="text-dark-green text-sm w-full">
-      <div>Order: {orders.orderPK}</div>
+    <div className="text-dark-green w-full">
       <button
         className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-1 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
         type="button"
@@ -254,14 +254,15 @@ const OrderTable = () => {
           options={options}
           isMulti
           onChange={handleColumnSelection}
+          placeholder="Select columns"
           defaultValue={selectedColumns.map((column) => ({
             value: column.accessorKey,
             label: column.header,
           }))}
         />
       </button>
-      <div className="overflow-auto relative">
-        <table ref={tableRef} className="border-x border-b w-full">
+      <div className="mb-5">
+        <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
@@ -314,19 +315,26 @@ const OrderTable = () => {
                       className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                       type="checkbox"
                     />
-                   
+
                    <div className="relative group">
                       <IoIosWarning className="text-2xl text-red" />
                       <span className="absolute top-5 left-5 bg-white border w-60 text-sm text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         This order has transport booking set to "No" in M3 and can not be transport booked.
                       </span>
                     </div>
+                    <div>
+                    <div className="relative group">
+                        <MdOutlineSmartDisplay className="text-2xl relative group" />
+                        <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                            Create new transport order.
+                        </span>
+                    </div>
+                    </div>
                     <div className="relative group">
                       <FaRegComment className="text-2xl relative group" />
-                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                      <span className="absolute top-6 left-6 bg-white border w-auto text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Edit internal comment.
-                      </span>
-                    </div>
+                   
                     <div className="relative group">
                       <MdOutlineSmartDisplay className="text-2xl" />
                       <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
