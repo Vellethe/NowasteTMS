@@ -289,12 +289,18 @@ const CreateForm = () => {
                   </select>
                 </td>
                 <td>
-                  <div className="flex gap-5 justify-center m-6 ">
+                <div className="flex gap-5 justify-center m-6">
                     <button
                       className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
-                      onClick={() => handleRemoveLine(index)}>
-                      Remove</button>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleRemoveLine(index);
+                      }}
+                    >
+                      Remove
+                    </button>
                   </div>
+
                 </td>
               </tr>
             ))}
