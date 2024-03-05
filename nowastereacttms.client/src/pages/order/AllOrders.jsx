@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import OrderTable from "../../components/table/OrderTable";
 import * as XLSX from "xlsx";
 import { SiMicrosoftexcel } from "react-icons/si";
-
-
+import mData from '../../data/MOCK_DATA.json'
 
 const AllOrders = () => {
+  const data = mData;
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
