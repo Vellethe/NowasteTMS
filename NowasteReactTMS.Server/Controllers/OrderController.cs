@@ -95,6 +95,21 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(orders);
         }
+        [HttpGet]
+        public async Task<IActionResult> AllOrders()
+        {
+            try
+            {
+                var orders = await _orderRepo.GetAllOrders();
+
+                return Ok(orders);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDTO dto)
         {

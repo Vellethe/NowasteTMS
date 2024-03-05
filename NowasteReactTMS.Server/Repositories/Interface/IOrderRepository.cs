@@ -9,6 +9,6 @@ public interface IOrderRepository
     Task<Order> GetById(string orderId);
     Task<int> UpdateOrder(Order order);
     Task<int> AddOrder(Order order);
+    Task<Order> GetAllOrders();
     Task<SearchOrderResponse> SearchOrders(SearchParameters parameters);
-
 }

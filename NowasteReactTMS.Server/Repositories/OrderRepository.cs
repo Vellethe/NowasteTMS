@@ -60,7 +60,6 @@ public class OrderRepository : IOrderRepository
         this.transportOrderRepository = transportOrderRepository;
     }
 
-
     public async Task<Order> Get(Guid pk)
     {
         using (var connection = connectionFactory.CreateConnection())
