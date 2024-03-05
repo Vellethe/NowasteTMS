@@ -12,6 +12,8 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineSmartDisplay } from "react-icons/md";
+import { BiSolidPlusSquare } from "react-icons/bi";
+
 import SearchBar from '../Searchbar';
 
 
@@ -246,11 +248,8 @@ const OrderTable = () => {
   return (
     <div className="text-dark-green text-sm w-full">
       <div>Order: {orders.orderPK}</div>
-      <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-1 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
-        type="button"
-      >
-        <Select
+      
+        <Select className=" duration-200 bg-medium-green mb-1 font-medium rounded-lg text-xl p-1 text-center inline-flex"
           options={options}
           isMulti
           onChange={handleColumnSelection}
@@ -259,7 +258,7 @@ const OrderTable = () => {
             label: column.header,
           }))}
         />
-      </button>
+      
       <div className="overflow-auto relative">
         <table ref={tableRef} className="border-x border-b w-full">
           <thead className="border">
@@ -309,7 +308,7 @@ const OrderTable = () => {
               .rows.filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className=" border p-1 text-center flex gap-2">
+                  <td className=" border-b p-1 text-center flex gap-2">
                     <input
                       className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                       type="checkbox"
@@ -322,7 +321,7 @@ const OrderTable = () => {
                       </span>
                     </div>
                     <div className="relative group">
-                      <FaRegComment className="text-2xl relative group" />
+                      <FaRegComment className="text-2xl relative group cursor-pointer" />
                       <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Edit internal comment.
                       </span>
@@ -331,6 +330,12 @@ const OrderTable = () => {
                       <MdOutlineSmartDisplay className="text-2xl" />
                       <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
                         Note! Order is already transport booked.
+                      </span>
+                    </div>
+                    <div className="relative group">
+                      <BiSolidPlusSquare className="text-2xl text-blue cursor-pointer" />
+                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 hover:focus group-hover:opacity-100 z-10">
+                        Create new transport order.
                       </span>
                     </div>
                     

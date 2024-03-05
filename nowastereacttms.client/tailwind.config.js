@@ -11,7 +11,8 @@ export default {
       'brown': '#AA8B56',
       'white': '#F0EBCE',
       'gray': '#eaeaea',
-      'red': '#ea0808'
+      'red': '#ea0808',
+      'blue': '#346beb'
 
     },
     extend: {},
