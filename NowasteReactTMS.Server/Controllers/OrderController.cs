@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NowasteReactTMS.Server.Models;
 using NowasteTms.Model;
@@ -15,40 +16,40 @@ namespace NowasteReactTMS.Server.Controllers
         // Keep names synchronized with OrderRepository.columnMapping (project nowaste.transport), as well in OrderController.SearchOrders().
         public static string[] ColumnNames = [
                 "OrderPK",
-                "DeliveryDate",
-                "DeliveryDateTo",
-                "DeliveryDateWD",
-                "OrderId",
-                "OrderTransportStatus",
-                "OrderTransportStatusString",
-                "Origin",
-                "CollectionDate",
-                "CollectionDateTo",
-                "CollectionDateWD",
-                "SupplierName",
-                "CustomerName",
-                "PalletExchange",
-                "Created",
-                "Updated",
-                "UpdatedTo",
-                "UpdatedWD",
-                "InternalComment",
-                "LineCount",
-                "OrderLinesTypeId2",
-                "OrderLinesTypeId8",
-                "ItemID",
-                "ItemName",
-                "ItemCompany",
-                "ItemQty",
-                "TransportTemp",
-                "CustomerAddress",
-                "CustomerCountry",
-                "SupplierCountry",
-                "Email",
-                "TransportBooking",
-                "SupplierPK",
-                "CustomerPK",
-                "Status"
+            "DeliveryDate",
+            "DeliveryDateTo",
+            "DeliveryDateWD",
+            "OrderId",
+            "OrderTransportStatus",
+            "OrderTransportStatusString",
+            "Origin",
+            "CollectionDate",
+            "CollectionDateTo",
+            "CollectionDateWD",
+            "SupplierName",
+            "CustomerName",
+            "PalletExchange",
+            "Created",
+            "Updated",
+            "UpdatedTo",
+            "UpdatedWD",
+            "InternalComment",
+            "LineCount",
+            "OrderLinesTypeId2",
+            "OrderLinesTypeId8",
+            "ItemID",
+            "ItemName",
+            "ItemCompany",
+            "ItemQty",
+            "TransportTemp",
+            "CustomerAddress",
+            "CustomerCountry",
+            "SupplierCountry",
+            "Email",
+            "TransportBooking",
+            "SupplierPK",
+            "CustomerPK",
+            "Status"
             ];
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IOrderRepository _orderRepo;
@@ -89,9 +90,9 @@ namespace NowasteReactTMS.Server.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task <IActionResult> GetOrder(Guid pk)
+        public async Task<IActionResult> GetOrder(Guid pk)
         {
-             var orders = await _orderRepo.GetOrder(pk);
+            var orders = await _orderRepo.GetOrder(pk);
 
             return Ok(orders);
         }
@@ -117,7 +118,7 @@ namespace NowasteReactTMS.Server.Controllers
             Dictionary<Guid, Item> items = new Dictionary<Guid, Item>();
             foreach (var orderLine in dto.Lines)
             {
-               var item = await _itemRepository.GetItem(orderLine.ItemPK);
+                var item = await _itemRepository.GetItem(orderLine.ItemPK);
                 items.Add(orderLine.ItemPK, item);
             }
             var pk = Guid.NewGuid();
@@ -136,8 +137,8 @@ namespace NowasteReactTMS.Server.Controllers
                 CustomerPK = dto.CustomerPK,
                 Comment = dto.Comment,
                 InternalComment = dto.InternalComment,
-                UpdatedByUserId ="hej", //user.Id
-                Email ="hej@email.com", //user.Email
+                UpdatedByUserId = "hej", //user.Id
+                Email = "hej@email.com", //user.Email
                 TransportBooking = dto.TransportBooking,
                 PalletExchange = dto.PalletExchange,
                 Lines = dto.Lines.Select(x => new OrderLine
@@ -160,12 +161,68 @@ namespace NowasteReactTMS.Server.Controllers
         //Network Failure
         //URL scheme must be "http" or "https" for CORS request.
         [HttpDelete]
-        public async Task <IActionResult> DeleteOrder(Guid pk)
+        public async Task<IActionResult> DeleteOrder(Guid pk)
         {
             var order = await _orderRepo.GetOrder(pk);
 
             return NoContent();
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] Order updatedOrder)
+        {
+            try
+            {
+                var existingOrder = await _orderRepo.Get(id);
+
+                if (existingOrder == null)
+                {
+                    return NotFound();
+                }
+
+                existingOrder.OrderId = updatedOrder.OrderId;
+                existingOrder.Type = updatedOrder.Type;
+                existingOrder.Status = updatedOrder.Status;
+                existingOrder.Origin = updatedOrder.Origin;
+                existingOrder.CollectionDate = updatedOrder.CollectionDate;
+                existingOrder.DeliveryDate = updatedOrder.DeliveryDate;
+                existingOrder.PalletExchange = updatedOrder.PalletExchange;
+                existingOrder.SupplierPK = updatedOrder.SupplierPK;
+                existingOrder.CustomerPK = updatedOrder.CustomerPK;
+                existingOrder.HandlerID = updatedOrder.HandlerID;
+                existingOrder.Created = updatedOrder.Created;
+                existingOrder.Updated = updatedOrder.Updated;
+                existingOrder.Comment = updatedOrder.Comment;
+                existingOrder.InterchangeReference = updatedOrder.InterchangeReference;
+                existingOrder.InternalComment = updatedOrder.InternalComment;
+                existingOrder.DivisionId = updatedOrder.DivisionId;
+                existingOrder.UpdatedByUserId = updatedOrder.UpdatedByUserId;
+                existingOrder.Email = updatedOrder.Email;
+                existingOrder.TransportBooking = updatedOrder.TransportBooking;
+                existingOrder.Lines = updatedOrder.Lines.ToList();
+                existingOrder.TransportOrders = updatedOrder.TransportOrders.ToList(); 
+                existingOrder.TransportOrder = updatedOrder.TransportOrder; 
+                existingOrder.Customer = updatedOrder.Customer; 
+                existingOrder.Supplier = updatedOrder.Supplier;
+
+                // Update the order in the database and get the number of affected rows
+                int affectedRows = await _orderRepo.UpdateOrder(existingOrder);
+
+                if (affectedRows > 0)
+                {
+                    return Ok(existingOrder); 
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update order");
+                }
+            }
+            catch
+            {
+                // Handle any exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
     }
-        
+
 }
