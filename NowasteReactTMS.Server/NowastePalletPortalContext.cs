@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NowasteReactTMS.Server.Controllers;
+using NowasteTms.Model;
 
 
 namespace NowasteReactTMS.Server
@@ -11,5 +12,6 @@ namespace NowasteReactTMS.Server
             : base(options)
         {
         }
+       //public DbSet<Order> Orders { get; set; }
     }
 }

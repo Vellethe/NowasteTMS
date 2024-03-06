@@ -24,23 +24,6 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok(customer);
         }
 
-        //ANVÄND ENDAST PÅ EGENSKAPADE CUSTOMERS
-        [HttpDelete]
-        public async Task<IActionResult> DeleteCustomer(Guid id)
-        {
-            try
-            {
-                await _customerRepo.DeleteCustomer(id);
-                return Ok("Customer set to 0, deleted successfully.");
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine($"An error occurred while deleting the customer: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the customer.");
-            }
-        }
-
         [HttpPost]
             public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO dto)
             {
@@ -105,67 +88,81 @@ namespace NowasteReactTMS.Server.Controllers
                 return Ok(customer.CustomerPK); // Return the created customer's PK
             }
 
-        //Kraschar swagger atm, ingen aning varför
+        [HttpPut]
+        public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel)
+        {
+            var ci = new List<ContactInformation>();
 
-        //[HttpPost]
-        //public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel)
-        //{
-        //    var ci = new List<ContactInformation>();
+            if (customerViewModel.BusinessUnit?.ContactInformations != null)
+            {
+                foreach (var c in customerViewModel.BusinessUnit.ContactInformations)
+                {
+                    if (c != null)
+                    {
+                        ci.Add(new ContactInformation
+                        {
+                            BusinessUnitPK = c.BusinessUnitPK,
+                            IsDefault = c.IsDefault,
+                            References = c.References,
+                            ContactInformationPK = c.ContactInformationPK,
+                            Email = c.Email,
+                            Phone = c.Phone,
+                            CellularPhone = c.CellularPhone,
+                            Fax = c.Fax,
+                            Address = c.Address,
+                            Zipcode = c.Zipcode,
+                            City = c.City,
+                            Country = c.Country,
+                            IsActive = c.IsActive,
+                            ExternalId = c.ExternalId,
+                            Description = c.Description,
+                            IsEditable = c.IsEditable
+                        });
+                    }
+                }
+            }
 
-        //    if (customerViewModel.BusinessUnit?.ContactInformations != null)
-        //    {
-        //        foreach (var c in customerViewModel.BusinessUnit.ContactInformations)
-        //        {
-        //            if (c != null)
-        //            {
-        //                ci.Add(new ContactInformation
-        //                {
-        //                    BusinessUnitPK = c.BusinessUnitPK,
-        //                    IsDefault = c.IsDefault,
-        //                    References = c.References,
-        //                    ContactInformationPK = c.ContactInformationPK,
-        //                    Email = c.Email,
-        //                    Phone = c.Phone,
-        //                    CellularPhone = c.CellularPhone,
-        //                    Fax = c.Fax,
-        //                    Address = c.Address,
-        //                    Zipcode = c.Zipcode,
-        //                    City = c.City,
-        //                    Country = c.Country,
-        //                    IsActive = c.IsActive,
-        //                    ExternalId = c.ExternalId,
-        //                    Description = c.Description,
-        //                    IsEditable = c.IsEditable
-        //                });
-        //            }
-        //        }
-        //    }
+            var customer = new Customer
+            {
+                CustomerPK = customerViewModel.CustomerPK,
+                CustomerID = customerViewModel.CustomerID,
+                BusinessUnitPK = customerViewModel.BusinessUnitPK,
+                BusinessUnit = new BusinessUnit
+                {
+                    Name = customerViewModel.BusinessUnit.Name,
+                    IsEditable = customerViewModel.BusinessUnit.IsEditable,
+                    Company = customerViewModel.BusinessUnit.Company,
+                    BusinessUnitPK = customerViewModel.BusinessUnit.BusinessUnitPK,
+                    FinanceInformation = new FinanceInformation
+                    {
+                        FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
+                        CurrencyPK = customerViewModel.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
+                        VAT = customerViewModel.BusinessUnit.FinanceInformation.VAT
+                    },
+                    ContactInformations = ci.AsEnumerable(),
+                    FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK
+                }
+            };
 
-        //    var customer = new Customer
-        //    {
-        //        CustomerPK = customerViewModel.CustomerPK,
-        //        CustomerID = customerViewModel.CustomerID,
-        //        BusinessUnitPK = customerViewModel.BusinessUnitPK,
-        //        BusinessUnit = new BusinessUnit
-        //        {
-        //            Name = customerViewModel.BusinessUnit.Name,
-        //            IsEditable = customerViewModel.BusinessUnit.IsEditable,
-        //            Company = customerViewModel.BusinessUnit.Company,
-        //            BusinessUnitPK = customerViewModel.BusinessUnit.BusinessUnitPK,
-        //            FinanceInformation = new FinanceInformation
-        //            {
-        //                FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
-        //                CurrencyPK = customerViewModel.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
-        //                VAT = customerViewModel.BusinessUnit.FinanceInformation.VAT
-        //            },
-        //            ContactInformations = ci.AsEnumerable(),
-        //            FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK
-        //        }
-        //    };
+            await _customerRepo.UpdateCustomer(customerViewModel.CustomerPK, customer);
 
-        //    await _customerRepository.UpdateCustomer(customerViewModel.CustomerPK, customer);
+            return Ok(new { message = "Edit successful" });
+        }
 
-        //    return Ok(new { message = "Edit successful" });
-        //}
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCustomer(Guid id)
+        {
+            try
+            {
+                await _customerRepo.DeleteCustomer(id);
+                return Ok("Customer set to 0, deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"An error occurred while deleting the customer: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the customer.");
+            }
+        }
     }
 }
