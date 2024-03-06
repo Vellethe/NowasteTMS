@@ -16,10 +16,10 @@ namespace NowasteReactTMS.Server.Controllers
             _currencyRepo = currencyRepo;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCustomer(Guid id)
+        [HttpGet("{pk}")]
+        public async Task<IActionResult> GetCustomer(Guid pk)
         {
-            var customer = await _customerRepo.GetCustomer(id);
+            var customer = await _customerRepo.GetCustomer(pk);
 
             return Ok(customer);
         }
@@ -88,8 +88,8 @@ namespace NowasteReactTMS.Server.Controllers
                 return Ok(customer.CustomerPK); // Return the created customer's PK
             }
 
-        [HttpPut]
-        public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel)
+        [HttpPut("{pk}")]
+        public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel, Guid pk)
         {
             var ci = new List<ContactInformation>();
 
@@ -144,12 +144,12 @@ namespace NowasteReactTMS.Server.Controllers
                 }
             };
 
-            await _customerRepo.UpdateCustomer(customerViewModel.CustomerPK, customer);
+            await _customerRepo.UpdateCustomer(pk, customer);
 
             return Ok(new { message = "Edit successful" });
         }
 
-        [HttpDelete]
+        [HttpDelete("{pk}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
             try
