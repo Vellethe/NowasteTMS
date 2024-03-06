@@ -99,9 +99,9 @@ namespace NowasteReactTMS.Server.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpPut("{pk}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(SupplierDTO dto)
+        public async Task<IActionResult> Edit(SupplierDTO dto, Guid pk)
         {
             List<ContactInformation> ci = new List<ContactInformation>();
 
@@ -166,22 +166,21 @@ namespace NowasteReactTMS.Server.Controllers
                 }
             };
 
-            await _supplierRepository.UpdateSupplier(dto.SupplierPK, supplier);
+            await _supplierRepository.UpdateSupplier(pk, supplier);
 
             return Ok("Edit successful");
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{pk}")]
+        public async Task<IActionResult> Delete(Guid pk)
             {
                 try
                 {
-                    await _supplierRepository.DeleteSupplier(id);
+                    await _supplierRepository.DeleteSupplier(pk);
                 return Ok("Supplier set to 0, deleted successfully.");
             }
                 catch (Exception ex)
                 {
-                    // Log the exception
                     Console.WriteLine($"An error occurred while deleting the customer: {ex.Message}");
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the customer.");
                 }
