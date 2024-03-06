@@ -99,78 +99,77 @@ namespace NowasteReactTMS.Server.Controllers
             };
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(SupplierDTO dto)
-        //{
-        //    List<ContactInformation> ci = new List<ContactInformation>();
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(SupplierDTO dto)
+        {
+            List<ContactInformation> ci = new List<ContactInformation>();
 
-        //    var currencies = await _currencyRepo.GetAll();
-        //    var currencySEK = currencies.FirstOrDefault(x => x.ShortName == "SEK");
+            var currencies = await _currencyRepo.GetAll();
+            var currencySEK = currencies.FirstOrDefault(x => x.ShortName == "SEK");
 
-        //    dto.BusinessUnit.FinanceInformation = new CustomerFinanceInformation
-        //    {
-        //        Currency = currencySEK,
-        //        Currencies = currencies,
-        //        VAT = ""
-        //    };
+            dto.BusinessUnit.FinanceInformation = new CustomerFinanceInformation
+            {
+                Currency = currencySEK,
+                Currencies = currencies,
+                VAT = ""
+            };
 
-        //    if (null != dto.BusinessUnit.ContactInformations)
-        //    {
-        //        foreach (var c in dto.BusinessUnit.ContactInformations)
-        //        {
-        //            if (null != c)
-        //            {
-        //                ci.Add(new ContactInformation
-        //                {
-        //                    BusinessUnitPK = c.BusinessUnitPK,
-        //                    IsDefault = c.IsDefault,
-        //                    References = c.References,
-        //                    ContactInformationPK = c.ContactInformationPK,
-        //                    Email = c.Email,
-        //                    Phone = c.Phone,
-        //                    CellularPhone = c.CellularPhone,
-        //                    Fax = c.Fax,
-        //                    Address = c.Address,
-        //                    Zipcode = c.Zipcode,
-        //                    City = c.City,
-        //                    Country = c.Country,
-        //                    IsActive = c.IsActive,
-        //                    ExternalId = c.ExternalId,
-        //                    Description = c.Description,
-        //                    IsEditable = c.IsEditable,
-        //                });
-        //            }
-        //        }
-        //    }
+            if (null != dto.BusinessUnit.ContactInformations)
+            {
+                foreach (var c in dto.BusinessUnit.ContactInformations)
+                {
+                    if (null != c)
+                    {
+                        ci.Add(new ContactInformation
+                        {
+                            BusinessUnitPK = c.BusinessUnitPK,
+                            IsDefault = c.IsDefault,
+                            References = c.References,
+                            ContactInformationPK = c.ContactInformationPK,
+                            Email = c.Email,
+                            Phone = c.Phone,
+                            CellularPhone = c.CellularPhone,
+                            Fax = c.Fax,
+                            Address = c.Address,
+                            Zipcode = c.Zipcode,
+                            City = c.City,
+                            Country = c.Country,
+                            IsActive = c.IsActive,
+                            ExternalId = c.ExternalId,
+                            Description = c.Description,
+                            IsEditable = c.IsEditable,
+                        });
+                    }
+                }
+            }
 
-        //    var supplier = new Supplier
-        //    {
-        //        SupplierPK = dto.SupplierPK,
-        //        SupplierID = dto.SupplierID,
-        //        BusinessUnitPK = dto.BusinessUnitPK,
-        //        BusinessUnit = new BusinessUnit
-        //        {
-        //            Name = dto.BusinessUnit.Name,
-        //            IsEditable = dto.BusinessUnit.IsEditable,
-        //            Company = dto.BusinessUnit.Company,
-        //            BusinessUnitPK = dto.BusinessUnit.BusinessUnitPK,
-        //            FinanceInformation = new FinanceInformation
-        //            {
-        //                FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK,
-        //                CurrencyPK = dto.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
-        //                VAT = dto.BusinessUnit.FinanceInformation.VAT
-        //            },
-        //            ContactInformations = ci.AsEnumerable(),
-        //            FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK
-        //        }
-        //    };
+            var supplier = new Supplier
+            {
+                SupplierPK = dto.SupplierPK,
+                SupplierID = dto.SupplierID,
+                BusinessUnitPK = dto.BusinessUnitPK,
+                BusinessUnit = new BusinessUnit
+                {
+                    Name = dto.BusinessUnit.Name,
+                    IsEditable = dto.BusinessUnit.IsEditable,
+                    Company = dto.BusinessUnit.Company,
+                    BusinessUnitPK = dto.BusinessUnit.BusinessUnitPK,
+                    FinanceInformation = new FinanceInformation
+                    {
+                        FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK,
+                        CurrencyPK = dto.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
+                        VAT = dto.BusinessUnit.FinanceInformation.VAT
+                    },
+                    ContactInformations = ci.AsEnumerable(),
+                    FinanceInformationPK = dto.BusinessUnit.FinanceInformationPK
+                }
+            };
 
-        //    await _supplierRepository.UpdateSupplier(dto.SupplierPK, supplier);
+            await _supplierRepository.UpdateSupplier(dto.SupplierPK, supplier);
 
-        //    return Ok("Edit successful");
-        //}
-
+            return Ok("Edit successful");
+        }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)

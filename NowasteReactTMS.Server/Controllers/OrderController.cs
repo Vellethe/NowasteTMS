@@ -89,7 +89,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{pk}")]
         public async Task<IActionResult> GetOrder(Guid pk)
         {
             var orders = await _orderRepo.GetOrder(pk);
@@ -155,19 +155,7 @@ namespace NowasteReactTMS.Server.Controllers
             });
             return Ok(pk);
         }
-        //Failed to fetch.
-        //Possible Reasons:
-        //CORS
-        //Network Failure
-        //URL scheme must be "http" or "https" for CORS request.
-        [HttpDelete]
-        public async Task<IActionResult> DeleteOrder(Guid pk)
-        {
-            var order = await _orderRepo.GetOrder(pk);
-
-            return NoContent();
-        }
-        [HttpPut]
+        [HttpPut("{pk}")]
         public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] Order updatedOrder)
         {
             try
@@ -221,6 +209,18 @@ namespace NowasteReactTMS.Server.Controllers
                 // Handle any exceptions
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
+        }
+        //Failed to fetch.
+        //Possible Reasons:
+        //CORS
+        //Network Failure
+        //URL scheme must be "http" or "https" for CORS request.
+        [HttpDelete("{pk}")]
+        public async Task<IActionResult> DeleteOrder(Guid pk)
+        {
+            var order = await _orderRepo.GetOrder(pk);
+
+            return NoContent();
         }
 
     }
