@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NowasteReactTMS.Server;
 using NowasteTms.Model;
 using System.Text;
 using WMan.Data.ConnectionFactory;
@@ -11,6 +13,7 @@ public class OrderRepository : IOrderRepository
     private readonly IOrderLineRepository orderLineRepository;
     private readonly IBusinessUnitRepository businessUnitRepository;
     private readonly ITransportOrderRepository transportOrderRepository;
+    //private readonly NowastePalletPortalContext portalContext;
 
     private readonly Dictionary<string, ColumnMapping> columnMapping = new Dictionary<string, ColumnMapping>
         {
@@ -52,13 +55,19 @@ public class OrderRepository : IOrderRepository
 
 
     public OrderRepository(IConnectionFactory connectionFactory, IOrderLineRepository orderLineRepository, IBusinessUnitRepository businessUnitRepository,
-        ITransportOrderRepository transportOrderRepository)
+        ITransportOrderRepository transportOrderRepository/*, NowastePalletPortalContext portalContext*/)
     {
         this.connectionFactory = connectionFactory;
         this.orderLineRepository = orderLineRepository;
         this.businessUnitRepository = businessUnitRepository;
         this.transportOrderRepository = transportOrderRepository;
+        //this.portalContext = portalContext;
     }
+
+    //public async Task<IEnumerable<Order>> GetAllOrders()
+    //{
+    //    return await portalContext.Orders.ToListAsync();
+    //}
 
     public async Task<Order> Get(Guid pk)
     {
