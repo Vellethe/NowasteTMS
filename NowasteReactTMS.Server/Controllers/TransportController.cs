@@ -84,6 +84,10 @@ namespace NowasteReactTMS.Server.Controllers
         public async Task<IActionResult> GetTransportOrder(Guid pk)
         {
             var transportOrder = await _transportOrderRepo.Get(pk);
+            if (transportOrder == null)
+            {
+                return NotFound();
+            }
 
             return Ok(transportOrder);
         }
