@@ -218,9 +218,9 @@ namespace NowasteReactTMS.Server.Controllers
         [HttpDelete("{pk}")]
         public async Task<IActionResult> DeleteOrder(Guid pk)
         {
-            var order = await _orderRepo.GetOrder(pk);
+            await _orderRepo.GetOrder(pk);
 
-            return NoContent();
+            return Ok("Successufully deleted");
         }
 
     }
