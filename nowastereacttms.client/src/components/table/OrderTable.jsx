@@ -278,7 +278,7 @@ const OrderTable = () => {
                   <th className="border p-2 bg-white relative"></th>
                   {headerGroup.headers.map((header) => (
                     <th
-                      className="border p-2 bg-white relative"
+                      className="border p-2 bg-white relative truncate"
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                     >
@@ -300,7 +300,7 @@ const OrderTable = () => {
                     <SearchBar disabled></SearchBar>
                   </th>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
+                    <th className=""key={header.id}>
                       <SearchBar
                         onFilterChange={(value) =>
                           handleColumnFilterChange(header.id, value)
@@ -318,7 +318,7 @@ const OrderTable = () => {
               .rows.filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className=" border-b p-1 text-center flex gap-2">
+                  <td className=" border-b p-1 text-center flex gap-2 truncate">
                     <input
                       className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                       type="checkbox"
@@ -351,7 +351,7 @@ const OrderTable = () => {
                     </div>
                   </td>
                   {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center" key={cell.id}>
+                    <td className="border p-1 text-center truncate" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
