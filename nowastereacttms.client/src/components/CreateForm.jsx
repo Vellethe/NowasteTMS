@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { createOrder } from "./APICalls/CreateOrder";
 
 const CreateForm = () => {
   const [formData, setFormData] = useState({
@@ -28,8 +29,16 @@ const CreateForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log("Form submitted", data);
+  const onSubmit = async (data) => {
+    try {
+      const pk = await createOrder(data);
+      console.log('Order created with primary key:', pk);
+      window.alert("Order created")
+      navigate('/success');
+    } catch (error) {
+      // Handle errors
+      console.error('Failed to create order:', error);
+    }
   };
 
   const handleInputChange = (index, event) => {

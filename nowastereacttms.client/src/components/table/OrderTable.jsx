@@ -14,6 +14,7 @@ import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
+// import { updateOrder } from '../APICalls/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -239,21 +240,15 @@ const OrderTable = () => {
   };
   const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    // Fetch data from your API
-    fetch(
-      "https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Update state with fetched data
-        setOrders(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+//Måste göras med en if sats med checkbox när dom fungerar (och dubbelkollas vad som ska kunna uppdateras)
+  // const handleUpdateOrder = async (orderId, updatedData) => {
+  //   try {
+  //     const updatedOrder = await updateOrder(orderId, updatedData);
+  //     console.log('Order updated successfully:', updatedOrder);
+  //   } catch (error) {
+  //     console.error('Error updating order:', error.message);
+  //   }
+  // };
 
   return (
     <div className="text-dark-green w-full">
