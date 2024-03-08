@@ -1,8 +1,8 @@
 var baseUrl ="https://localhost:7253";
 
-const createCustomer = async (orderData) => {
+const createSupplier = async (orderData) => {
   try {
-    const response = await fetch(`${baseUrl}/Customer`, {
+    const response = await fetch(`${baseUrl}/Supplier`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,4 +22,4 @@ const createCustomer = async (orderData) => {
   }
 };
 
-export default createCustomer;
+export default createSupplier;
