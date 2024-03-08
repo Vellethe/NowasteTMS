@@ -13,7 +13,7 @@ const SearchBar = ({ onFilterChange, disabled }) => {
 
   return (
     <input
-      className="text-center"
+      className="text-center w-full p-1 my-1"
       type="text"
       placeholder={disabled ? "" : "Search"}
       onChange={handleChange}

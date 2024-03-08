@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import mData from "../../data/MOCK_DATA.json";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
@@ -283,8 +283,8 @@ const OrderTable = () => {
                       )}
                       {
                         {
-                          asc: <LuChevronsUpDown />,
-                          desc: <LuChevronsUpDown />,
+                          asc: <FaArrowUp />,
+                          desc: <FaArrowDown />,
                         }[header.column.getIsSorted()]
                       }
                     </th>
