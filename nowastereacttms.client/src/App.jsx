@@ -23,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/" element={<MasterLayout />}>
-          <Route path="/Transport/Order/AllOrders" element={<AllOrders />} />{" "}
+          <Route path="/Transport/Order/AllOrders" element={<AllOrders />} />
           
           <Route
             path="/Transport/Order/AllHistoricalOrders"
