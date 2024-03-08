@@ -2,13 +2,14 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import Select from "react-select";
 import {
   useReactTable,
+  
   getCoreRowModel,
   flexRender,
   getPaginationRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
 import mData from "../../data/MOCK_DATA.json";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
@@ -148,6 +149,7 @@ const OrderTable = () => {
 
   const table = useReactTable({
     data,
+    
     columns: selectedColumns,
     initialState: {
       pagination: {
@@ -237,23 +239,25 @@ const OrderTable = () => {
     }
     return true; // Include row if all filters match
   };
-  const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    // Fetch data from your API
-    fetch(
-      "https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Update state with fetched data
-        setOrders(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+
+  // const [orders, setOrders] = useState([]);
+
+  // useEffect(() => {
+  //   // Fetch data from your API
+  //   fetch(
+  //     "https://localhost:7253/api/Order?pk=2A8D6E5A-7CBC-4F0B-BAAC-007206E994B1"
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // Update state with fetched data
+  //       setOrders(data);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   return (
     <div className="text-dark-green w-full">
@@ -288,14 +292,14 @@ const OrderTable = () => {
                       )}
                       {
                         {
-                          asc: <LuChevronsUpDown />,
-                          desc: <LuChevronsUpDown />,
+                          asc: <FaArrowUp />,
+                          desc: <FaArrowDown />,
                         }[header.column.getIsSorted()]
                       }
                     </th>
                   ))}
                 </tr>
-                <tr>
+                <tr className="border">
                   <th>
                     <SearchBar disabled></SearchBar>
                   </th>
@@ -397,7 +401,10 @@ const OrderTable = () => {
         >
           Last
         </button>
-        <select
+      
+      </div>
+      <div className="flex justify-center" >
+      <select
           id="showbutton"
           className="cursor-pointer"
           value={table.getState().pagination.pageSize}

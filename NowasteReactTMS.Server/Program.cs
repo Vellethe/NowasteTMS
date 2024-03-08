@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using NowastePalletPortal.Extensions.Helpers;
 using NowasteReactTMS.Server;
 using NowasteReactTMS.Server.Controllers;
@@ -75,7 +74,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
+
 }
 
 app.UseCors("MyAllowSpecificOrigins");
