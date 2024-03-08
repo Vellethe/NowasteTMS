@@ -1,9 +1,8 @@
-//import baseUrl from './API'
 var baseUrl ="https://localhost:7253";
 
-const createOrder = async (orderData) => {
+const createCustomer = async (orderData) => {
   try {
-    const response = await fetch(`${baseUrl}/Order`, {
+    const response = await fetch(`${baseUrl}/create-customer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,4 +22,4 @@ const createOrder = async (orderData) => {
   }
 };
 
-export default createOrder;
+export default createCustomer;
