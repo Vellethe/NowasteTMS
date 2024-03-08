@@ -14,6 +14,7 @@ import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
+import { updateOrder } from '../APICalls/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -238,6 +239,16 @@ const OrderTable = () => {
     return true; // Include row if all filters match
   };
   const [orders, setOrders] = useState([]);
+
+//Måste göras med en if sats med checkbox när dom fungerar (och dubbelkollas vad som ska kunna uppdateras)
+  const handleUpdateOrder = async (orderId, updatedData) => {
+    try {
+      const updatedOrder = await updateOrder(orderId, updatedData);
+      console.log('Order updated successfully:', updatedOrder);
+    } catch (error) {
+      console.error('Error updating order:', error.message);
+    }
+  };
 
   return (
     <div className="text-dark-green w-full">
