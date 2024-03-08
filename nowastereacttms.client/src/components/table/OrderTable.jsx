@@ -14,7 +14,7 @@ import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
-// import { updateOrder } from '../APICalls/UpdateOrder'
+// import { updateOrder } from './APICalls/Orders/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
