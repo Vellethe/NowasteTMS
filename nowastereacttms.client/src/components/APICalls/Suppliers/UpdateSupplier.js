@@ -1,8 +1,8 @@
-var baseUrl ="https://localhost:7253";
+var baseUrl ="https://localhost:7253/api";
 
 const updateSupplier = async (id, updateSupplier) => {
     try {
-      const response = await fetch(`${baseUrl}/supplier/${id}`, {
+      const response = await fetch(`${baseUrl}/Supplier/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

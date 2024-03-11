@@ -1,5 +1,5 @@
 //import baseUrl from './API'
-var baseUrl ="https://localhost:7253";
+var baseUrl ="https://localhost:7253/api";
 
 const createOrder = async (orderData) => {
   try {
