@@ -2,7 +2,7 @@ var baseUrl ="https://localhost:7253";
 
 const updateAgent = async (id, updateAgent) => {
     try {
-      const response = await fetch(`${baseUrl}/agent/${id}`, {
+      const response = await fetch(`${baseUrl}/Agent/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

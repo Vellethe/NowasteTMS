@@ -1,4 +1,4 @@
-var baseUrl ="https://localhost:7253";
+var baseUrl ="https://localhost:7253/api";
 
 const createCustomer = async (orderData) => {
   try {
