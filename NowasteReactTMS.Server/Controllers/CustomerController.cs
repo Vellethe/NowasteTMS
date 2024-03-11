@@ -15,7 +15,11 @@ namespace NowasteReactTMS.Server.Controllers
             _customerRepo = customerRepository;
             _currencyRepo = currencyRepo;
         }
-
+        /// <summary>
+        /// Display one Customers details by searching on their PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpGet("{pk}")]
         public async Task<IActionResult> GetCustomer(Guid pk)
         {
@@ -24,6 +28,29 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok(customer);
         }
 
+        /// <summary>
+        /// Displays all active Customers
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
+        {
+            try
+            {
+                var customers = await _customerRepo.GetCustomers();
+                return Ok(customers);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal server error");
+
+            }
+        }
+        /// <summary>
+        /// Creates a new Customer with the needed parameters
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
             public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO dto)
             {
@@ -87,7 +114,12 @@ namespace NowasteReactTMS.Server.Controllers
 
                 return Ok(customer.CustomerPK); // Return the created customer's PK
             }
-
+        /// <summary>
+        /// Updates an existing Customer and makes sure the required parameters are valid
+        /// </summary>
+        /// <param name="customerViewModel"></param>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpPut("{pk}")]
         public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel, Guid pk)
         {
@@ -148,7 +180,11 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(new { message = "Edit successful" });
         }
-
+        /// <summary>
+        /// Deletes a existing Customer (put isActive status to 0)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{pk}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
