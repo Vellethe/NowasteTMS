@@ -16,6 +16,11 @@ namespace NowasteReactTMS.Server.Controllers
             _agentRepo = agentRepository;
             _currencyRepo = currencyRepo;
         }
+        /// <summary>
+        /// Create a new Agent with all the needed parameters
+        /// </summary>
+        /// <param name="newAgent"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateAgent([FromBody] Agent newAgent)
         {
@@ -49,7 +54,11 @@ namespace NowasteReactTMS.Server.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Display one Agents details by searching on their PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpGet("{pk}")]
     public async Task<IActionResult> GetAgent(Guid pk)
     {
@@ -67,6 +76,11 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving agent: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Displays all existing Agents
+        /// </summary>
+        /// <param name="includeInactive"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<Agent>>> GetAllAgents(bool includeInactive = false)
         {
@@ -80,6 +94,12 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Update a Agent and their values when searching on their PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <param name="updatedAgent"></param>
+        /// <returns></returns>
         [HttpPut("{pk}")]
         public async Task<IActionResult> UpdateAgent(Guid pk, [FromBody] Agent updatedAgent)
         {
@@ -106,13 +126,17 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the agent.");
             }
         }
-
+        /// <summary>
+        /// Puts an Agent into isActive=0 when "deleting" them using their PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpDelete("{pk}")]
-        public async Task<IActionResult> DeleteAgent(Guid id)
+        public async Task<IActionResult> DeleteAgent(Guid pk)
         {
             try
             {
-                await _agentRepo.DeleteAgent(id);
+                await _agentRepo.DeleteAgent(pk);
                 return Ok("Agent deleted successfully.");
             }
             catch (Exception ex)
