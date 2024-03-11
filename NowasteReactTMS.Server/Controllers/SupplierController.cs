@@ -17,6 +17,33 @@ namespace NowasteReactTMS.Server.Controllers
             _supplierRepository = supplierRepository;
             _currencyRepo = currencyRepo;
         }
+        /// <summary>
+        /// Displays an active SUpplier when searching for their PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
+        [HttpGet("{pk}")]
+        public async Task<IActionResult> GetSupplier(Guid pk)
+        {
+            var supplier = await _supplierRepository.GetSupplier(pk);
+            return Ok(supplier);
+        }
+        /// <summary>
+        /// Displays all active Suppliers
+        /// </summary>
+        /// <param name="includeInactive"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetAllSuppliers(bool includeInactive = false)
+        {
+            var suppliers = await _supplierRepository.GetSuppliers(includeInactive);
+            return Ok(suppliers);
+        }
+        /// <summary>
+        /// Creates a new Supplier with the required parameters
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierDTO dto)
@@ -99,6 +126,12 @@ namespace NowasteReactTMS.Server.Controllers
             };
         }
 
+        /// <summary>
+        /// Updates an existing Supplier and makes sure the required parameters are valid
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpPut("{pk}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SupplierDTO dto, Guid pk)
@@ -170,7 +203,11 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok("Edit successful");
         }
-
+        /// <summary>
+        /// Deletes a existing Supplier (put isActive status to 0)
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpDelete("{pk}")]
         public async Task<IActionResult> Delete(Guid pk)
             {
