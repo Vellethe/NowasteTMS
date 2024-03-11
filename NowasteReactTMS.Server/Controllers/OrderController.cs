@@ -85,7 +85,7 @@ namespace NowasteReactTMS.Server.Controllers
             _orderLineRepository = orderLineRepository;
         }
         /// <summary>
-        /// Returns order when searching for its id
+        /// Returns order when searching for its PK
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -111,6 +111,11 @@ namespace NowasteReactTMS.Server.Controllers
         //    }
         //}
 
+        /// <summary>
+        /// Creates a new Order with the required parameters
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDTO dto)
         {
@@ -210,11 +215,11 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }
-        //Failed to fetch.
-        //Possible Reasons:
-        //CORS
-        //Network Failure
-        //URL scheme must be "http" or "https" for CORS request.
+        /// <summary>
+        /// Deletes a existing order using its PK
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
         [HttpDelete("{pk}")]
         public async Task<IActionResult> DeleteOrder(Guid pk)
         {
