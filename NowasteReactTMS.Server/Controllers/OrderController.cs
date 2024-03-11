@@ -111,6 +111,20 @@ namespace NowasteReactTMS.Server.Controllers
         //    }
         //}
 
+        //[HttpGet("historical")]
+        //public async Task<IActionResult> GetHistoricalOrders()
+        //{
+        //    try
+        //    {
+        //    var historicalOrders = await _orderRepo.GetHistoricalOrders();
+        //    return Ok(historicalOrders);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "An error occurred while retrieving historical orders.");
+        //    }
+        //}
+
         /// <summary>
         /// Creates a new Order with the required parameters
         /// </summary>
@@ -160,6 +174,12 @@ namespace NowasteReactTMS.Server.Controllers
             });
             return Ok(pk);
         }
+        /// <summary>
+        /// Updates an existing Order and makes sure the required parameters are valid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedOrder"></param>
+        /// <returns></returns>
         [HttpPut("{pk}")]
         public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] Order updatedOrder)
         {
