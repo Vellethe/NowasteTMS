@@ -96,34 +96,47 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(orders);
         }
-        //[HttpGet]
-        //public async Task<IActionResult> AllOrders()
-        //{
-        //    try
-        //    {
-        //        var orders = await _orderRepo.GetAllOrders();
+        [HttpGet]
+        public async Task<IActionResult> AllOrders()
+        {
+            try
+            {
+                var orders = await _orderRepo.GetAllOrders();
 
-        //        return Ok(orders);
-        //    }
-        //    catch
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-        //    }
-        //}
+                return Ok(orders);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
 
         //[HttpGet("historical")]
         //public async Task<IActionResult> GetHistoricalOrders()
         //{
         //    try
         //    {
-        //    var historicalOrders = await _orderRepo.GetHistoricalOrders();
-        //    return Ok(historicalOrders);
+        //        var historicalOrders = await _orderRepo.GetHistoricalOrders();
+        //        return Ok(historicalOrders);
         //    }
         //    catch
         //    {
         //        return StatusCode(500, "An error occurred while retrieving historical orders.");
         //    }
         //}
+
+        [HttpGet("historical")]
+        public async Task<IActionResult> GetHistoricalOrders()
+        {
+            try
+            {
+                var historicalOrders = await _orderRepo.SearchOrders();
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while retrieving historical orders.");
+            }
+        }
 
         /// <summary>
         /// Creates a new Order with the required parameters
