@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using NowasteReactTMS.Server.Models;
 using NowasteTms.Model;
 using System.Data.SqlTypes;
@@ -96,20 +97,20 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(orders);
         }
-        [HttpGet]
-        public async Task<IActionResult> AllOrders()
-        {
-            try
-            {
-                var orders = await _orderRepo.GetAllOrders();
+        //[HttpGet]
+        //public async Task<IActionResult> AllOrders()
+        //{
+        //    try
+        //    {
+        //        var orders = await _orderRepo.GetAllOrders();
 
-                return Ok(orders);
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-        }
+        //        return Ok(orders);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+        //    }
+        //}
 
         //[HttpGet("historical")]
         //public async Task<IActionResult> GetHistoricalOrders()
@@ -125,17 +126,23 @@ namespace NowasteReactTMS.Server.Controllers
         //    }
         //}
 
-        [HttpGet("historical")]
-        public async Task<IActionResult> GetHistoricalOrders()
+        [HttpPost]
+        public async Task<IActionResult> SearchOrders(SearchOrderDTO dto)
+
         {
-            try
+            var searchParameters = new SearchParameters
             {
-                var historicalOrders = await _orderRepo.SearchOrders();
-            }
-            catch
-            {
-                return StatusCode(500, "An error occurred while retrieving historical orders.");
-            }
+                Limit = dto.Size,
+                Offset = dto.Page * dto.Size,
+                Filters = dto.Filter,
+                SortOrders = dto.Column
+            };
+
+            searchParameters.Filters.Add("historical", dto.Historical.ToString().ToLower());
+
+            var orders = await _orderRepo.SearchOrders(searchParameters);
+
+            return Ok(orders);
         }
 
         /// <summary>
@@ -143,7 +150,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreateOrder(OrderDTO dto)
         {
             //var user = await _userManager.GetUserAsync(User);
