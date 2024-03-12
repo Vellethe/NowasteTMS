@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 import {
   useReactTable,
   getCoreRowModel,
@@ -20,7 +21,7 @@ const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const data = useMemo(() => mData, []);
 
-  /**@type import('@tanstack/react-table').ColumnDef<any> */
+ 
   const columns = [
     {
       header: "Status",
@@ -168,7 +169,7 @@ const OrderTable = () => {
 
   useEffect(() => {
     setSelectedColumns(defaultSelectedColumns);
-  }, []); //Empty dependency array so it only runs once
+  }, []);
 
   const defaultSelectedAccessorKeys = [
     "OrderPK",
@@ -252,8 +253,9 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green w-full">
+      <div className="flex justify-between mb-3">
       <Select
-        className="text-dark-green duration-500  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex"
+        className="text-dark-green duration-500 cursor-pointer  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
         options={options}
         isMulti
         onChange={handleColumnSelection}
@@ -263,6 +265,24 @@ const OrderTable = () => {
           label: column.header,
         }))}
       />
+       <div className=" m-1 text-xl flex justify-end  text-medium-green">
+          <div className="flex gap-3">
+            <Link
+              to="/Transport/Order/AllHistoricalOrders"
+              className=" p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
+            >
+              Historical Orders
+            </Link>
+            <Link
+              to="/Transport/Order/Create"
+              className=" p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
+            >
+              Create New
+            </Link>
+          </div>
+        </div>
+      </div>
+
 
       <div className="mb-5">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
@@ -362,14 +382,14 @@ const OrderTable = () => {
       <div className="flex justify-center gap-3 mt-2">
         <button
           onClick={() => table.setPageIndex(0)}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
+          className="bg-medium-green hover:bg-brown duration-200 py-2 px-3 rounded text-white"
         >
           First
         </button>
         <button
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
+          className="bg-medium-green hover:bg-brown duration-200 py-2 px-3 rounded text-white"
         >
           Prev
         </button>
@@ -382,19 +402,22 @@ const OrderTable = () => {
         <button
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
-          className="bg-medium-green hover:bg-brown duration-200 text-gray-800 py-2 px-3 rounded-lg text-white"
+          className="bg-medium-green hover:bg-brown duration-200 py-2 px-3 rounded text-white"
         >
           Next
         </button>
         <button
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          className="bg-medium-green duration-200 hover:bg-brown text-gray-800 py-2 px-3 rounded-lg text-white"
+          className="bg-medium-green duration-200 hover:bg-brown  py-2 px-3 rounded text-white"
         >
           Last
         </button>
-        <select
+     
+      </div>
+      <div className="flex justify-center mt-4">
+      <select
           id="showbutton"
-          className="cursor-pointer"
+          className="cursor-pointer bg-medium-green duration-200 hover:bg-brown  py-2 rounded text-white text-center"
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
