@@ -10,6 +10,6 @@ public interface IOrderRepository
     Task<int> UpdateOrder(Order order);
     Task<int> AddOrder(Order order);
     Task<List<Order>> GetAllOrders();
-    Task<List<Order>> GetHistoricalOrders();
+    //Task<List<Order>> GetHistoricalOrders();
     Task<SearchOrderResponse> SearchOrders(SearchParameters parameters);
 }

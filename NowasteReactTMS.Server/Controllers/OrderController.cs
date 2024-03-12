@@ -111,13 +111,26 @@ namespace NowasteReactTMS.Server.Controllers
             }
         }
 
+        //[HttpGet("historical")]
+        //public async Task<IActionResult> GetHistoricalOrders()
+        //{
+        //    try
+        //    {
+        //        var historicalOrders = await _orderRepo.GetHistoricalOrders();
+        //        return Ok(historicalOrders);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "An error occurred while retrieving historical orders.");
+        //    }
+        //}
+
         [HttpGet("historical")]
         public async Task<IActionResult> GetHistoricalOrders()
         {
             try
             {
-                var historicalOrders = await _orderRepo.GetHistoricalOrders();
-                return Ok(historicalOrders);
+                var historicalOrders = await _orderRepo.SearchOrders();
             }
             catch
             {

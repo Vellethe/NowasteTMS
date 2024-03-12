@@ -146,90 +146,90 @@ public class OrderRepository : IOrderRepository
         }
     }
 
-    public async Task<List<Order>> GetHistoricalOrders()
-    {
-        using (var connection = connectionFactory.CreateConnection())
-        {
-            var orders = await connection.QueryAsync<Order, Customer, BusinessUnit, Supplier, BusinessUnit, Order>(@"
-            SELECT 
-                   po.[OrderPK] AS Id
-                  ,po.[OrderPK]
-                  ,po.[OrderId]
-                  ,po.[Type]
-                  ,po.[Status]
-                  ,po.[Origin]
-                  ,po.[CollectionDate]
-                  ,po.[DeliveryDate]
-                  ,po.[PalletExchange]
-                  ,po.[SupplierPK]
-                  ,po.[CustomerPK]
-                  ,po.[HandlerID]
-                  ,po.[Comment]
-                  ,po.[InternalComment]
-                  ,po.[Created]
-                  ,po.[Updated]
-                  ,po.[InterchangeReference]
-                  ,po.[Email]
-                  ,po.[TransportBooking]
-                  ,po.[UpdatedByUserId]
-                  ,cbu.[DivisionId]
+    //public async Task<List<Order>> GetHistoricalOrders()
+    //{
+    //    using (var connection = connectionFactory.CreateConnection())
+    //    {
+    //        var orders = await connection.QueryAsync<Order, Customer, BusinessUnit, Supplier, BusinessUnit, Order>(@"
+    //        SELECT 
+    //               po.[OrderPK] AS Id
+    //              ,po.[OrderPK]
+    //              ,po.[OrderId]
+    //              ,po.[Type]
+    //              ,po.[Status]
+    //              ,po.[Origin]
+    //              ,po.[CollectionDate]
+    //              ,po.[DeliveryDate]
+    //              ,po.[PalletExchange]
+    //              ,po.[SupplierPK]
+    //              ,po.[CustomerPK]
+    //              ,po.[HandlerID]
+    //              ,po.[Comment]
+    //              ,po.[InternalComment]
+    //              ,po.[Created]
+    //              ,po.[Updated]
+    //              ,po.[InterchangeReference]
+    //              ,po.[Email]
+    //              ,po.[TransportBooking]
+    //              ,po.[UpdatedByUserId]
+    //              ,cbu.[DivisionId]
 
-                  ,c.[CustomerPK] AS Id
-                  ,c.[CustomerPK]
-                  ,c.[CustomerID]
-                  ,c.[BusinessUnitPK]
+    //              ,c.[CustomerPK] AS Id
+    //              ,c.[CustomerPK]
+    //              ,c.[CustomerID]
+    //              ,c.[BusinessUnitPK]
 
-                  ,cbu.[BusinessUnitPK] AS Id
-                  ,cbu.[BusinessUnitPK]
-                  ,cbu.[Name]
-                  ,cbu.[Company]
-                  ,cbu.[DivisionId]
-                  ,cbu.[FinanceInformationPK]
+    //              ,cbu.[BusinessUnitPK] AS Id
+    //              ,cbu.[BusinessUnitPK]
+    //              ,cbu.[Name]
+    //              ,cbu.[Company]
+    //              ,cbu.[DivisionId]
+    //              ,cbu.[FinanceInformationPK]
 
-                  ,s.[SupplierPK] AS Id
-                  ,s.[SupplierPK]
-                  ,s.[SupplierID]
-                  ,s.[BusinessUnitPK]
+    //              ,s.[SupplierPK] AS Id
+    //              ,s.[SupplierPK]
+    //              ,s.[SupplierID]
+    //              ,s.[BusinessUnitPK]
 
-                  ,sbu.[BusinessUnitPK] AS Id
-                  ,sbu.[BusinessUnitPK]
-                  ,sbu.[Name]
-                  ,sbu.[Company]
-                  ,sbu.[DivisionId]
-                  ,sbu.[FinanceInformationPK]
+    //              ,sbu.[BusinessUnitPK] AS Id
+    //              ,sbu.[BusinessUnitPK]
+    //              ,sbu.[Name]
+    //              ,sbu.[Company]
+    //              ,sbu.[DivisionId]
+    //              ,sbu.[FinanceInformationPK]
 
-                  ,ol.[PalletTypeId]
+    //              ,ol.[PalletTypeId]
 
-                  ,pt.[Description]
+    //              ,pt.[Description]
 
-            FROM [dbo].[Order] po
-            LEFT JOIN [Customer] c ON po.[CustomerPK] = c.[CustomerPK]
-            LEFT JOIN [BusinessUnit] cbu ON c.[BusinessUnitPK] = cbu.[BusinessUnitPK]
-            LEFT JOIN [Supplier] s ON po.[SupplierPK] = s.[SupplierPK]
-            LEFT JOIN [BusinessUnit] sbu ON s.[BusinessUnitPK] = sbu.[BusinessUnitPK]
-            LEFT JOIN [OrderLine] ol ON po.[OrderPK] = ol.[OrderPK]
-            LEFT JOIN [PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
-            WHERE po.[DeliveryDate] < GETDATE()",
-        (po, c, cbu, s, sbu) =>
-        {
-                if (po.CustomerPK != Guid.Empty)
-                {
-                    po.Customer = c;
-                    c.BusinessUnit = cbu;
-                }
+    //        FROM [dbo].[Order] po
+    //        LEFT JOIN [Customer] c ON po.[CustomerPK] = c.[CustomerPK]
+    //        LEFT JOIN [BusinessUnit] cbu ON c.[BusinessUnitPK] = cbu.[BusinessUnitPK]
+    //        LEFT JOIN [Supplier] s ON po.[SupplierPK] = s.[SupplierPK]
+    //        LEFT JOIN [BusinessUnit] sbu ON s.[BusinessUnitPK] = sbu.[BusinessUnitPK]
+    //        LEFT JOIN [OrderLine] ol ON po.[OrderPK] = ol.[OrderPK]
+    //        LEFT JOIN [PalletType] pt ON ol.[PalletTypeId] = pt.[Id]
+    //        WHERE po.[DeliveryDate] < GETDATE()",
+    //    (po, c, cbu, s, sbu) =>
+    //    {
+    //            if (po.CustomerPK != Guid.Empty)
+    //            {
+    //                po.Customer = c;
+    //                c.BusinessUnit = cbu;
+    //            }
 
-                if (po.SupplierPK != Guid.Empty)
-                {
-                    po.Supplier = s;
-                    s.BusinessUnit = sbu;
-                }
+    //            if (po.SupplierPK != Guid.Empty)
+    //            {
+    //                po.Supplier = s;
+    //                s.BusinessUnit = sbu;
+    //            }
 
-                return po;
-            });
+    //            return po;
+    //        });
 
-            return orders.ToList();
-        }
-    }
+    //        return orders.ToList();
+    //    }
+    //}
 
     public async Task<Order> Get(Guid pk)
     {
