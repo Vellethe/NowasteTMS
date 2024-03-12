@@ -15,7 +15,8 @@ import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
-// import { updateOrder } from './APICalls/Orders/UpdateOrder'
+// import fetchData from "../APICalls/API";
+// import updateOrder from './APICalls/Orders/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -145,6 +146,47 @@ const OrderTable = () => {
     },
   ];
 
+  // const [tableData, setTableData] = useState([]);
+  // const [page, setPage] = useState(0);
+  // const [pageSize, setPageSize] = useState(25);
+  // const [filter, setFilter] = useState(null);
+  // const [column, setColumn] = useState(null);
+  // const [historical, setHistorical] = useState(false);
+  // const [totalCount, setTotalCount] = useState(0);
+
+  // useEffect(() => {
+  //     const fetchDataAndSetState = async () => {
+  //         const result = await fetchData(page, pageSize, filter, column, historical);
+  //         setTableData(result.tableData); 
+  //         setTotalCount(result.totalCount);
+  //     };
+  //     fetchDataAndSetState();
+  // }, [page, pageSize, filter, column, historical]);
+
+  // const handlePageChange = (newPage) => {
+  //     setPage(newPage);
+  // };
+
+  // const handlePageSizeChange = (size) => {
+  //     setPageSize(size);
+  //     setPage(0);
+  // };
+
+  // const handleFilterChange = (newFilter) => {
+  //     setFilter(newFilter);
+  //     setPage(0);
+  // };
+
+  // const handleColumnChange = (newColumn) => {
+  //     setColumn(newColumn);
+  //     setPage(0);
+  // };
+
+  // const handleHistoricalChange = (newHistorical) => {
+  //     setHistorical(newHistorical);
+  //     setPage(0);
+  // };
+
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -245,7 +287,6 @@ const OrderTable = () => {
   // const handleUpdateOrder = async (orderId, updatedData) => {
   //   try {
   //     const updatedOrder = await updateOrder(orderId, updatedData);
-  //     console.log('Order updated successfully:', updatedOrder);
   //   } catch (error) {
   //     console.error('Error updating order:', error.message);
   //   }
