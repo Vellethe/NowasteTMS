@@ -25,27 +25,23 @@ const OrderTable = () => {
   const columns = [
     {
       header: "AgentID",
-      accessorKey: "AgentId",
+      accessorKey: "agentID",
     },
     {
       header: "Name",
-      accessorKey: "CompanyName",
+      accessorKey: "businessUnit.name",
     },
     {
       header: "Self billing",
-      accessorKey: "SelfBilling",
+      accessorKey: "isSelfBilling",
     },
     {
       header: "Country",
-      accessorKey: "Country",
+      accessorKey: "businessUnit.contactInformations.0.country",
     },
     {
       header: "Currency",
-      accessorKey: "Currency",
-    },
-    {
-      header: "",
-      accessorKey: "EditAndDelete"
+      accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
 
