@@ -2,7 +2,14 @@ var baseUrl ="https://localhost:7253/api";
 
 const getAllAgents = async (includeInactive = false) => {
     try {
-      const response = await fetch(`${baseUrl}/Agent?includeInactive=${includeInactive}`);
+      const response = await fetch(`${baseUrl}/Agent?includeInactive=${includeInactive}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({Size: 400, Page: 0, Filter: {}, Column: {}}),
+      });
+      
       if (!response.ok) {
         throw new Error('Failed to fetch agents');
       }

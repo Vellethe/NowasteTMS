@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using NowasteReactTMS.Server.Models;
 using NowasteTms.Model;
 
 namespace NowasteReactTMS.Server.Controllers
@@ -21,7 +22,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="newAgent"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateAgent([FromBody] Agent newAgent)
         {
             try
@@ -81,18 +82,21 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="includeInactive"></param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<List<Agent>>> GetAllAgents(bool includeInactive = false)
+        [HttpPost]
+        public async Task<IActionResult> SearchOrders(SearchDTO dto)
+
         {
-            try
+            var searchParameters = new SearchParameters
             {
-                var agents = await _agentRepo.GetAgents(includeInactive);
-                return Ok(agents);
-            }
-            catch
-            {
-                return StatusCode(500, "Internal server error");
-            }
+                Limit = dto.Size,
+                Offset = dto.Page * dto.Size,
+                Filters = dto.Filter,
+                SortOrders = dto.Column
+            };
+
+            var agents = await _agentRepo.SearchAgents(searchParameters);
+
+            return Ok(agents);
         }
         /// <summary>
         /// Update a Agent and their values when searching on their PK
