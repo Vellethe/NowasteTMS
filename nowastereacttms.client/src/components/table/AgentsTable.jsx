@@ -11,11 +11,15 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
+import getAllAgents from '../APICalls/Agents/GetAllAgents';
 
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => [])
+  const [data, setData] = useState([]);
+  const [sorting, setSorting] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [columnFilters, setColumnFilters] = useState({});
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -45,8 +49,14 @@ const OrderTable = () => {
     },
   ];
 
-  const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const fetchAgents = async () => {
+    try {
+      const agents = await getAllAgents();
+      setData(agents);
+    } catch (error) {
+      console.error('Error fetching agents: ', error.message);
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -69,7 +79,8 @@ const OrderTable = () => {
 
   useEffect(() => {
     setSelectedColumns(columns);
-  }, []); //Empty dependency array so it only runs once
+    fetchAgents();
+  }, []); // Empty dependency array so it only runs once
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -77,8 +88,6 @@ const OrderTable = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Orders");
     XLSX.writeFile(wb, "Orders.xlsx");
   };
-
-  const [columnFilters, setColumnFilters] = useState({});
 
   // Function to update filter value for a column
   const handleColumnFilterChange = (columnId, value) => {
