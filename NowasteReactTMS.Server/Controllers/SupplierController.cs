@@ -28,15 +28,26 @@ namespace NowasteReactTMS.Server.Controllers
             var supplier = await _supplierRepository.GetSupplier(pk);
             return Ok(supplier);
         }
+
         /// <summary>
         /// Displays all active Suppliers
         /// </summary>
-        /// <param name="includeInactive"></param>
+        /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> GetAllSuppliers(bool includeInactive = false)
+        [HttpPost]
+        public async Task<IActionResult> SearchSuppliers(SearchOrderDTO dto)
+
         {
-            var suppliers = await _supplierRepository.GetSuppliers(includeInactive);
+            var searchParameters = new SearchParameters
+            {
+                Limit = dto.Size,
+                Offset = dto.Page * dto.Size,
+                Filters = dto.Filter,
+                SortOrders = dto.Column
+            };
+
+            var suppliers = await _supplierRepository.SearchSuppliers(searchParameters);
+
             return Ok(suppliers);
         }
         /// <summary>

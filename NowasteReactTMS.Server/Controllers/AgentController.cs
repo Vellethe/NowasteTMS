@@ -83,7 +83,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// <param name="includeInactive"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> SearchOrders(SearchDTO dto)
+        public async Task<IActionResult> SearchAgents(SearchDTO dto)
 
         {
             var searchParameters = new SearchParameters

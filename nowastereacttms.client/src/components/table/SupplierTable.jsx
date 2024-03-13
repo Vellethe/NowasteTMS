@@ -11,6 +11,7 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
+import getAllSupplier from '../APICalls/Suppliers/GetAllSuppliers';
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -40,6 +41,15 @@ const OrderTable = () => {
     },
   ];
 
+  const fetchSupplier = async () => {
+    try {
+      const suppliers = await getAllSuppliers();
+      setData(suppliers);
+    } catch (error) {
+      console.error('Error fetching suppliers: ', error.message);
+    }
+  };
+
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -64,7 +74,8 @@ const OrderTable = () => {
 
   useEffect(() => {
     setSelectedColumns(columns);
-  }, []); //Empty dependency array so it only runs once
+    fetchSupplier();
+  }, []); // Empty dependency array so it only runs once
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
