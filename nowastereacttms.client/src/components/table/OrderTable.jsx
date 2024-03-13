@@ -146,16 +146,6 @@ const OrderTable = () => {
     },
   ];
 
-  const fetchOrders = async () => {
-    try {
-      const orders = await getAllOrders();
-      setData(orders);
-      console.log(orders)
-    } catch (error) {
-      console.error('Error fetching orders: ', error.message);
-    }
-  };
-
   // const [tableData, setTableData] = useState([]);
   // const [page, setPage] = useState(0);
   // const [pageSize, setPageSize] = useState(25);
@@ -210,7 +200,7 @@ const OrderTable = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const table = useReactTable({
-    data: data,
+    data,
     columns: selectedColumns,
     initialState: {
       pagination: {
@@ -432,7 +422,7 @@ const OrderTable = () => {
                       </span>
                     </div>
                   </td>
-                  {row.getVisibleCells().map((column) => (
+                  {row.getVisibleCells().map((cell) => (
                     <td className="border p-1 text-center truncate" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
