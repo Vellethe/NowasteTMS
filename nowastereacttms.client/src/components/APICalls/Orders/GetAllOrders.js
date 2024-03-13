@@ -1,7 +1,6 @@
-
 var baseUrl ="https://localhost:7253/api";
 
-const getAllOrders = async () => {
+const getAllOrders = async() => {
     try {
       const response = await fetch(`${baseUrl}/Order`, {
         method: 'POST',
