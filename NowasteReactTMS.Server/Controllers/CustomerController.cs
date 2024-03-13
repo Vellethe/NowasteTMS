@@ -33,7 +33,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> SearchOrders(SearchDTO dto)
+        public async Task<IActionResult> GetAllCustomers(SearchDTO dto)
 
         {
             var searchParameters = new SearchParameters
@@ -53,7 +53,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("create")]
             public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO dto)
             {
                 if (!ModelState.IsValid)

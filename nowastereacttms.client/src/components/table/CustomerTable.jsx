@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
-import Select from 'react-select';
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,31 +14,30 @@ import getAllCustomers from '../APICalls/Customers/GetAllCustomers';
 import updateCustomer from '../APICalls/Customers/UpdateCustomer';
 
 
-const OrderTable = () => {
+const CustomerTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => [])
+  const [data, setData] = useState([])
+  const [sorting, setSorting] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [columnFilters, setColumnFilters] = useState({});
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
       header: "CustomerId",
-      accessorKey: "CustomerId",
+      accessorKey: "customerID",
     },
     {
       header: "Name",
-      accessorKey: "CustomerName",
+      accessorKey: "businessUnit.name",
     },
     {
       header: "Country",
-      accessorKey: "Country",
+      accessorKey: "businessUnit.contactInformations.0.country",
     },
     {
       header: "Currency",
-      accessorKey: "Currency",
-    },
-    {
-      header: "",
-      accessorKey: "EditAndDelete",
+      accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
 
@@ -51,9 +49,6 @@ const OrderTable = () => {
       console.error('Error fetching customers: ', error.message);
     }
   };
-
-  const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
 
   const table = useReactTable({
     data,
@@ -85,8 +80,6 @@ const OrderTable = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Orders");
     XLSX.writeFile(wb, "Orders.xlsx");
   };
-
-  const [columnFilters, setColumnFilters] = useState({});
 
   // Function to update filter value for a column
   const handleColumnFilterChange = (columnId, value) => {
@@ -243,4 +236,4 @@ const OrderTable = () => {
     </div>
   );
 }
-export default OrderTable;
+export default CustomerTable;
