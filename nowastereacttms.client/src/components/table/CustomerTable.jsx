@@ -7,10 +7,12 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
+import getAllCustomers from '../APICalls/Customers/GetAllCustomers';
+import updateCustomer from '../APICalls/Customers/UpdateCustomer';
 
 
 const OrderTable = () => {
@@ -41,6 +43,15 @@ const OrderTable = () => {
     },
   ];
 
+  const fetchCustomers = async () => {
+    try {
+      const customers = await getAllCustomers();
+      setData(customers);
+    } catch (error) {
+      console.error('Error fetching customers: ', error.message);
+    }
+  };
+
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -65,7 +76,8 @@ const OrderTable = () => {
 
   useEffect(() => {
     setSelectedColumns(columns);
-  }, []); //Empty dependency array so it only runs once
+    fetchCustomers();
+  }, []); // Empty dependency array so it only runs once
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -96,62 +108,82 @@ const OrderTable = () => {
   };
 
   return (
-    <div className="text-dark-green text-sm w-full">
-      <div className="overflow-auto relative">
-        <table ref={tableRef} className="border-x border-b w-full">
-          <thead className="border">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <React.Fragment key={headerGroup.id}>
-                <tr>
-                  <th className="border p-2 bg-white relative">
-                    <p>Buttons</p>
-                  </th>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      className="border p-2 bg-white relative"
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {({ asc: <LuChevronsUpDown />, desc: <LuChevronsUpDown /> })[
-                        header.column.getIsSorted()
-                      ]}
+      <div className="text-dark-green w-full">
+        <div className="mb-5">
+          <table ref={tableRef} className="table-fixed border-x border-b w-full">
+            <thead className="border ">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <React.Fragment key={headerGroup.id}>
+                  <tr>
+                    <th className="border p-2 bg-white relative"></th>
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        className="border p-2 bg-white relative truncate"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {
+                          {
+                            asc: <FaArrowUp />,
+                            desc: <FaArrowDown />,
+                          }[header.column.getIsSorted()]
+                        }
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th>
+                      <SearchBar disabled></SearchBar>
                     </th>
-                  ))}
-                </tr>
-                <tr>
-                  <th>
-                    <SearchBar disabled></SearchBar>
-                  </th>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      <SearchBar onFilterChange={(value) => handleColumnFilterChange(header.id, value)} />
-                    </th>
-                  ))}
-                </tr>
-              </React.Fragment>
-            ))}
-          </thead>
-          <tbody className="text-dark-green">
-            {table.getRowModel().rows
-              .filter((row) => filterData(row.original)) // Apply filtering
-              .map((row) => (
-                <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className="border p-1 text-center">
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 1</button>
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 2</button>
-                    <input type="checkbox" />
-                  </td>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center" key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
+                    {headerGroup.headers.map((header) => (
+                      <th className=""key={header.id}>
+                        <SearchBar
+                          onFilterChange={(value) =>
+                            handleColumnFilterChange(header.id, value)
+                          }
+                        />
+                      </th>
+                    ))}
+                  </tr>
+                </React.Fragment>
               ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="text-dark-green">
+              {table
+                .getRowModel()
+                .rows.filter((row) => filterData(row.original)) // Apply filtering
+                .map((row) => (
+                  <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
+                    <td className=" border-b p-1 text-center flex gap-2 truncate">
+                      <input
+                        className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                        type="checkbox"
+                      />
+                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full"
+                      onClick={() => handleEdit(row.original.agentID, agentData)}>
+                      Edit
+                      </button>
+                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full">
+                        Details
+                      </button>
+                    </td>
+                    {row.getVisibleCells().map((cell) => (
+                      <td className="border p-1 text-center truncate" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
 
       <div className="flex justify-center gap-3 mt-2">
         <button

@@ -32,19 +32,21 @@ namespace NowasteReactTMS.Server.Controllers
         /// Displays all active Customers
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
-        {
-            try
-            {
-                var customers = await _customerRepo.GetCustomers();
-                return Ok(customers);
-            }
-            catch
-            {
-                return StatusCode(500, "Internal server error");
+        [HttpPost]
+        public async Task<IActionResult> SearchOrders(SearchDTO dto)
 
-            }
+        {
+            var searchParameters = new SearchParameters
+            {
+                Limit = dto.Size,
+                Offset = dto.Page * dto.Size,
+                Filters = dto.Filter,
+                SortOrders = dto.Column
+            };
+
+            var customers = await _customerRepo.SearchCustomers(searchParameters);
+
+            return Ok(customers);
         }
         /// <summary>
         /// Creates a new Customer with the needed parameters
