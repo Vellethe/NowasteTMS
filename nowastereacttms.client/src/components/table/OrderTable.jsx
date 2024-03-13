@@ -8,29 +8,31 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import mData from "../../data/MOCK_DATA.json";
+// import mData from "../../data/MOCK_DATA.json";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
+import getAllOrders from '../APICalls/Orders/GetAllOrders';
 // import fetchData from "../APICalls/API";
 // import updateOrder from './APICalls/Orders/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => mData, []);
+  // const data = useMemo(() => mData, []);
+  const [data, setData] = useState([]);
 
  
   const columns = [
     {
       header: "Status",
-      accessorKey: "OrderTransportStatusString",
+      accessorKey: "status",
     },
     {
       header: "Pickup from ",
-      accessorKey: "CollectionDate",
+      accessorKey: "collectionDate",
     },
     {
       header: "Pickup to",
@@ -146,6 +148,16 @@ const OrderTable = () => {
     },
   ];
 
+  const fetchOrders = async () => {
+    try {
+      const orders = await getAllOrders();
+      setData(orders);
+      console.log(orders)
+    } catch (error) {
+      console.error('Error fetching orders: ', error.message);
+    }
+  };
+
   // const [tableData, setTableData] = useState([]);
   // const [page, setPage] = useState(0);
   // const [pageSize, setPageSize] = useState(25);
@@ -191,7 +203,7 @@ const OrderTable = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const table = useReactTable({
-    data,
+    data: data,
     columns: selectedColumns,
     initialState: {
       pagination: {
@@ -281,7 +293,7 @@ const OrderTable = () => {
     }
     return true; // Include row if all filters match
   };
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
 
 //Måste göras med en if sats med checkbox när dom fungerar (och dubbelkollas vad som ska kunna uppdateras)
   // const handleUpdateOrder = async (orderId, updatedData) => {
@@ -291,6 +303,13 @@ const OrderTable = () => {
   //     console.error('Error updating order:', error.message);
   //   }
   // };
+
+  
+
+  useEffect(() => {
+    setSelectedColumns(columns);
+    fetchOrders();
+  }, []);
 
   return (
     <div className="text-dark-green w-full">
@@ -323,8 +342,7 @@ const OrderTable = () => {
           </div>
         </div>
       </div>
-
-
+       
       <div className="mb-5">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border ">
@@ -406,7 +424,7 @@ const OrderTable = () => {
                       </span>
                     </div>
                   </td>
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map((column) => (
                     <td className="border p-1 text-center truncate" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
