@@ -3,7 +3,7 @@ var baseUrl ="https://localhost:7253/api";
 
 const createOrder = async (orderData) => {
   try {
-    const response = await fetch(`${baseUrl}/Order`, {
+    const response = await fetch(`${baseUrl}/Order/Create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
