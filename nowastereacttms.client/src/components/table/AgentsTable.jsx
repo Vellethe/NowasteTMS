@@ -176,7 +176,7 @@ const AgentTable = () => {
                     Edit
                     </button>
                     <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full">
-                      Delete
+                      Details
                     </button>
                   </td>
                   {row.getVisibleCells().map((cell) => (
