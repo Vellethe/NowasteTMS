@@ -8,33 +8,33 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import mData from "../../data/MOCK_DATA.json";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
+import getAllOrders from "../APICalls/Orders/GetAllOrders";
 // import fetchData from "../APICalls/API";
 // import updateOrder from './APICalls/Orders/UpdateOrder'
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => mData, []);
+  const [data, setData] = useState([]);
 
  
   const columns = [
     {
       header: "Status",
-      accessorKey: "OrderTransportStatusString",
+      accessorKey: "status",
     },
     {
       header: "Pickup from ",
-      accessorKey: "CollectionDate",
+      accessorKey: "collectionDate",
     },
     {
       header: "Pickup to",
-      accessorKey: "CollectionDateTo",
+      accessorKey: "deliveryDate",
     },
     {
       header: "Pickup weekday",
@@ -42,19 +42,19 @@ const OrderTable = () => {
     },
     {
       header: "OrderId",
-      accessorKey: "OrderId",
+      accessorKey: "orderId",
     },
     {
       header: "Supplier",
-      accessorKey: "SupplierName",
+      accessorKey: "supplier.businessUnit.name",
     },
     {
       header: "From Country",
-      accessorKey: "SupplierCountry",
+      accessorKey: "",
     },
     {
       header: "Eur Pallets",
-      accessorKey: "OrderLinesTypeId2",
+      accessorKey: "eurPalletQty",
     },
     {
       header: "Sea Pallets",
@@ -62,7 +62,7 @@ const OrderTable = () => {
     },
     {
       header: "Pallet Exch",
-      accessorKey: "PalletExchange",
+      accessorKey: "palletExchange",
     },
     {
       header: "Item Id",
@@ -86,11 +86,11 @@ const OrderTable = () => {
     },
     {
       header: "ETA From",
-      accessorKey: "DeliveryDate",
+      accessorKey: "transportOrder.arrivalDate",
     },
     {
       header: "ETA To",
-      accessorKey: "DeliveryDateTo",
+      accessorKey: "transportOrder.collectionDate",
     },
     {
       header: "ETA Weekday",
@@ -98,7 +98,7 @@ const OrderTable = () => {
     },
     {
       header: "Customer",
-      accessorKey: "CustomerName",
+      accessorKey: "customer.businessUnit.company",
     },
     {
       header: "To Country",
@@ -118,7 +118,7 @@ const OrderTable = () => {
     },
     {
       header: "Comment",
-      accessorKey: "InternalComment",
+      accessorKey: "internalComment",
     },
     {
       header: "Created",
@@ -138,11 +138,11 @@ const OrderTable = () => {
     },
     {
       header: "Updated by",
-      accessorKey: "Email",
+      accessorKey: "transportOrder.updatedByUserId",
     },
     {
       header: "Transport booking",
-      accessorKey: "TransportBooking",
+      accessorKey: "transportBooking",
     },
   ];
 
@@ -187,6 +187,15 @@ const OrderTable = () => {
   //     setPage(0);
   // };
 
+  const fetchOrders = async () => {
+    try {
+      const orders = await getAllOrders();
+      setData(orders.orders);
+    } catch (error) {
+      console.error('Error fetching orders: ', error.message);
+    }
+  };
+
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -210,8 +219,9 @@ const OrderTable = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setSelectedColumns(defaultSelectedColumns);
-  }, []);
+    setSelectedColumns(columns);
+    fetchOrders();
+  }, []); // Empty dependency array so it only runs once
 
   const defaultSelectedAccessorKeys = [
     "OrderPK",
