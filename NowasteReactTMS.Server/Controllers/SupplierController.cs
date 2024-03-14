@@ -55,7 +55,7 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierDTO dto)
         {

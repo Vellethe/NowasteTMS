@@ -11,33 +11,29 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
-import getAllSupplier from '../APICalls/Suppliers/GetAllSuppliers';
+import getAllSuppliers from '../APICalls/Suppliers/GetAllSuppliers';
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const data = useMemo(() => [])
+  const [data, setData] = useState([]);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
       header: "SupplierID",
-      accessorKey: "SupplierId",
+      accessorKey: "supplierID",
     },
     {
       header: "Name",
-      accessorKey: "SupplierName",
+      accessorKey: "businessUnit.name",
     },
     {
       header: "Country",
-      accessorKey: "Country",
+      accessorKey: "businessUnit.contactInformations.0.country",
     },
     {
       header: "Currency",
-      accessorKey: "Currency",
-    },
-    {
-      header: "",
-      accessorKey: "EditAndDelete",
+      accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
 
