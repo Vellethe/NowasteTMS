@@ -170,33 +170,33 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public async Task<IActionResult> SearchTransportOrders(SearchOrderDTO dto)
-        {
-            var searchParameters = new SearchParameters
-            {
-                Limit = dto.Size,
-                Offset = dto.Page * dto.Size,
-                Filters = dto.Filter,
-                SortOrders = dto.Column
-            };
+        //public async Task<IActionResult> SearchTransportOrders(SearchOrderDTO dto)
+        //{
+        //    var searchParameters = new SearchParameters
+        //    {
+        //        Limit = dto.Size,
+        //        Offset = dto.Page * dto.Size,
+        //        Filters = dto.Filter,
+        //        SortOrders = dto.Column
+        //    };
 
-            var user = await _userManager.GetUserAsync(User);
+        //    var user = await _userManager.GetUserAsync(User);
 
-            List<TransportOrder> transportOrders = new List<TransportOrder>();
+        //    List<TransportOrder> transportOrders = new List<TransportOrder>();
 
-            if (User.IsInRole(Constants.ROLE_ADMIN) || User.IsInRole(Constants.ROLE_SUPERUSER) || User.IsInRole(Constants.ROLE_STANDARDUSER))
-            {
-                var response = await _transportOrderRepo.SearchOrders(searchParameters, null, dto.Historical);
-                transportOrders.AddRange(response.TransportOrders);
-            }
-            else if (User.IsInRole(Constants.ROLE_AGENT) && user.BusinessUnitId != null)
-            {
-                var response = await _transportOrderRepo.SearchOrders(searchParameters, user.BusinessUnitId, dto.Historical);
-                transportOrders.AddRange(response.TransportOrders);
-            }
+        //    if (User.IsInRole(Constants.ROLE_ADMIN) || User.IsInRole(Constants.ROLE_SUPERUSER) || User.IsInRole(Constants.ROLE_STANDARDUSER))
+        //    {
+        //        var response = await _transportOrderRepo.SearchOrders(searchParameters, null, dto.Historical);
+        //        transportOrders.AddRange(response.TransportOrders);
+        //    }
+        //    else if (User.IsInRole(Constants.ROLE_AGENT) && user.BusinessUnitId != null)
+        //    {
+        //        var response = await _transportOrderRepo.SearchOrders(searchParameters, user.BusinessUnitId, dto.Historical);
+        //        transportOrders.AddRange(response.TransportOrders);
+        //    }
 
-            return Ok(transportOrders);
-        }
+        //    return Ok(transportOrders);
+        //}
 
     }
 }
