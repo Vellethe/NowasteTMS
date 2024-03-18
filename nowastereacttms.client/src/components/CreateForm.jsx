@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import createOrder from "./APICalls/Orders/CreateOrder";
+import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 
 const CreateForm = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +26,21 @@ const CreateForm = () => {
       },
     ],
   });
+
+  const [suppliers, setSuppliers] = useState([]);
+
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const data = await getAllSupplier();
+        setSuppliers(data);
+      } catch (error) {
+        console.error("Error fetching suppliers:", error);
+      }
+    };
+
+    fetchSuppliers();
+  }, []);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
@@ -200,11 +216,13 @@ const CreateForm = () => {
               {...register("supplier", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              <option></option>
-              <option>ICA</option>
-              <option>Coop</option>
-              <option>Netto</option>
-            </select>
+              <option value="">Select supplier</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier.id} value={supplier.id}>
+                {supplier.name}
+              </option>
+            ))}
+          </select>
             {errors.supplier && <p className="text-sm text-red">Supplier is required</p>}
           </div>
         </div>
