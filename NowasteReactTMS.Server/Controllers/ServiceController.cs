@@ -88,6 +88,12 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok("Order edited");
         }
+        [HttpDelete]
+        public async Task <IActionResult> Delete(Guid pk)
+        {
+            await _transportOrderServiceRepo.Delete(pk);
+            return Ok("Successfully deleted");
+        }
 
 
     }
