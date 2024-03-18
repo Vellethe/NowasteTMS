@@ -78,7 +78,7 @@ const OrderTable = () => {
     },
     {
       header: "Lines",
-      accessorKey: "LineCount",
+      accessorKey: "lines",
     },
     {
       header: "Temp",
@@ -98,7 +98,7 @@ const OrderTable = () => {
     },
     {
       header: "Customer",
-      accessorKey: "customer.businessUnit.company",
+      accessorKey: "customer.businessUnit.name",
     },
     {
       header: "To Country",
@@ -114,7 +114,7 @@ const OrderTable = () => {
     },
     {
       header: "Origin",
-      accessorKey: "Origin",
+      accessorKey: "origin",
     },
     {
       header: "Comment",
@@ -122,15 +122,11 @@ const OrderTable = () => {
     },
     {
       header: "Created",
-      accessorKey: "Created",
+      accessorKey: "created",
     },
     {
-      header: "Update from",
-      accessorKey: "Updated",
-    },
-    {
-      header: "Update to",
-      accessorKey: "UpdatedTo",
+      header: "Updated",
+      accessorKey: "updated",
     },
     {
       header: "Update weekday",
@@ -138,7 +134,7 @@ const OrderTable = () => {
     },
     {
       header: "Updated by",
-      accessorKey: "transportOrder.updatedByUserId",
+      accessorKey: "updatedByUserId",
     },
     {
       header: "Transport booking",
