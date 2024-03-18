@@ -37,6 +37,15 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(responseData);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchTransportOrderServices(bool includeInactive = true)
+
+        {
+            var suppliers = await _transportOrderServiceRepo.GetAllTransportOrderServices(includeInactive);
+            return Ok(suppliers);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create(ServiceDTO dto)
         {
