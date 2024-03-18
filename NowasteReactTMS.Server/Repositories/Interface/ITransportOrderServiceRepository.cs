@@ -6,5 +6,6 @@ public interface ITransportOrderServiceRepository
     Task<TransportOrderService> Get(Guid id);
     Task<int> Outdate(TransportOrderService transportOrderService);
     Task<int> Add(TransportOrderService transportOrderService);
+    Task<List<TransportOrderService>> GetAllTransportOrderServices(bool includeInactive = false);
     Task<Guid> Delete(Guid id);
 }
