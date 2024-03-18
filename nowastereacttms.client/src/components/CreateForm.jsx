@@ -44,7 +44,10 @@ const CreateForm = () => {
   const handleInputChange = (index, event) => {
     const { name, value } = event.target;
     const list = [...formData.lines];
-    list[index][name] = value;
+    list[index] = {
+      ...list[index],
+      [name]: value
+    };
     setFormData({ ...formData, lines: list });
   };
 
@@ -245,7 +248,7 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="number"
-                    {...register("line.itemqty")}
+                    {...register(`lines[${index}].itemqty`)}
                     value={line.itemqty}
                     onChange={(e) => handleInputChange(index, e)}
                     name="itemqty"
@@ -255,7 +258,7 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="number"
-                    {...register("line.itemno")}
+                    {...register(`lines[${index}].itemno`)}
                     value={line.itemno}
                     onChange={(e) => handleInputChange(index, e)}
                     name="itemno"
@@ -265,7 +268,7 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="text"
-                    {...register("line.description")}
+                    {...register(`lines[${index}].description`)}
                     value={line.description}
                     onChange={(e) => handleInputChange(index, e)}
                     name="description"
@@ -275,7 +278,7 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="number"
-                    {...register("line.palletqty")}
+                    {...register(`lines[${index}].palletqty`)}
                     value={line.palletqty}
                     onChange={(e) => handleInputChange(index, e)}
                     name="palletqty"
@@ -285,7 +288,7 @@ const CreateForm = () => {
                 <td>
                   <select
                     value={line.pallettype}
-                    {...register("line.pallettype")}
+                    {...register(`lines[${index}].pallettype`)}
                     onChange={(e) => handleInputChange(index, e)}
                     name="pallettype"
                     className="w-full h-8 border rounded pl-2 text-center"
