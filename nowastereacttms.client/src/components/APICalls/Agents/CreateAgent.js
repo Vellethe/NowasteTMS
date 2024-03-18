@@ -1,13 +1,13 @@
 var baseUrl ="https://localhost:7253/api";
 
-const createAgent = async (orderData) => {
+const createAgent = async (agentData) => {
   try {
     const response = await fetch(`${baseUrl}/Agent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(agentData),
     });
 
     if (!response.ok) {

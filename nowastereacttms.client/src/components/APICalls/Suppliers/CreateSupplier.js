@@ -1,13 +1,13 @@
 var baseUrl ="https://localhost:7253/api";
 
-const createSupplier = async (orderData) => {
+const createSupplier = async (supplierData) => {
   try {
     const response = await fetch(`${baseUrl}/Supplier`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(supplierData),
     });
 
     if (!response.ok) {

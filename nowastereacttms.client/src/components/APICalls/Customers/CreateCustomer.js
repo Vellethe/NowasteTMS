@@ -1,13 +1,13 @@
 var baseUrl ="https://localhost:7253/api";
 
-const createCustomer = async (orderData) => {
+const createCustomer = async (customerData) => {
   try {
     const response = await fetch(`${baseUrl}/Customer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(customerData),
     });
 
     if (!response.ok) {
