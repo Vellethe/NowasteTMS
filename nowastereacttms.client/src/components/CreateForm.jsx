@@ -44,7 +44,7 @@ const CreateForm = () => {
     fetchSuppliers();
   }, []);
 
-  const [customers, setCustomers] = useState([]);
+  const [customer, setCustomers] = useState([]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -134,7 +134,9 @@ const CreateForm = () => {
         noValidate
       >
         {/* General information */}
-        <div className="w-full bg-gray h-12 text-center font-bold mb-3 pt-3">General information</div>
+        <div className="w-full bg-gray h-12 text-center font-bold mb-3 pt-3">
+          General information
+        </div>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0 text-center font-bold">
             <label htmlFor="orderId">Order ID</label>
@@ -144,7 +146,9 @@ const CreateForm = () => {
               {...register("orderId", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
-            {errors.orderId && <p className="text-sm text-red">Order ID is required</p>}
+            {errors.orderId && (
+              <p className="text-sm text-red">Order ID is required</p>
+            )}
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="handlerid">Handler ID</label>
@@ -154,19 +158,22 @@ const CreateForm = () => {
               {...register("handlerid", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
-            {errors.handlerid && <p className="text-sm text-red">Handler ID is required</p>}
+            {errors.handlerid && (
+              <p className="text-sm text-red">Handler ID is required</p>
+            )}
           </div>
         </div>
 
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 text-center">
-            <label htmlFor="palletexchange"
+            <label
+              htmlFor="palletexchange"
               className="block tracking-wide text-gray-700 text-center font-bold mb-2"
             >
               Pallet Exchange
               <div className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight">
                 <input
-                  className="border rounded mr-3 "
+                  className="accent-medium-green mr-2"
                   type="checkbox"
                   id="palletexchange"
                   {...register("palletexchange")}
@@ -193,42 +200,30 @@ const CreateForm = () => {
             <input
               type="date"
               id="collectiondate"
+              {...register("collectionDate")}
               value={collectionDate}
               onChange={handleDateChange}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
-            {errors.collectiondate && <p className="text-sm text-red">Collection Date is required</p>}
+            {errors.collectiondate && (
+              <p className="text-sm text-red">Collection Date is required</p>
+            )}
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="deliverydate">Delivery Date</label>
             <input
               type="date"
-              id="collectiondate"
-              value={collectionDate}
-              onChange={handleDateChange}
+              id="deliverydate"
+              {...register("deliveryDate")}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
-            {errors.deliverydate && <p className="text-sm text-red">Delivery Date is required</p>}
+            {errors.deliverydate && (
+              <p className="text-sm text-red">Delivery Date is required</p>
+            )}
           </div>
         </div>
 
         <div className="flex flex-wrap mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="customer">Customer</label>
-            <select
-              id="customer"
-              {...register("customer", { required: true })}
-              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            >
-               <option value="">Select customer</option>
-            {suppliers.map((customer) => (
-              <option key={customer.customerPK} value={customer.customerPK}>
-                {customer.businessUnit.name}
-              </option>
-            ))}
-            </select>
-            {errors.customer && <p className="text-sm text-red">Customer is required</p>}
-          </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="supplier">Supplier</label>
             <select
@@ -237,13 +232,33 @@ const CreateForm = () => {
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
               <option value="">Select supplier</option>
-            {suppliers.map((supplier) => (
-              <option key={supplier.supplierPK} value={supplier.supplierPK}>
-                {supplier.businessUnit.name}
-              </option>
-            ))}
-          </select>
-            {errors.supplier && <p className="text-sm text-red">Supplier is required</p>}
+              {suppliers.map((supplier) => (
+                <option key={supplier.supplierPK} value={supplier.supplierPK}>
+                  {supplier.businessUnit.name}
+                </option>
+              ))}
+            </select>
+            {errors.supplier && (
+              <p className="text-sm text-red">Supplier is required</p>
+            )}
+          </div>
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="customer">Customer</label>
+            <select
+              id="customer"
+              {...register("customer", { required: true })}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            >
+              <option value="">Select customer</option>
+              {customer.map((customer) => (
+                <option key={customer.customerPK} value={customer.customerPK}>
+                  {customer.businessUnit.name}
+                </option>
+              ))}
+            </select>
+            {errors.customer && (
+              <p className="text-sm text-red">Customer is required</p>
+            )}
           </div>
         </div>
 
@@ -277,7 +292,6 @@ const CreateForm = () => {
               <th>Description</th>
               <th>Pallet qty.</th>
               <th>Pallet type</th>
-
             </tr>
           </thead>
           <tbody>
@@ -339,7 +353,7 @@ const CreateForm = () => {
                   </select>
                 </td>
                 <td>
-                <div className="flex gap-5 justify-center m-6">
+                  <div className="flex gap-5 justify-center m-6">
                     <button
                       className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
                       onClick={(e) => {
@@ -350,7 +364,6 @@ const CreateForm = () => {
                       Remove
                     </button>
                   </div>
-
                 </td>
               </tr>
             ))}
@@ -359,8 +372,10 @@ const CreateForm = () => {
         <div className="flex gap-5 justify-center m-6 ">
           <button
             className="hover:bg-medium-green hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
-            onClick={handleAddLine}>
-            Add Line</button>
+            onClick={handleAddLine}
+          >
+            Add Line
+          </button>
         </div>
         {/* End of Lines Section */}
 
