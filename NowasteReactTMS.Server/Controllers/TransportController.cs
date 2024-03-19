@@ -243,32 +243,5 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok(cdto);
         }
-
-        //public async Task<IActionResult> CreateConsolidation(ConsolidateViewModel vm, EditViewModel em, int status)
-        //{
-        //    await _createConsolidation(vm);
-
-        //    return RedirectToAction("AllTransportOrders");
-        //}
-
-        //public async Task<IActionResult> CreateAndBookConsolidation(ConsolidateViewModel vm)
-        //{
-        //    var consolidatedTransportOrder = await _createConsolidation(vm);
-
-        //    // Send email.
-        //    // Despite all the efforts, the field is not auto populated.. Lets fetch it like this.
-        //    vm.SelectedAgentEmailAddresses = Request.Form["AgentEmailAddresses.selectedAgentEmailAddresses"].ToList();
-        //    //var mailOperationSuccessfulResult = false;
-
-        //    //TransportOrderViewModel to = vm.TransportOrders.First();
-        //    var agent = await _agentRepository.GetAgent(vm.AgentPK);
-
-        //    foreach (var address in vm.SelectedAgentEmailAddresses)
-        //    {
-        //        await SendTransportOrderCreatedMail(consolidatedTransportOrder.TransportOrderPK, address, agent.BusinessUnit.Name);
-        //    }
-
-        //    return RedirectToAction("AllTransportOrders");
-        //}
     }
 }
