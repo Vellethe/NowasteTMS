@@ -35,7 +35,33 @@ namespace NowasteReactTMS.Server.Controllers
             _inventoryRepo = inventoryRepo;
         }
 
-        [HttpPost("create")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllTransportZonePrices()
+    {
+        try
+        {
+            var agents = await _agentRepo.GetAgents();
+            var prices = await _transportZonePriceRepo.GetAll();
+            prices = prices.Where(x => agents.FirstOrDefault(y => y.AgentPK == x.AgentPK) != null).ToList();
+
+            var dto = new TransportZonePricesDTO
+            {
+                Prices = prices,
+                TransportZones = await _transportZoneRepo.GetAll(),
+                TransportTypes = await _transportTypeRepo.GetAll(),
+                Agents = agents
+            };
+
+            return Ok(dto);
+        }
+        catch
+        {
+            return StatusCode(500, "An error occurred while processing your request.");
+        }
+    }
+
+
+    [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTransportZonePriceDTO dto)
         {
             dto.TransportZonePrice.TransportZonePricePK = Guid.NewGuid();
