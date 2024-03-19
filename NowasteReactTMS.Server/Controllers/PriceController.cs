@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using NowasteReactTMS.Server.Models;
+using NowasteReactTMS.Server.Models.TransportDTOs;
 using NowasteReactTMS.Server.Repositories.Interface;
 using NowasteTms.Model;
 
