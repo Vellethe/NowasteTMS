@@ -2,10 +2,8 @@ import { Link } from "react-router-dom";
 import OrderTable from "../../components/table/OrderTable";
 import * as XLSX from "xlsx";
 import { SiMicrosoftexcel } from "react-icons/si";
-import mData from '../../data/MOCK_DATA.json'
 
 const AllOrders = () => {
-  const data = mData;
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -17,13 +15,27 @@ const AllOrders = () => {
     <>
       <div className="m-4">
         <div className="text-3xl text-center text-dark-green">Orders</div>
+        <div className=" m-3 text-xl flex justify-end  text-medium-green">
 
-       
+<div className="flex gap-3">
+  <Link
+    to="/Transport/Order/AllOrders"
+    className=" p-1 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
+  >
+    Orders
+  </Link>
+  <Link
+    to="/Transport/Order/Create"
+    className=" p-1 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
+  >
+    Create New
+  </Link>
+</div>
+</div>
         <OrderTable />
       </div>
       <div>
         <hr className="m-4"></hr>
-
         <div className="flex justify-between">
   <Link
     to="/Transport/Order/Create"
