@@ -5,8 +5,8 @@ namespace NowasteReactTMS.Server.Models
 {
     public class ConsolidateDTO
     {
-        public List<TransportOrderDTO> TransportOrders { get; set; }
-        public List<OrderViewDTO> Orders { get; set; }
+        public List<TransportOrder> TransportOrders { get; set; }
+        public List<Order> Orders { get; set; }
         public List<TransportOrderService> Services { get; set; }
         public decimal TotalFullTruckPrice { get; set; }
         public DateTime CollectionDate { get; set; }
