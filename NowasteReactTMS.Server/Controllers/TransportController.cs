@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using NowasteReactTMS.Server.Models;
+using NowasteReactTMS.Server.Repositories.Interface;
 using NowasteTms.Model;
 using NuGet.Protocol.Plugins;
 using System.Globalization;
@@ -25,6 +26,7 @@ namespace NowasteReactTMS.Server.Controllers
         private readonly IAgentRepository _agentRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderLineRepository _orderLineRepository;
+        private readonly IEmailHandler _emailHandler;
         private readonly IMemoryCache _memoryCache;
         public static string[] ColumnNames = [
             "OrderOrigin",
@@ -72,6 +74,7 @@ namespace NowasteReactTMS.Server.Controllers
             IAgentRepository agentRepository,
             IOrderRepository orderRepository,
             IOrderLineRepository orderLineRepository,
+            IEmailHandler emailHandler,
             IMemoryCache memoryCache)
         {
             _userManager = userManager;
@@ -83,6 +86,7 @@ namespace NowasteReactTMS.Server.Controllers
             _agentRepository = agentRepository;
             _orderRepository = orderRepository;
             _orderLineRepository = orderLineRepository;
+            _emailHandler = emailHandler;
             _memoryCache = memoryCache;
         }
 
@@ -115,7 +119,7 @@ namespace NowasteReactTMS.Server.Controllers
         //    {
         //        var updatedOrderLines = order.Lines.Select(line =>
         //        {
-        //            var orderLine = updatedOrderLines.FirstOrDefault(ol => ol.OrderLinePK == line.OrderLinePK);
+        //            var orderLine = order.Lines.FirstOrDefault(ol => ol.OrderLinePK == line.OrderLinePK);
         //            if (orderLine != null)
         //            {
         //                line.LineNumber = orderLine.LineNumber;
@@ -128,14 +132,13 @@ namespace NowasteReactTMS.Server.Controllers
         //                line.TotalNetPrice = orderLine.TotalNetPrice;
         //            }
         //            return line;
-        //        });
+        //        }).ToList();
 
         //        await _orderRepository.UpdateOrder(updatedOrderLines);
         //    }
 
         //    return Ok(new { message = "Edit successful" });
         //}
-
 
         /// <summary>
         /// Display one TransportOrders details by searching on their PK
