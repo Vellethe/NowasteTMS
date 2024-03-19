@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import createOrder from "./APICalls/Orders/CreateOrder";
 import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
+import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
 
 const CreateForm = () => {
   const [formData, setFormData] = useState({
@@ -41,6 +42,22 @@ const CreateForm = () => {
     };
 
     fetchSuppliers();
+  }, []);
+
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const data = await getAllCustomers();
+        console.log(data)
+        setCustomers(data);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchCustomers();
   }, []);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -203,10 +220,12 @@ const CreateForm = () => {
               {...register("customer", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              <option></option>
-              <option>Coop</option>
-              <option>Ica</option>
-              <option>Netto</option>
+               <option value="">Select customer</option>
+            {suppliers.map((customer) => (
+              <option key={customer.customerPK} value={customer.customerPK}>
+                {customer.businessUnit.name}
+              </option>
+            ))}
             </select>
             {errors.customer && <p className="text-sm text-red">Customer is required</p>}
           </div>
