@@ -209,13 +209,12 @@ namespace NowasteReactTMS.Server.Controllers
             var allServices = await _transportOrderServiceRepo.GetAllTransportOrderServices(transportOrders.First().TransportOrderLines.First().AgentPK, true);
             var selectedServicePKs = transportOrders.SelectMany(x => x.TransportOrderLines)
                 .SelectMany(x => x.TransportOrderLineTransportOrderServices).Select(x => x.TransportOrderServicePK);
-
             var commonAgentForAllOrderLines = await _agentRepository.GetAgent(transportOrders.First().TransportOrderLines.First().AgentPK.Value);
 
             var cdto = new ConsolidateDTO
             {
-                TransportOrders = transportOrders.Select(x => ViewModelFactory.Create(x, x.OrderTransportOrders.Select(async y => await _orderRepository.GetOrder(y.OrderPK)).Select(y => y.Result).ToList(), allServices)).ToList(),
-                Orders = orders.Select(ViewModelFactory.Create).ToList(),
+                TransportOrders = transportOrders.ToList(),
+                Orders = orders.ToList(),
                 Services = allServices,
                 TotalFullTruckPrice = transportOrders.Sum(x => x.Price),
                 CurrencyPK = transportOrders.First().CurrencyPK,
@@ -240,7 +239,7 @@ namespace NowasteReactTMS.Server.Controllers
                 }
             };
 
-            cdto.TransportOrders = cdto.TransportOrders.OrderBy(p => p.TransportOrderId).ToList();
+            cdto.TransportOrders = cdto.TransportOrders.OrderBy(p => p.TransportOrderID).ToList();
 
             return Ok(cdto);
         }
