@@ -169,7 +169,7 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         /// <summary>
-        /// Displays all information about a TransportOrder depending on what role inside the webpage you have
+        /// Displays all information about a TransportOrder depending on what role inside the website you have
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -201,5 +201,75 @@ namespace NowasteReactTMS.Server.Controllers
         //    return Ok(transportOrders);
         //}
 
+        public async Task<IActionResult> Consolidate(TransportViewDTO dto)
+        {
+            var transportOrderPks = dto.CheckedTransportOrderPKs.Split(",");
+            var transportOrders = transportOrderPks.Select(async x => await _transportOrderRepo.Get(new Guid(x))).Select(x => x.Result);
+            var orders = transportOrders.SelectMany(x => x.OrderTransportOrders.Select(y => y.OrderPK)).Select(async x => await _orderRepository.GetOrder(x)).Select(x => x.Result);
+            var allServices = await _transportOrderServiceRepo.GetAllTransportOrderServices(transportOrders.First().TransportOrderLines.First().AgentPK, true);
+            var selectedServicePKs = transportOrders.SelectMany(x => x.TransportOrderLines)
+                .SelectMany(x => x.TransportOrderLineTransportOrderServices).Select(x => x.TransportOrderServicePK);
+
+            var commonAgentForAllOrderLines = await _agentRepository.GetAgent(transportOrders.First().TransportOrderLines.First().AgentPK.Value);
+
+            var cdto = new ConsolidateDTO
+            {
+                TransportOrders = transportOrders.Select(x => ViewModelFactory.Create(x, x.OrderTransportOrders.Select(async y => await _orderRepository.GetOrder(y.OrderPK)).Select(y => y.Result).ToList(), allServices)).ToList(),
+                Orders = orders.Select(ViewModelFactory.Create).ToList(),
+                Services = allServices,
+                TotalFullTruckPrice = transportOrders.Sum(x => x.Price),
+                CurrencyPK = transportOrders.First().CurrencyPK,
+                AgentEmailAddresses = _emailHandler.GetListOfAgentsEmailAddresses(commonAgentForAllOrderLines),
+                AgentPK = commonAgentForAllOrderLines.AgentPK,
+                ConsolidateServicesViewModel = new ConsolidateServiceDTO
+                {
+                    UnselectedServices = allServices.Where(x => x.isActive && !selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
+                    {
+                        Id = x.CurrencyPK,
+                        Name = x.Name,
+                        Currency = x.Currency,
+                        Price = x.Price
+                    }).ToList(),
+                    SelectedServices = allServices.Where(x => selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
+                    {
+                        Id = x.TransportOrderServicePK,
+                        Name = x.Name,
+                        Currency = x.Currency,
+                        Price = x.Price
+                    }).ToList()
+                }
+            };
+
+            cdto.TransportOrders = cdto.TransportOrders.OrderBy(p => p.TransportOrderId).ToList();
+
+            return Ok(cdto);
+        }
+
+        //public async Task<IActionResult> CreateConsolidation(ConsolidateViewModel vm, EditViewModel em, int status)
+        //{
+        //    await _createConsolidation(vm);
+
+        //    return RedirectToAction("AllTransportOrders");
+        //}
+
+        //public async Task<IActionResult> CreateAndBookConsolidation(ConsolidateViewModel vm)
+        //{
+        //    var consolidatedTransportOrder = await _createConsolidation(vm);
+
+        //    // Send email.
+        //    // Despite all the efforts, the field is not auto populated.. Lets fetch it like this.
+        //    vm.SelectedAgentEmailAddresses = Request.Form["AgentEmailAddresses.selectedAgentEmailAddresses"].ToList();
+        //    //var mailOperationSuccessfulResult = false;
+
+        //    //TransportOrderViewModel to = vm.TransportOrders.First();
+        //    var agent = await _agentRepository.GetAgent(vm.AgentPK);
+
+        //    foreach (var address in vm.SelectedAgentEmailAddresses)
+        //    {
+        //        await SendTransportOrderCreatedMail(consolidatedTransportOrder.TransportOrderPK, address, agent.BusinessUnit.Name);
+        //    }
+
+        //    return RedirectToAction("AllTransportOrders");
+        //}
     }
 }
