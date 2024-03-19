@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import {
@@ -21,7 +21,9 @@ import getAllOrders from "../APICalls/Orders/GetAllOrders";
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
-
+  const [sorting, setSorting] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [columnFilters, setColumnFilters] = useState({});
  
   const columns = [
     {
@@ -142,47 +144,6 @@ const OrderTable = () => {
     },
   ];
 
-  // const [tableData, setTableData] = useState([]);
-  // const [page, setPage] = useState(0);
-  // const [pageSize, setPageSize] = useState(25);
-  // const [filter, setFilter] = useState(null);
-  // const [column, setColumn] = useState(null);
-  // const [historical, setHistorical] = useState(false);
-  // const [totalCount, setTotalCount] = useState(0);
-
-  // useEffect(() => {
-  //     const fetchDataAndSetState = async () => {
-  //         const result = await fetchData(page, pageSize, filter, column, historical);
-  //         setTableData(result.tableData); 
-  //         setTotalCount(result.totalCount);
-  //     };
-  //     fetchDataAndSetState();
-  // }, [page, pageSize, filter, column, historical]);
-
-  // const handlePageChange = (newPage) => {
-  //     setPage(newPage);
-  // };
-
-  // const handlePageSizeChange = (size) => {
-  //     setPageSize(size);
-  //     setPage(0);
-  // };
-
-  // const handleFilterChange = (newFilter) => {
-  //     setFilter(newFilter);
-  //     setPage(0);
-  // };
-
-  // const handleColumnChange = (newColumn) => {
-  //     setColumn(newColumn);
-  //     setPage(0);
-  // };
-
-  // const handleHistoricalChange = (newHistorical) => {
-  //     setHistorical(newHistorical);
-  //     setPage(0);
-  // };
-
   const fetchOrders = async () => {
     try {
       const orders = await getAllOrders();
@@ -191,9 +152,6 @@ const OrderTable = () => {
       console.error('Error fetching orders: ', error.message);
     }
   };
-
-  const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
 
   const table = useReactTable({
     data,
@@ -264,9 +222,6 @@ const OrderTable = () => {
       label: column.header,
     })),
   ];
-
-  const [columnFilters, setColumnFilters] = useState({});
-
   // Function to update filter value for a column
   const handleColumnFilterChange = (columnId, value) => {
     setColumnFilters({
@@ -287,18 +242,6 @@ const OrderTable = () => {
     }
     return true; // Include row if all filters match
   };
-  // const [orders, setOrders] = useState([]);
-
-//Måste göras med en if sats med checkbox när dom fungerar (och dubbelkollas vad som ska kunna uppdateras)
-  // const handleUpdateOrder = async (orderId, updatedData) => {
-  //   try {
-  //     const updatedOrder = await updateOrder(orderId, updatedData);
-  //   } catch (error) {
-  //     console.error('Error updating order:', error.message);
-  //   }
-  // };
-
-  
 
   useEffect(() => {
     setSelectedColumns(columns);

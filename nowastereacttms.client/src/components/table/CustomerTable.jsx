@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   useReactTable,
   getCoreRowModel,
@@ -77,8 +77,8 @@ const CustomerTable = () => {
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, "Orders.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Customers");
+    XLSX.writeFile(wb, "Customers.xlsx");
   };
 
   // Function to update filter value for a column

@@ -16,6 +16,7 @@ import getAllSuppliers from '../APICalls/Suppliers/GetAllSuppliers';
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
+  const [sorting, setSorting] = useState([]);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -46,9 +47,6 @@ const OrderTable = () => {
     }
   };
 
-  const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-
   const table = useReactTable({
     data,
     columns,
@@ -76,8 +74,8 @@ const OrderTable = () => {
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, "Orders.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Suppliers");
+    XLSX.writeFile(wb, "Suppliers.xlsx");
   };
 
   const [columnFilters, setColumnFilters] = useState({});
