@@ -92,8 +92,8 @@ const AgentTable = () => {
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, "Orders.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Agents");
+    XLSX.writeFile(wb, "Agents.xlsx");
   };
 
   // Function to update filter value for a column
