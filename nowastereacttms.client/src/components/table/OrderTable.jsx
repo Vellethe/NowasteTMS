@@ -262,22 +262,6 @@ const OrderTable = () => {
           label: column.header,
         }))}
       />
-       <div className=" m-1 text-xl flex justify-end  text-medium-green">
-          <div className="flex gap-3">
-            <Link
-              to="/Transport/Order/AllHistoricalOrders"
-              className=" p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
-            >
-              Historical Orders
-            </Link>
-            <Link
-              to="/Transport/Order/Create"
-              className=" p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
-            >
-              Create New
-            </Link>
-          </div>
-        </div>
       </div>
        
       <div className="mb-5">
