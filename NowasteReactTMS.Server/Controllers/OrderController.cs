@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 using NowasteReactTMS.Server.Models;
 using NowasteTms.Model;
-using System.Data.SqlTypes;
-using System.Runtime.InteropServices;
 
 namespace NowasteReactTMS.Server.Controllers
 {
