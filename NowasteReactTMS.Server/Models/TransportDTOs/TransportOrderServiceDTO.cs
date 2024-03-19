@@ -1,6 +1,6 @@
 ﻿using NowasteTms.Model;
 
-namespace NowasteReactTMS.Server.Models
+namespace NowasteReactTMS.Server.Models.TransportDTOs
 {
     public class TransportOrderServiceDTO
     {

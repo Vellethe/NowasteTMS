@@ -1,6 +1,8 @@
-﻿using NowasteTms.Model;
+﻿using NowasteReactTMS.Server.Models.CustomerDTOs;
+using NowasteReactTMS.Server.Models.TransportDTOs;
+using NowasteTms.Model;
 
-namespace NowasteReactTMS.Server.Models
+namespace NowasteReactTMS.Server.Models.OrderDTOs
 {
     public class OrderViewDTO
     {

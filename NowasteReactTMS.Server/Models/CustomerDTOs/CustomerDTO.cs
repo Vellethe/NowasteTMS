@@ -1,6 +1,6 @@
-﻿namespace NowasteReactTMS.Server.Models
+﻿namespace NowasteReactTMS.Server.Models.CustomerDTOs
 {
-    public class SingleCustomerDTO
+    public class CustomerDTO
     {
         public Guid CustomerPK { get; set; }
 
@@ -8,6 +8,6 @@
 
         public Guid BusinessUnitPK { get; set; }
 
-        public BusinessUnitDTO BusinessUnit { get; set; }
+        public CustomerInfo BusinessUnit { get; set; }
     }
 }

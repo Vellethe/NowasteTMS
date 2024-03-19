@@ -1,4 +1,6 @@
-﻿namespace NowasteReactTMS.Server.Models
+﻿using NowasteReactTMS.Server.Models.CustomerDTOs;
+
+namespace NowasteReactTMS.Server.Models
 {
     public class SupplierDTO
     {

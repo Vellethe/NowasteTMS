@@ -1,4 +1,4 @@
-﻿namespace NowasteReactTMS.Server.Models
+﻿namespace NowasteReactTMS.Server.Models.TransportDTOs
 {
     public class ConsolidateServiceDTO
     {
