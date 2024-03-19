@@ -200,7 +200,7 @@ namespace NowasteReactTMS.Server.Controllers
 
         //    return Ok(transportOrders);
         //}
-
+        [HttpPost]
         public async Task<IActionResult> Consolidate(TransportViewDTO dto)
         {
             var transportOrderPks = dto.CheckedTransportOrderPKs.Split(",");
