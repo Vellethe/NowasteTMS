@@ -9,7 +9,6 @@ public interface IOrderRepository
     Task<Order> GetById(string orderId);
     Task<int> UpdateOrder(Order order);
     Task<int> AddOrder(Order order);
-    //Task<List<Order>> GetAllOrders();
-    //Task<List<Order>> GetHistoricalOrders();
     Task<SearchOrderResponse> SearchOrders(SearchParameters parameters);
+    //Task UpdateOrder(List<OrderLine> updatedOrderLines);
 }
