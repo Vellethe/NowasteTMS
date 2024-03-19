@@ -3,7 +3,7 @@ using NowasteTms.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace NowasteReactTMS.Server.Models
+namespace NowasteReactTMS.Server.Models.OrderDTOs
 {
     public class OrderDTO
     {

@@ -2,7 +2,7 @@
 using NowasteTms.Model;
 using System.ComponentModel.DataAnnotations;
 
-namespace NowasteReactTMS.Server.Models
+namespace NowasteReactTMS.Server.Models.TransportDTOs
 {
     public class TransportOrderDTO
     {

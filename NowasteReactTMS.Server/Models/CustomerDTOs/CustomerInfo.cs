@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace NowasteReactTMS.Server.Models
+namespace NowasteReactTMS.Server.Models.CustomerDTOs
 {
     public class CustomerInfo
     {
