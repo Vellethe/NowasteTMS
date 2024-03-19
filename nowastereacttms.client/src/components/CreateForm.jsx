@@ -33,6 +33,7 @@ const CreateForm = () => {
     const fetchSuppliers = async () => {
       try {
         const data = await getAllSupplier();
+        console.log(data)
         setSuppliers(data);
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -218,8 +219,8 @@ const CreateForm = () => {
             >
               <option value="">Select supplier</option>
             {suppliers.map((supplier) => (
-              <option key={supplier.id} value={supplier.id}>
-                {supplier.name}
+              <option key={supplier.supplierPK} value={supplier.supplierPK}>
+                {supplier.businessUnit.name}
               </option>
             ))}
           </select>
