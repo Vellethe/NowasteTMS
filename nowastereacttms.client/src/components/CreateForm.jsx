@@ -1,32 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import createOrder from "./APICalls/Orders/CreateOrder";
 import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
 
 const CreateForm = () => {
-  const [formData, setFormData] = useState({
-    orderId: "",
-    handlerid: "",
-    palletexchange: true,
-    origin: "",
-    collectiondate: "",
-    deliverydate: "",
-    customer: "",
-    supplier: "",
-    internalcomment: "",
-    commenttoagent: "",
-    lines: [
-      {
-        itemqty: "",
-        itemno: "",
-        description: "",
-        palletqty: "",
-        pallettype: "",
-      },
-    ],
-  });
+ 
 
   const [suppliers, setSuppliers] = useState([]);
 
@@ -60,12 +40,18 @@ const CreateForm = () => {
     fetchCustomers();
   }, []);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "lines",
+  });
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
+      console.log(data)
       const pk = await createOrder(data);
+      
       console.log('Order created with primary key:', pk);
       window.alert("Order created")
       navigate('/success');
@@ -75,37 +61,9 @@ const CreateForm = () => {
     }
   };
 
-  const handleInputChange = (index, event) => {
-    const { name, value } = event.target;
-    const list = [...formData.lines];
-    list[index] = {
-      ...list[index],
-      [name]: value
-    };
-    setFormData({ ...formData, lines: list });
-  };
 
-  const handleAddLine = () => {
-    setFormData({
-      ...formData,
-      lines: [
-        ...formData.lines,
-        {
-          itemqty: "",
-          itemno: "",
-          description: "",
-          palletqty: "",
-          pallettype: "",
-        },
-      ],
-    });
-  };
 
-  const handleRemoveLine = (index) => {
-    const list = [...formData.lines];
-    list.splice(index, 1);
-    setFormData({ ...formData, lines: list });
-  };
+  
 
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
 
@@ -295,15 +253,13 @@ const CreateForm = () => {
             </tr>
           </thead>
           <tbody>
-            {formData.lines.map((line, index) => (
-              <tr key={index}>
+            {fields.map((line, index) => (
+              <tr key={line.id}>
                 <td>
                   <input
                     type="number"
                     {...register(`lines[${index}].itemqty`)}
-                    value={line.itemqty}
-                    onChange={(e) => handleInputChange(index, e)}
-                    name="itemqty"
+                    defaultValue={line.itemqty}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
@@ -311,9 +267,7 @@ const CreateForm = () => {
                   <input
                     type="number"
                     {...register(`lines[${index}].itemno`)}
-                    value={line.itemno}
-                    onChange={(e) => handleInputChange(index, e)}
-                    name="itemno"
+                    defaultValue={line.itemno}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
@@ -321,9 +275,7 @@ const CreateForm = () => {
                   <input
                     type="text"
                     {...register(`lines[${index}].description`)}
-                    value={line.description}
-                    onChange={(e) => handleInputChange(index, e)}
-                    name="description"
+                    defaultValue={line.description}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
@@ -331,39 +283,31 @@ const CreateForm = () => {
                   <input
                     type="number"
                     {...register(`lines[${index}].palletqty`)}
-                    value={line.palletqty}
-                    onChange={(e) => handleInputChange(index, e)}
-                    name="palletqty"
+                    defaultValue={line.palletqty}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
                 <td>
                   <select
-                    value={line.pallettype}
-                    {...register(`lines[${index}].pallettype`)}
-                    onChange={(e) => handleInputChange(index, e)}
-                    name="pallettype"
+                    {...register(`lines[${index}].pallettype`)} //pallettypeid ger INSERT conflict i databasen i supplier
+                    defaultValue={line.pallettype}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
-                    <option></option>
-                    <option value="EU B Pallet">EU B Pallet</option>
-                    <option value="Red Pallets">Red Pallet</option>
+                    <option value=""> </option>
+                    <option value="1">1</option>
+                    <option value="Red Pallet">Red Pallet</option>
                     <option value="Blue Pallet">Blue Pallet</option>
                     <option value="Green Pallet">Green Pallet</option>
                   </select>
                 </td>
                 <td>
-                  <div className="flex gap-5 justify-center m-6">
-                    <button
-                      className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleRemoveLine(index);
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
+                  <button
+                    className="p-2 border rounded border-red text-red text-sm hover:bg-red hover:text-white"
+                    onClick={() => remove(index)}
+                    type="button"
+                  >
+                    Remove
+                  </button>
                 </td>
               </tr>
             ))}
@@ -372,7 +316,8 @@ const CreateForm = () => {
         <div className="flex gap-5 justify-center m-6 ">
           <button
             className="hover:bg-medium-green hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
-            onClick={handleAddLine}
+            type="button"
+            onClick={() => append({ itemqty: "", itemno: "", description: "", palletqty: "", pallettype: "" })}
           >
             Add Line
           </button>
