@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using NowasteReactTMS.Server.Models;
+using NowasteReactTMS.Server.Models.CustomerDTOs;
 using NowasteTms.Model;
 
 namespace NowasteReactTMS.Server.Controllers

@@ -40,7 +40,7 @@ const OrderTable = () => {
     },
     {
       header: "Pickup weekday",
-      accessorKey: "CollectionDateWD",
+      accessorKey: "collectionDateWD",
     },
     {
       header: "OrderId",
@@ -56,11 +56,11 @@ const OrderTable = () => {
     },
     {
       header: "Eur Pallets",
-      accessorKey: "eurPalletQty",
+      accessorKey: "transportOrder.eurPalletQty",
     },
     {
       header: "Sea Pallets",
-      accessorKey: "OrderLinesTypeId8",
+      accessorKey: "transportOrder.seaPalletQty", //transportOrder.palletQty
     },
     {
       header: "Pallet Exch",
@@ -76,7 +76,7 @@ const OrderTable = () => {
     },
     {
       header: "Item Qty",
-      accessorKey: "ItemQty",
+      accessorKey: "itemqty",
     },
     {
       header: "Lines",
@@ -92,7 +92,7 @@ const OrderTable = () => {
     },
     {
       header: "ETA To",
-      accessorKey: "transportOrder.collectionDate",
+      accessorKey: "transportOrder.collectionDate", //transportOrder.deliveryDate
     },
     {
       header: "ETA Weekday",
@@ -132,7 +132,7 @@ const OrderTable = () => {
     },
     {
       header: "Update weekday",
-      accessorKey: "UpdatedWD",
+      accessorKey: "updatedWD",
     },
     {
       header: "Updated by",
