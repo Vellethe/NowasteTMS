@@ -35,33 +35,37 @@ namespace NowasteReactTMS.Server.Controllers
             _inventoryRepo = inventoryRepo;
         }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllTransportZonePrices()
-    {
-        try
+        [HttpPost]
+        public async Task<IActionResult> GetAllTransportZonePrices()
         {
-            var agents = await _agentRepo.GetAgents();
-            var prices = await _transportZonePriceRepo.GetAll();
-            prices = prices.Where(x => agents.FirstOrDefault(y => y.AgentPK == x.AgentPK) != null).ToList();
-
-            var dto = new TransportZonePricesDTO
+            try
             {
-                Prices = prices,
-                TransportZones = await _transportZoneRepo.GetAll(),
-                TransportTypes = await _transportTypeRepo.GetAll(),
-                Agents = agents
-            };
+                var agents = await _agentRepo.GetAgents();
+                var prices = await _transportZonePriceRepo.GetAll();
+                prices = prices.Where(x => agents.FirstOrDefault(y => y.AgentPK == x.AgentPK) != null).ToList();
+                var transportZones = await _transportZoneRepo.GetAll();
+                var transportTypes = await _transportTypeRepo.GetAll();
 
-            return Ok(dto);
+                // Create a combined array
+                var combinedData = prices.Select(p => new
+                {
+                    Price = p,
+                    TransportZone = transportZones.FirstOrDefault(tz => tz.TransportZonePK == p.ToTransportZonePK),
+                    TransportType = transportTypes.FirstOrDefault(tt => tt.TransportTypePK == p.TransportTypePK),
+                    Agent = agents.FirstOrDefault(a => a.AgentPK == p.AgentPK)
+                }).ToArray();
+
+                return Ok(combinedData);
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-        catch
-        {
-            return StatusCode(500, "An error occurred while processing your request.");
-        }
-    }
 
 
-    [HttpPost("create")]
+
+        [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTransportZonePriceDTO dto)
         {
             dto.TransportZonePrice.TransportZonePricePK = Guid.NewGuid();

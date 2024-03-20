@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Select from 'react-select';
 import {
   useReactTable,
@@ -11,54 +11,52 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
+import getAllPrices from '../APICalls/Prices/GetAllPrices';
 
 const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const data = useMemo(() => [])
+  const [selectedColumns, setSelectedColumns] = useState([]);
+  const [data, setData] = useState([])
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
       header: "From",
-      accessorKey: "DeliverFrom",
+      accessorKey: "price.fromTransportZone.name",
     },
     {
       header: "To",
-      accessorKey: "DeliverTo",
+      accessorKey: "price.toTransportZone.name",
     },
     {
       header: "Price",
-      accessorKey: "Price",
+      accessorKey: "price.price",
     },
     {
       header: "Currency",
-      accessorKey: "Currency",
+      accessorKey: "price.currency.name", //shortName
     },
     {
       header: "Agent",
-      accessorKey: "Agent",
+      accessorKey: "agent.businessUnit.name",
     },
     {
       header: "Type",
-      accessorKey: "Type",
+      accessorKey: "transportType.description",
     },
     {
       header: "Valid from",
-      accessorKey: "ValidFrom",
+      accessorKey: "price.validFrom",
     },
     {
       header: "Valid to",
-      accessorKey: "ValidTo",
+      accessorKey: "price.validTo",
     },
     {
       header: "Description",
-      accessorKey: "Description",
+      accessorKey: "price.description",
     },
-    {
-      header: "",
-      accessorKey: "EditAndDelete"
-    }
   ];
 
   const table = useReactTable({
@@ -86,6 +84,20 @@ const OrderTable = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Prices");
     XLSX.writeFile(wb, "Prices.xlsx");
   };
+
+  const fetchPrices = async () => {
+    try {
+      const prices = await getAllPrices();
+      setData(prices);
+    } catch (error) {
+      console.error('Error fetching prices: ', error.message);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedColumns(columns);
+    fetchPrices();
+  }, []); // Empty dependency array so it only runs once
 
   const [columnFilters, setColumnFilters] = useState({});
 
