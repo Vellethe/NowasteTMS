@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using NowastePalletPortal.Extensions.Helpers;
 using NowasteReactTMS.Server;
 using NowasteReactTMS.Server.Controllers;
+using NowasteReactTMS.Server.Repositories;
+using NowasteReactTMS.Server.Repositories.Interface;
 using WMan.Data.ConnectionFactory;
 
 using IConnectionFactory = WMan.Data.ConnectionFactory.IConnectionFactory;
@@ -52,6 +54,7 @@ builder.Services.AddSingleton<ITransportOrderLineRepository, TransportOrderLineR
 builder.Services.AddSingleton<ITransportZonePriceRepository, TransportZonePriceRepository>();
 builder.Services.AddSingleton<ITransportZoneRepository, TransportZoneRepository>();
 builder.Services.AddSingleton<ITransportZonePriceLineRepository, TransportZonePriceLineRepository>();
+builder.Services.AddSingleton<ITransportTypeRepository, TransportTypeRepository>();
 builder.Services.AddSingleton<IAgentRepository, AgentRepository>();
 builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
 builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
