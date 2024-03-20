@@ -164,7 +164,7 @@ namespace NowasteReactTMS.Server.Controllers
                     ItemName = items[x.ItemPK].Name
                 })
             });
-            return Ok(pk);
+            return Ok(dto);
         }
         /// <summary>
         /// Updates an existing Order and makes sure the required parameters are valid
@@ -239,6 +239,16 @@ namespace NowasteReactTMS.Server.Controllers
 
             return Ok("Successufully deleted");
         }
+
+        [HttpGet("Items")]
+        public async Task<ActionResult<List<Item>>> GetAllItems()
+        {
+            
+                var items = await _itemRepository.GetItems();
+                return Ok(items);       
+            
+        }
+
 
     }
 

@@ -6,15 +6,12 @@ import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
 
 const CreateForm = () => {
- 
-
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
         const data = await getAllSupplier();
-        console.log(data)
         setSuppliers(data);
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -30,7 +27,6 @@ const CreateForm = () => {
     const fetchCustomers = async () => {
       try {
         const data = await getAllCustomers();
-        console.log(data)
         setCustomers(data);
       } catch (error) {
         console.error("Error fetching customers:", error);
@@ -40,7 +36,12 @@ const CreateForm = () => {
     fetchCustomers();
   }, []);
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "lines",
@@ -49,21 +50,17 @@ const CreateForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data)
+      console.log(data);
       const pk = await createOrder(data);
-      
-      console.log('Order created with primary key:', pk);
-      window.alert("Order created")
-      navigate('/success');
+
+      console.log("Order created with primary key:", pk);
+      window.alert("Order created");
+      navigate("/success");
     } catch (error) {
       // Handle errors
-      console.error('Failed to create order:', error);
+      console.error("Failed to create order:", error);
     }
   };
-
-
-
-  
 
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
 
@@ -131,7 +128,7 @@ const CreateForm = () => {
               Pallet Exchange
               <div className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight">
                 <input
-                  className="accent-medium-green mr-2"
+                  className="accent-medium-green mr-2 "
                   type="checkbox"
                   id="palletexchange"
                   {...register("palletexchange")}
@@ -274,7 +271,7 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="text"
-                    {...register(`lines[${index}].description`)}
+                    {...register(`lines[${index}].name`)}
                     defaultValue={line.description}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
@@ -317,7 +314,15 @@ const CreateForm = () => {
           <button
             className="hover:bg-medium-green hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
             type="button"
-            onClick={() => append({ itemqty: "", itemno: "", description: "", palletqty: "", pallettype: "" })}
+            onClick={() =>
+              append({
+                itemqty: "",
+                itemno: "",
+                name: "",
+                palletqty: "",
+                pallettype: "",
+              })
+            }
           >
             Add Line
           </button>

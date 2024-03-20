@@ -11,7 +11,7 @@ namespace NowasteReactTMS.Server.Models.OrderDTOs
         public string OrderId { get; set; }
         public DateTime CollectionDate { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public List<OrderLineDTO> Lines { get; set; }
+        public List<OrderLineDTO>? Lines { get; set; }
 
         public bool PalletExchange { get; set; }
 
@@ -23,6 +23,7 @@ namespace NowasteReactTMS.Server.Models.OrderDTOs
         [DisplayName("Customer")]
         public Guid CustomerPK { get; set; }
 
+        public int ItemQty { get; set; }
         public string HandlerID { get; set; }
         public string? Comment { get; set; }
         public string? InternalComment { get; set; }
