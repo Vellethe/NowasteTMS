@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
-import { Link } from "react-router-dom";
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,7 +14,6 @@ import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
 import getAllOrders from "../APICalls/Orders/GetAllOrders";
-// import fetchData from "../APICalls/API";
 // import updateOrder from './APICalls/Orders/UpdateOrder'
 
 const OrderTable = () => {
@@ -178,9 +176,6 @@ const OrderTable = () => {
   }, []); // Empty dependency array so it only runs once
 
   const defaultSelectedAccessorKeys = [
-    "OrderPK",
-    "OrderId",
-    "SupplierName",
     "TransportBooking",
     "OrderTransportStatusString",
   ];
@@ -242,11 +237,6 @@ const OrderTable = () => {
     }
     return true; // Include row if all filters match
   };
-
-  useEffect(() => {
-    setSelectedColumns(columns);
-    fetchOrders();
-  }, []);
 
   return (
     <div className="text-dark-green w-full">

@@ -34,8 +34,7 @@ const getAllPrices = async() => {
     const hours = datetime.getHours().toString().padStart(2, '0'); 
     const minutes = datetime.getMinutes().toString().padStart(2, '0');
     const seconds = datetime.getSeconds().toString().padStart(2, '0');
-    const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][datetime.getDay()];
-    return `${dayOfWeek}, ${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   }
   
   export default getAllPrices;
