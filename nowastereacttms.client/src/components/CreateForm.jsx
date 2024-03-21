@@ -4,9 +4,15 @@ import { useNavigate } from "react-router-dom";
 import createOrder from "./APICalls/Orders/CreateOrder";
 import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
+import getItems from "./APICalls/Orders/GetItems"
 
 const CreateForm = () => {
   const [suppliers, setSuppliers] = useState([]);
+  const [customer, setCustomers] = useState([]);
+  const [collectionDate, setCollectionDate] = useState(getTodayDate());
+  const [items, setItems] = useState([]);
+  const [field, setFields] = useState([]);
+  
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -21,8 +27,6 @@ const CreateForm = () => {
     fetchSuppliers();
   }, []);
 
-  const [customer, setCustomers] = useState([]);
-
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -34,6 +38,20 @@ const CreateForm = () => {
     };
 
     fetchCustomers();
+  }, []);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const data = await getItems();
+        console.log(data);
+        setItems(data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
   }, []);
 
   const {
@@ -62,8 +80,6 @@ const CreateForm = () => {
     }
   };
 
-  const [collectionDate, setCollectionDate] = useState(getTodayDate());
-
   function getTodayDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -80,6 +96,8 @@ const CreateForm = () => {
   function handleDateChange(event) {
     setCollectionDate(event.target.value);
   }
+
+
 
   return (
     <div>
@@ -262,18 +280,26 @@ const CreateForm = () => {
                 </td>
                 <td>
                   <input
-                    type="number"
+                    type="text"
                     {...register(`lines[${index}].itemno`)}
-                    defaultValue={line.itemno}
+                    defaultValue={line.itemID}
                     className="w-full h-8 border rounded pl-2 text-center"
+                    list="itemList"
                   />
+                  <datalist id="itemList">
+                    {items.map((item) => (
+                      <option key={item.itemPK} value={item.itemID} />
+                    ))}
+                  </datalist>
                 </td>
                 <td>
                   <input
                     type="text"
+                    value={line.name}
                     {...register(`lines[${index}].name`)}
                     defaultValue={line.description}
                     className="w-full h-8 border rounded pl-2 text-center"
+                    
                   />
                 </td>
                 <td>
@@ -286,7 +312,7 @@ const CreateForm = () => {
                 </td>
                 <td>
                   <select
-                    {...register(`lines[${index}].pallettype`)} //pallettypeid ger INSERT conflict i databasen i supplier
+                    {...register(`lines[${index}].PalletType`)} //pallettypeid ger INSERT conflict i databasen i supplier
                     defaultValue={line.pallettype}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >

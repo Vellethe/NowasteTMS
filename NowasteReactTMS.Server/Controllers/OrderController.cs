@@ -174,7 +174,7 @@ namespace NowasteReactTMS.Server.Controllers
                     ItemName = items[x.ItemPK].Name
                 })
             });
-            return Ok(dto);
+            return Ok(pk);
         }
         /// <summary>
         /// Updates an existing Order and makes sure the required parameters are valid
