@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NowasteReactTMS.Server.Models;
 using NowasteReactTMS.Server.Models.OrderDTOs;
+using NowasteReactTMS.Server.Repositories.Interface;
 using NowasteTms.Model;
 
 namespace NowasteReactTMS.Server.Controllers
@@ -58,6 +59,7 @@ namespace NowasteReactTMS.Server.Controllers
         private readonly IItemRepository _itemRepository;
         private readonly IOrderLineRepository _orderLineRepository;
         private readonly IPalletInventoryRepository _inventoryRepository;
+        private readonly ITransportTypeRepository _transportTypeRepository;
 
         public OrderController(UserManager<ApplicationUser> userManager,
             IOrderRepository orderRepo,
@@ -68,7 +70,8 @@ namespace NowasteReactTMS.Server.Controllers
             ITransportOrderRepository transportOrderRepository,
             IItemRepository itemRepository,
             IOrderLineRepository orderLineRepository,
-            IPalletInventoryRepository inventoryRepository)
+            IPalletInventoryRepository inventoryRepository,
+            ITransportTypeRepository transportTypeRepository)
         {
             _userManager = userManager;
             _orderRepo = orderRepo;
@@ -80,6 +83,7 @@ namespace NowasteReactTMS.Server.Controllers
             _itemRepository = itemRepository;
             _inventoryRepository = inventoryRepository;
             _orderLineRepository = orderLineRepository;
+            _transportTypeRepository = transportTypeRepository;
         }
         /// <summary>
         /// Returns order when searching for its PK
@@ -100,7 +104,6 @@ namespace NowasteReactTMS.Server.Controllers
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SearchOrders(SearchOrderDTO dto)
-
         {
             var searchParameters = new SearchParameters
             {
@@ -113,8 +116,15 @@ namespace NowasteReactTMS.Server.Controllers
             searchParameters.Filters.Add("historical", dto.Historical.ToString().ToLower());
 
             var orders = await _orderRepo.SearchOrders(searchParameters);
+            var items = await _itemRepository.GetItems(); // TransportTemp/StorageTemp, itemID, Name och Company
 
-            return Ok(orders);
+            var responseDTO = new
+            {
+                Orders = orders.Orders,
+                Items = items
+            };
+
+            return Ok(responseDTO);
         }
 
         /// <summary>
