@@ -35,10 +35,7 @@ const NavMenu = [
     name: "Services",
     link: "/Transport/TransportOrderService"
   }
-
 ];
-
-
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -47,8 +44,10 @@ const Navbar = () => {
   };
 
   return (
-    <header className=" flex items-center justify-between flex-wrap bg-gradient-to-l from-dark-green via-medium-green to-white w-full top-0 left-0 p-6 text-white">
-      <img className="w-[80px] rounded " src={NWLlogo} />
+    <header className="flex items-center justify-between flex-wrap bg-gradient-to-l from-dark-green via-medium-green to-white w-full top-0 left-0 p-6 text-white">
+      <Link to="/">
+        <img className="w-[80px] rounded" src={NWLlogo} alt="NWL Logo" /> {/* Make sure to add alt text for accessibility */}
+      </Link>
       <ul className="hidden md:flex md:items-center gap-4 text-2xl">
         {NavMenu.map((NavMenu) => (
           <Link
@@ -71,7 +70,7 @@ const Navbar = () => {
           </button>
         </Link>
       </div>
-
+  
       {/* ----mobile--- */}
       <div className="-mr-2 flex flex-row-reverse p-4 md:hidden">
         <div className="flex items-center ml-4">

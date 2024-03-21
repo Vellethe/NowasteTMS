@@ -253,7 +253,7 @@ const OrderTable = () => {
         }))}
       />
       </div>
-       
+
       <div className="mb-5">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border ">
