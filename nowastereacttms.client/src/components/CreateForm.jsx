@@ -18,6 +18,7 @@ const CreateForm = () => {
     const fetchSuppliers = async () => {
       try {
         const data = await getAllSupplier();
+        console.log(data)
         setSuppliers(data);
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -73,7 +74,7 @@ const CreateForm = () => {
 
       console.log("Order created with primary key:", pk);
       window.alert("Order created");
-      navigate("/success");
+      navigate("/Transport/Order/AllOrders");
     } catch (error) {
       // Handle errors
       console.error("Failed to create order:", error);
@@ -201,7 +202,7 @@ const CreateForm = () => {
             <label htmlFor="supplier">Supplier</label>
             <select
               id="supplier"
-              {...register("supplier", { required: true })}
+              {...register("supplierPK", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
               <option value="">Select supplier</option>
@@ -219,7 +220,7 @@ const CreateForm = () => {
             <label htmlFor="customer">Customer</label>
             <select
               id="customer"
-              {...register("customer", { required: true })}
+              {...register("customerPK", { required: true })}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
               <option value="">Select customer</option>
@@ -312,7 +313,7 @@ const CreateForm = () => {
                 </td>
                 <td>
                   <select
-                    {...register(`lines[${index}].PalletType`)} //pallettypeid ger INSERT conflict i databasen i supplier
+                    {...register(`lines[${index}].PalletTypeId`)} //pallettypeid ger INSERT conflict i databasen i supplier
                     defaultValue={line.pallettype}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
