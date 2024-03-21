@@ -64,7 +64,7 @@ const OrderTable = () => {
     columns,
     initialState: {
       pagination: {
-        pageSize: 150,
+        pageSize: 500,
       },
     },
     getCoreRowModel: getCoreRowModel(),

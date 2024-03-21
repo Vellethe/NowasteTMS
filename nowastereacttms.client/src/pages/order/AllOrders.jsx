@@ -19,10 +19,10 @@ const AllOrders = () => {
 
 <div className="flex gap-3">
   <Link
-    to="/Transport/Order/AllOrders"
+    to="/Transport/Order/AllHistoricalOrders"
     className=" p-1 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
   >
-    Orders
+    Historical Orders
   </Link>
   <Link
     to="/Transport/Order/Create"
