@@ -12,7 +12,7 @@ import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllAgents from '../APICalls/Agents/GetAllAgents';
 import updateAgent from '../APICalls/Agents/UpdateAgent';
-
+import EditAgentsForm from '../EditForms/EditAgentsForm';
 
 const AgentTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -22,6 +22,8 @@ const AgentTable = () => {
   const [columnFilters, setColumnFilters] = useState({});
   const [initialAgentData, SetInitialAgentData] = useState();
   const [agentData, setAgentData] = useState(initialAgentData);
+  const [editItem, setEditItem] = useState(null);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -47,6 +49,25 @@ const AgentTable = () => {
     },
   ];
 
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setIsEditFormOpen(true);
+  };
+
+  const handleSave = async (updatedItem) => {
+    try {
+      await updateAgent(updatedItem.id, updatedItem);
+      fetchAgents();
+      setIsEditFormOpen(false);
+    } catch (error) {
+      console.error('Error updating agent: ', error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditFormOpen(false);
+  };
+
   const fetchAgents = async () => {
     try {
       const agents = await getAllAgents();
@@ -54,16 +75,7 @@ const AgentTable = () => {
     } catch (error) {
       console.error('Error fetching agents: ', error.message);
     }
-  };
-
-  const handleEdit = async (agentId, agentData) => {
-    try {
-      const updatedAgent = await updateAgent(agentId, agentData);
-      console.log('Agent updated successfully:', updatedAgent);
-    } catch (error) {
-      console.error('Failed to update agent:', error.message);
-    }
-  };  
+  }; 
 
   const table = useReactTable({
     data,
@@ -118,6 +130,9 @@ const AgentTable = () => {
   return (
     <div className="text-dark-green w-full">
       <div className="mb-5">
+      {isEditFormOpen && (
+        <EditAgentsForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border ">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -171,10 +186,8 @@ const AgentTable = () => {
                       className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                       type="checkbox"
                     />
-                    <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full"
-                    onClick={() => handleEdit(row.original.agentID, agentData)}>
-                    Edit
-                    </button>
+                  <button className="appearance-none font-bold border rounded px-2 mr-10" 
+                  onClick={() => handleEdit(row.original)}>Edit</button>
                     <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full">
                       Details
                     </button>
