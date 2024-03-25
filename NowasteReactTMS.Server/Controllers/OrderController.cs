@@ -117,11 +117,13 @@ namespace NowasteReactTMS.Server.Controllers
 
             var orders = await _orderRepo.SearchOrders(searchParameters);
             var items = await _itemRepository.GetItems(); // TransportTemp/StorageTemp, itemID, Name och Company
+            var transport = await _transportTypeRepository.GetAll();
 
             var responseDTO = new
             {
                 Orders = orders.Orders,
-                Items = items
+                Items = items,
+                Transport = transport
             };
 
             return Ok(responseDTO);

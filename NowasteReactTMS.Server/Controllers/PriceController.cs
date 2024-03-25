@@ -97,7 +97,7 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok("Created successfully");
         }
 
-        [HttpPut]
+        [HttpPut("{pk}")]
         public async Task<IActionResult> Edit(TransportPriceDTO dto)
         {
             var updatePrice = await _transportZonePriceRepo.Get(dto.TransportZonePrice.TransportZonePricePK);
