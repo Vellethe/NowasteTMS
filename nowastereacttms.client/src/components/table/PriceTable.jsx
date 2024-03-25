@@ -13,7 +13,7 @@ import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllPrices from '../APICalls/Prices/GetAllPrices';
 import updatePrice from '../APICalls/Prices/UpdatePrice';
-import EditPriceForm from '../EditPriceForm';
+import EditPriceForm from '../EditForms/EditPriceForm';
 
 const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
@@ -70,8 +70,7 @@ const OrderTable = () => {
 
   const handleSave = async (updatedItem) => {
     try {
-      await updatePrice(updatedItem.id, updatedItem); // Assuming id is a unique identifier for the item
-      // Optionally, you can fetch the updated data after saving
+      await updatePrice(updatedItem.id, updatedItem);
       fetchPrices();
       setIsEditFormOpen(false);
     } catch (error) {
