@@ -12,12 +12,16 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllPrices from '../APICalls/Prices/GetAllPrices';
+import updatePrice from '../APICalls/Prices/UpdatePrice';
+import EditPriceForm from '../EditPriceForm';
 
 const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([])
+  const [editItem, setEditItem] = useState(null);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -58,6 +62,26 @@ const OrderTable = () => {
       accessorKey: "price.description",
     },
   ];
+
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setIsEditFormOpen(true);
+  };
+
+  const handleSave = async (updatedItem) => {
+    try {
+      await updatePrice(updatedItem.id, updatedItem); // Assuming id is a unique identifier for the item
+      // Optionally, you can fetch the updated data after saving
+      fetchPrices();
+      setIsEditFormOpen(false);
+    } catch (error) {
+      console.error('Error updating price: ', error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditFormOpen(false);
+  };
 
   const table = useReactTable({
     data,
@@ -122,6 +146,9 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green text-sm w-full">
+            {isEditFormOpen && (
+        <EditPriceForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
       <div className="overflow-auto relative">
         <table ref={tableRef} className="border-x border-b w-full">
           <thead className="border">
@@ -162,9 +189,9 @@ const OrderTable = () => {
               .filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className="border p-1 text-center">
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 1</button>
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 2</button>
+                <td className="border p-1 text-center">
+                  <button className="appearance-none font-bold border rounded px-2 mr-10" onClick={() => handleEdit(row.original)}>Edit</button>
+                    <button className="appearance-none font-bold border rounded px-2 mr-10">Delete</button>
                     <input type="checkbox" />
                   </td>
                   {row.getVisibleCells().map((cell) => (
