@@ -304,7 +304,7 @@ const CreateForm = () => {
                     type="text"
                     defaultValue={line.name}
                     {...register(`lines[${index}].name`)}
-                    className="w-full h-8 border rounded pl-2 text-center"
+                    className="w-full h-8 border rounded pl-2 text-center text-sm"
                     list="itemName"
                     onChange={(e) => {
                       const selectedName = e.target.value;
