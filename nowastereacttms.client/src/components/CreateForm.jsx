@@ -10,7 +10,9 @@ const CreateForm = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [customer, setCustomers] = useState([]);
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
+  const [deliveryDate, setDeliveryDate] = useState(getTodayDate());
   const [items, setItems] = useState([]);
+  
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -182,6 +184,8 @@ const CreateForm = () => {
               type="date"
               id="deliverydate"
               {...register("deliveryDate")}
+              value={deliveryDate}
+              onChange={handleDateChange}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
             {errors.deliverydate && (
