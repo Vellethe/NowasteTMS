@@ -1,4 +1,4 @@
-﻿public class InventoryStock
+﻿public class InventoryStockDTO
 {
 
     public int PalletAccountId { get; set; }

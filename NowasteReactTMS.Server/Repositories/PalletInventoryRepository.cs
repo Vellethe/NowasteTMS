@@ -103,12 +103,12 @@ public class PalletInventoryRepository : IPalletInventoryRepository
 
     //}
 
-    public async Task<IEnumerable<InventoryStock>> GetInventoryPalletStock(long palletAccountId, DateTime date)
+    public async Task<IEnumerable<InventoryStockDTO>> GetInventoryPalletStock(long palletAccountId, DateTime date)
     {
         var dateFormat = date.AddDays(1).ToString("s");
         using (var connection = connectionFactory.CreateConnection())
         {
-            var result = await connection.QueryAsync<InventoryStock>(@"
+            var result = await connection.QueryAsync<InventoryStockDTO>(@"
                 SELECT ps.[Id]
                       ,ps.[PalletAccountId]
                       ,ps.[PalletTypeId]

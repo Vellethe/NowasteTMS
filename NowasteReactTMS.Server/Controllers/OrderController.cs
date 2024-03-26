@@ -261,7 +261,14 @@ namespace NowasteReactTMS.Server.Controllers
             
         }
 
+        [HttpGet("PalletTypes")]
+        public async Task<ActionResult<List<PalletType>>> GetInventory()
+        {
 
+            var palletTypes = await _inventoryRepository.GetInventory();
+            return Ok(palletTypes);
+
+        }
     }
 
 }
