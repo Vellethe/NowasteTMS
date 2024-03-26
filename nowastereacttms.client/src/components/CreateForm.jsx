@@ -4,21 +4,18 @@ import { useNavigate } from "react-router-dom";
 import createOrder from "./APICalls/Orders/CreateOrder";
 import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
-import getItems from "./APICalls/Orders/GetItems"
+import getItems from "./APICalls/Orders/GetItems";
 
 const CreateForm = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [customer, setCustomers] = useState([]);
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
   const [items, setItems] = useState([]);
-  const [field, setFields] = useState([]);
-  
 
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
         const data = await getAllSupplier();
-        console.log(data)
         setSuppliers(data);
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -45,7 +42,6 @@ const CreateForm = () => {
     const fetchItems = async () => {
       try {
         const data = await getItems();
-        console.log(data);
         setItems(data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -57,6 +53,7 @@ const CreateForm = () => {
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
     control,
@@ -76,7 +73,6 @@ const CreateForm = () => {
       window.alert("Order created");
       navigate("/Transport/Order/AllOrders");
     } catch (error) {
-      // Handle errors
       console.error("Failed to create order:", error);
     }
   };
@@ -87,7 +83,6 @@ const CreateForm = () => {
     var month = today.getMonth() + 1;
     var day = today.getDate();
 
-    // Add zero if month or day is less than 10
     month = month < 10 ? `0${month}` : month;
     day = day < 10 ? `0${day}` : day;
 
@@ -97,8 +92,6 @@ const CreateForm = () => {
   function handleDateChange(event) {
     setCollectionDate(event.target.value);
   }
-
-
 
   return (
     <div>
@@ -273,7 +266,7 @@ const CreateForm = () => {
               <tr key={line.id}>
                 <td>
                   <input
-                    type="number"
+                    type="text"
                     {...register(`lines[${index}].itemqty`)}
                     defaultValue={line.itemqty}
                     className="w-full h-8 border rounded pl-2 text-center"
@@ -286,6 +279,15 @@ const CreateForm = () => {
                     defaultValue={line.itemID}
                     className="w-full h-8 border rounded pl-2 text-center"
                     list="itemList"
+                    onChange={(e) => {
+                      const selectedItemID = e.target.value;
+                      const selectedItem = items.find(
+                        (item) => item.itemID === selectedItemID
+                      );
+                      if (selectedItem) {
+                        setValue(`lines[${index}].name`, selectedItem.name);
+                      }
+                    }}
                   />
                   <datalist id="itemList">
                     {items.map((item) => (
@@ -296,12 +298,25 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="text"
-                    value={line.name}
+                    defaultValue={line.name}
                     {...register(`lines[${index}].name`)}
-                    defaultValue={line.description}
                     className="w-full h-8 border rounded pl-2 text-center"
-                    
+                    list="itemName"
+                    onChange={(e) => {
+                      const selectedName = e.target.value;
+                      const selectedItem = items.find(
+                        (item) => item.name === selectedName
+                      );
+                      if (selectedItem) {
+                        setValue(`lines[${index}].itemno`, selectedItem.itemID);
+                      }
+                    }}
                   />
+                  <datalist id="itemName">
+                    {items.map((item) => (
+                      <option key={item.itemPK} value={item.name} />
+                    ))}
+                  </datalist>
                 </td>
                 <td>
                   <input
@@ -313,7 +328,7 @@ const CreateForm = () => {
                 </td>
                 <td>
                   <select
-                    {...register(`lines[${index}].PalletTypeId`)} //pallettypeid ger INSERT conflict i databasen i supplier
+                    {...register(`lines[${index}].PalletTypeId`)}
                     defaultValue={line.pallettype}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
