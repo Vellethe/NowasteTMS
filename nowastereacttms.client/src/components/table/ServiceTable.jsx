@@ -52,6 +52,7 @@ const ServiceTable = () => {
   ];
 
   const handleEdit = (item) => {
+    console.log(item);
     setEditItem(item);
     setIsEditFormOpen(true);
   };

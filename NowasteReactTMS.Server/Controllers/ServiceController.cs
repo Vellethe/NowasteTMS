@@ -39,7 +39,7 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SearchTransportOrderServices(bool includeInactive = true)
+        public async Task<IActionResult> SearchTransportOrderServices(bool includeInactive = false)
 
         {
             var services = await _transportOrderServiceRepo.GetAllTransportOrderServices(includeInactive);
@@ -52,50 +52,50 @@ namespace NowasteReactTMS.Server.Controllers
             var newTransportOrderService = new TransportOrderService
             {
                 TransportOrderServicePK = Guid.NewGuid(),
-                Name = dto.TransportOrderService.Name,
-                Price = dto.TransportOrderService.Price,
-                CurrencyPK = dto.TransportOrderService.CurrencyPK,
+                Name = dto.Name,
+                Price = dto.Price,
+                CurrencyPK = dto.CurrencyPK,
                 SucceedingVersionPK = null,
                 isActive = true,
                 Timestamp = DateTime.Now,
-                AgentPK = dto.TransportOrderService.AgentPK
+                AgentPK = dto.AgentPK
             };
 
             await _transportOrderServiceRepo.Add(newTransportOrderService);
 
             return Ok("Order created");
         }
-        [HttpPut]
-        public async Task<IActionResult> Edit(ServiceDTO dto)
+        [HttpPut("{pk}")]
+        public async Task<IActionResult> Edit(Guid pk, [FromBody] ServiceDTO dto)
         {
             var newVersionOfTransportOrderService = new TransportOrderService
             {
                 TransportOrderServicePK = Guid.NewGuid(),
-                Name = dto.TransportOrderService.Name,
-                Price = dto.TransportOrderService.Price,
-                CurrencyPK = dto.TransportOrderService.CurrencyPK,
+                Name = dto.Name,
+                Price = dto.Price,
+                CurrencyPK = dto.CurrencyPK,
                 SucceedingVersionPK = null,
                 isActive = true,
                 Timestamp = DateTime.Now,
-                AgentPK = dto.TransportOrderService.AgentPK
+                AgentPK = dto.AgentPK
             };
 
             var outdatedVersionOfTransportOrderService = new TransportOrderService
             {
-                Name = dto.TransportOrderService.Name,
-                Price = dto.TransportOrderService.Price,
-                CurrencyPK = dto.TransportOrderService.CurrencyPK,
-                TransportOrderServicePK = dto.TransportOrderService.TransportOrderServicePK,
+                Name = dto.Name,
+                Price = dto.Price,
+                CurrencyPK = dto.CurrencyPK,
+                TransportOrderServicePK = pk,
                 SucceedingVersionPK = newVersionOfTransportOrderService.TransportOrderServicePK,
                 isActive = false,
                 Timestamp = DateTime.Now,
-                AgentPK = dto.TransportOrderService.AgentPK
+                AgentPK = dto.AgentPK
             };
 
             await _transportOrderServiceRepo.Outdate(outdatedVersionOfTransportOrderService);
             await _transportOrderServiceRepo.Add(newVersionOfTransportOrderService);
 
-            return Ok("Order edited");
+            return Ok(new {status = "Order edited" });
         }
         [HttpDelete]
         public async Task <IActionResult> Delete(Guid pk)
