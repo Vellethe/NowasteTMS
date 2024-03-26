@@ -25,39 +25,39 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
           {/* Input fields for each property */}
           <label className="block mb-2">
             From:
-            <input type="text" name="from" value={editedItem.from || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="from" value={editedItem.price?.fromTransportZone.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             To:
-            <input type="text" name="to" value={editedItem.to || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="to" value={editedItem.price?.toTransportZone.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Price:
-            <input type="text" name="price" value={editedItem.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="number" name="price" value={editedItem.price?.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Currency:
-            <input type="text" name="currency" value={editedItem.currency || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="currency" value={editedItem.price?.currency.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Agent:
-            <input type="text" name="agent" value={editedItem.agent || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="agent" value={editedItem.agent?.businessUnit.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Type:
-            <input type="text" name="type" value={editedItem.type || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="type" value={editedItem.transportType?.description || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Valid from:
-            <input type="text" name="validFrom" value={editedItem.validFrom || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="datetime" name="validFrom" value={editedItem.price?.validFrom || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Valid to:
-            <input type="text" name="validTo" value={editedItem.validTo || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="datetime" name="validTo" value={editedItem.price?.validTo || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Description:
-            <input type="text" name="description" value={editedItem.description || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="description" value={editedItem.price?.description || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
         </div>
         <div className="flex justify-end mt-5">

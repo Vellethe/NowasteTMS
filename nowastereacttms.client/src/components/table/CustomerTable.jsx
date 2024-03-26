@@ -12,7 +12,7 @@ import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllCustomers from '../APICalls/Customers/GetAllCustomers';
 import updateCustomer from '../APICalls/Customers/UpdateCustomer';
-
+import EditCustomerForm from '../EditForms/EditCustomerForm';
 
 const CustomerTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -20,6 +20,8 @@ const CustomerTable = () => {
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
+  const [editItem, setEditItem] = useState(null);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -40,6 +42,25 @@ const CustomerTable = () => {
       accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
+
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setIsEditFormOpen(true);
+  };
+
+  const handleSave = async (updatedItem) => {
+    try {
+      await updateCustomer(updatedItem.id, updatedItem);
+      fetchCustomers();
+      setIsEditFormOpen(false);
+    } catch (error) {
+      console.error('Error updating customer: ', error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditFormOpen(false);
+  };
 
   const fetchCustomers = async () => {
     try {
@@ -102,6 +123,9 @@ const CustomerTable = () => {
 
   return (
       <div className="text-dark-green w-full">
+        {isEditFormOpen && (
+        <EditCustomerForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
         <div className="mb-5">
           <table ref={tableRef} className="table-fixed border-x border-b w-full">
             <thead className="border ">
@@ -156,13 +180,8 @@ const CustomerTable = () => {
                         className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                         type="checkbox"
                       />
-                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full"
-                      onClick={() => handleEdit(row.original.agentID, agentData)}>
-                      Edit
-                      </button>
-                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full">
-                        Details
-                      </button>
+                  <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
+                    <button className="appearance-none font-bold border rounded px-2">Details</button>
                     </td>
                     {row.getVisibleCells().map((cell) => (
                       <td className="border p-1 text-center truncate" key={cell.id}>

@@ -10,7 +10,9 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
-import getAllServices from '../APICalls/Service/GetAllServices'
+import getAllServices from '../APICalls/Service/GetAllServices';
+import updateService from '../APICalls/Service/UpdateService';
+import EditServiceForm from '../EditForms/EditServiceForm';
 
 const ServiceTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -18,6 +20,8 @@ const ServiceTable = () => {
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
+  const [editItem, setEditItem] = useState(null);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -46,6 +50,25 @@ const ServiceTable = () => {
       accessorKey:"timestamp",
     }
   ];
+
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setIsEditFormOpen(true);
+  };
+
+  const handleSave = async (updatedItem) => {
+    try {
+      await updateService(updatedItem.id, updatedItem);
+      fetchServices();
+      setIsEditFormOpen(false);
+    } catch (error) {
+      console.error('Error updating service: ', error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditFormOpen(false);
+  };
 
   const fetchServices = async () => {
     try {
@@ -108,6 +131,9 @@ const ServiceTable = () => {
 
   return (
       <div className="text-dark-green w-full">
+      {isEditFormOpen && (
+        <EditServiceForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
         <div className="mb-5">
           <table ref={tableRef} className="table-fixed border-x border-b w-full">
             <thead className="border ">
@@ -162,13 +188,8 @@ const ServiceTable = () => {
                         className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                         type="checkbox"
                       />
-                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full"
-                      onClick={() => handleEdit(row.original.agentID, agentData)}>
-                      Edit
-                      </button>
-                      <button className="bg-sky-500 hover:bg-sky-700 font-bold rounded-full">
-                        Details
-                      </button>
+                  <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
+                    <button className="appearance-none font-bold border rounded px-2">Details</button>
                     </td>
                     {row.getVisibleCells().map((cell) => (
                       <td className="border p-1 text-center truncate" key={cell.id}>

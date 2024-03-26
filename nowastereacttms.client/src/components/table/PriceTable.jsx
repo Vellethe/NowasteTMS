@@ -188,17 +188,23 @@ const OrderTable = () => {
               .filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                <td className="border p-1 text-center">
-                  <button className="appearance-none font-bold border rounded px-2 mr-10" onClick={() => handleEdit(row.original)}>Edit</button>
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Delete</button>
-                    <input type="checkbox" />
+                <td className=" border-b p-1 text-center flex gap-2 truncate">
+                  <input
+                    className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                    type="checkbox"
+                  />
+              <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
+                <button className="appearance-none font-bold border rounded px-2">Delete</button>
+                </td>
+                {row.getVisibleCells().map((cell) => (
+                  <td className="border p-1 text-center truncate" key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
                   </td>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center" key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
+                ))}
+              </tr>
               ))}
           </tbody>
         </table>
