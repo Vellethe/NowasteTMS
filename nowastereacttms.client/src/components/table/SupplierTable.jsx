@@ -12,11 +12,15 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllSuppliers from '../APICalls/Suppliers/GetAllSuppliers';
+import updateSupplier from '../APICalls/Suppliers/UpdateSupplier';
+import EditSupplierForm from '../EditForms/EditSupplierForm';
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
+  const [editItem, setEditItem] = useState(null);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -37,6 +41,25 @@ const OrderTable = () => {
       accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
+
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setIsEditFormOpen(true);
+  };
+
+  const handleSave = async (updatedItem) => {
+    try {
+      await updateSupplier(updatedItem.id, updatedItem);
+      fetchSupplier();
+      setIsEditFormOpen(false);
+    } catch (error) {
+      console.error('Error updating supplier: ', error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditFormOpen(false);
+  };
 
   const fetchSupplier = async () => {
     try {
@@ -101,6 +124,9 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green text-sm w-full">
+            {isEditFormOpen && (
+        <EditSupplierForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
       <div className="overflow-auto relative">
         <table ref={tableRef} className="border-x border-b w-full">
           <thead className="border">
@@ -141,17 +167,23 @@ const OrderTable = () => {
               .filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className="border p-1 text-center">
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 1</button>
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 2</button>
-                    <input type="checkbox" />
+                <td className=" border-b p-1 text-center flex gap-2 truncate">
+                  <input
+                    className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                    type="checkbox"
+                  />
+              <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
+                <button className="appearance-none font-bold border rounded px-2">Details</button>
+                </td>
+                {row.getVisibleCells().map((cell) => (
+                  <td className="border p-1 text-center truncate" key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
                   </td>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center" key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
+                ))}
+              </tr>
               ))}
           </tbody>
         </table>

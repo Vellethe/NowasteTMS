@@ -25,11 +25,11 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
           {/* Input fields for each property */}
           <label className="block mb-2">
             Name:
-            <input type="text" name="name" value={editedItem.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="name" value={editedItem.businessUnit?.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Self billing:
-            <input type="text" name="selfbilling" value={editedItem.selfbilling || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="selfbilling" value={editedItem.isSelfBilling || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Country:
@@ -37,7 +37,7 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
           </label>
           <label className="block mb-2">
             Currency:
-            <input type="text" name="currency" value={editedItem.currency || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="currency" value={editedItem.businessUnit?.financeInformation.currency.shortName || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
         </div>
         <div className="flex justify-end mt-5">
