@@ -5,6 +5,7 @@ import createOrder from "./APICalls/Orders/CreateOrder";
 import getAllSupplier from "./APICalls/Suppliers/GetAllSuppliers";
 import getAllCustomers from "./APICalls/Customers/GetAllCustomers";
 import getItems from "./APICalls/Orders/GetItems";
+import getPalletTypes from "./APICalls/Orders/GetPalletTypes";
 
 const CreateForm = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -12,6 +13,7 @@ const CreateForm = () => {
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
   const [deliveryDate, setDeliveryDate] = useState(getTodayDate());
   const [items, setItems] = useState([]);
+  const [palletTypes, setPalletTypes] = useState([]);
   
 
   useEffect(() => {
@@ -23,8 +25,22 @@ const CreateForm = () => {
         console.error("Error fetching suppliers:", error);
       }
     };
+    
 
     fetchSuppliers();
+  }, []);
+
+  useEffect(() => {
+    const fetchPalletTypes = async () => {
+      try {
+        const data = await getPalletTypes();
+        console.log(data)
+        setPalletTypes(data);
+      } catch (error) {
+        console.error("Error fetching palletTypes:", error);
+      }
+    };
+    fetchPalletTypes();
   }, []);
 
   useEffect(() => {
@@ -333,14 +349,15 @@ const CreateForm = () => {
                 <td>
                   <select
                     {...register(`lines[${index}].PalletTypeId`)}
-                    defaultValue={line.pallettype}
+                    defaultValue={line.palletType}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
-                    <option value=""> </option>
-                    <option value="1">1</option>
-                    <option value="Red Pallet">Red Pallet</option>
-                    <option value="Blue Pallet">Blue Pallet</option>
-                    <option value="Green Pallet">Green Pallet</option>
+                    
+                    {palletTypes.map((palletType) => (
+                      <option key={palletType.id} value={palletType.id}>
+                        {palletType.description}
+                      </option>
+                    ))}
                   </select>
                 </td>
                 <td>
@@ -366,7 +383,7 @@ const CreateForm = () => {
                 itemno: "",
                 name: "",
                 palletqty: "",
-                pallettype: "",
+                PalletTypeId: "",
               })
             }
           >
