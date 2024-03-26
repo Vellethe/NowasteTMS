@@ -2,12 +2,17 @@ var baseUrl ="https://localhost:7253/api";
 
 const updateService = async (id, updatedService) => {
     try {
-      const response = await fetch(`${baseUrl}/Service/${id}`, {
+      const response = await fetch(`${baseUrl}/Service/${updatedService.transportOrderServicePK}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedService),
+        body: JSON.stringify({
+          name: updatedService.name,
+          price: updatedService.price,
+          currencyPK: updatedService.currencyPK,
+          agentPK: updatedService.agentPK
+        }),
       });
   
       if (response.ok) {

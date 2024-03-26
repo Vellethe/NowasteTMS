@@ -75,7 +75,6 @@ public class TransportOrderServiceRepository : ITransportOrderServiceRepository
              JOIN Currency cu ON cu.CurrencyPK = tos.CurrencyPK
              LEFT OUTER JOIN Agent a ON a.AgentPK = tos.AgentPK 
              WHERE (tos.[isActive] = 1 OR @includeInactive = 1)
-             AND (tos.[AgentPK] IS NULL)
              ORDER BY tos.[Timestamp] DESC
         ", (tos, cu) =>
             {

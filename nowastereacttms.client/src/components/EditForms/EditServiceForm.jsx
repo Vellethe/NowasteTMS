@@ -29,11 +29,11 @@ const EditServiceForm = ({ item, onSave, onCancel }) => {
           </label>
           <label className="block mb-2">
             Agent:
-            <input type="number" name="price" value={editedItem.agent || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="number" name="agent" value={editedItem.agent || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Price:
-            <input type="text" name="to" value={editedItem.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="number" name="price" value={editedItem.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Currency:
@@ -41,11 +41,11 @@ const EditServiceForm = ({ item, onSave, onCancel }) => {
           </label>
           <label className="block mb-2">
             Currency:
-            <input type="text" name="agent" value={editedItem.currency?.shortName || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="currency" value={editedItem.currency?.shortName || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Created/Updated:
-            <input type="datetime" name="type" value={editedItem.timestamp || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="datetime" name="timestamp" value={editedItem.timestamp || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
         </div>
         <div className="flex justify-end mt-5">

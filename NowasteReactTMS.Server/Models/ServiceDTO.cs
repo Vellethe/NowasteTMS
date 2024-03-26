@@ -4,8 +4,10 @@ namespace NowasteReactTMS.Server.Models
 {
     public class ServiceDTO
     {
-        public TransportOrderService TransportOrderService { get; set; }
-        public List<Currency> Currencies { get; set; }
-        public List<Agent> Agents { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public Guid CurrencyPK { get; set; }
+        public Guid TransportOrderServicePK { get; set; }
+        public Guid AgentPK { get; set; }
     }
 }
