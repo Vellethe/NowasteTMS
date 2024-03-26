@@ -255,7 +255,7 @@ const CreateForm = () => {
 
         {/* Lines Section */}
         <div className="w-full bg-gray h-12 text-center mb-5 pt-3">Lines</div>
-        <table className="w-full">
+        <table className="w-full ml-4">
           <thead>
             <tr>
               <th>Item qty.</th>
@@ -304,7 +304,7 @@ const CreateForm = () => {
                     type="text"
                     defaultValue={line.name}
                     {...register(`lines[${index}].name`)}
-                    className="w-full h-8 border rounded pl-2 text-center"
+                    className="w-full h-8 border rounded pl-2 text-center text-sm"
                     list="itemName"
                     onChange={(e) => {
                       const selectedName = e.target.value;
@@ -324,7 +324,7 @@ const CreateForm = () => {
                 </td>
                 <td>
                   <input
-                    type="number"
+                    type="text"
                     {...register(`lines[${index}].palletqty`)}
                     defaultValue={line.palletqty}
                     className="w-full h-8 border rounded pl-2 text-center"
