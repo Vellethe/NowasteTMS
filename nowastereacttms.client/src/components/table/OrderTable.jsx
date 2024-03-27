@@ -50,7 +50,7 @@ const OrderTable = () => {
     },
     {
       header: "From Country",
-      accessorKey: "",
+      accessorKey: "supplier.businessUnit.contactInformations.0.country",
     },
     {
       header: "Eur Pallets",
@@ -66,23 +66,23 @@ const OrderTable = () => {
     },
     {
       header: "Item Id",
-      accessorKey: "ItemID",
+      accessorKey: "lines.0.item.itemID",
     },
     {
       header: "Item",
-      accessorKey: "ItemName",
+      accessorKey: "lines.0.item.name",
     },
     {
       header: "Item Qty",
-      accessorKey: "itemqty",
+      accessorKey: "lines.0.itemQty",
     },
     {
       header: "Lines",
-      accessorKey: "lines",
+      accessorKey: "lines.length",
     },
     {
       header: "Temp",
-      accessorKey: "TransportTemp",
+      accessorKey: "lines.0.item.transportTemp",
     },
     {
       header: "ETA From",
@@ -90,7 +90,7 @@ const OrderTable = () => {
     },
     {
       header: "ETA To",
-      accessorKey: "transportOrder.collectionDate", //transportOrder.deliveryDate
+      accessorKey: "transportOrder.deliveryDate",
     },
     {
       header: "ETA Weekday",
@@ -102,15 +102,15 @@ const OrderTable = () => {
     },
     {
       header: "To Country",
-      accessorKey: "CustomerCountry",
+      accessorKey: "customer.businessUnit.contactInformations.0.country",
     },
     {
       header: "Adress",
-      accessorKey: "CustomerAddress",
+      accessorKey: "customer.businessUnit.contactInformations.0.adress",
     },
     {
       header: "Item Company",
-      accessorKey: "ItemCompany",
+      accessorKey: "lines.0.item.company",
     },
     {
       header: "Origin",
