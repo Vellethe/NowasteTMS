@@ -105,8 +105,8 @@ const OrderTable = () => {
       accessorKey: "customer.businessUnit.contactInformations.0.country",
     },
     {
-      header: "Adress",
-      accessorKey: "customer.businessUnit.contactInformations.0.adress",
+      header: "Address",
+      accessorKey: "customer.businessUnit.contactInformations.0.address",
     },
     {
       header: "Item Company",
@@ -176,8 +176,10 @@ const OrderTable = () => {
   }, []); // Empty dependency array so it only runs once
 
   const defaultSelectedAccessorKeys = [
-    "TransportBooking",
-    "OrderTransportStatusString",
+    "status",
+    "orderId",
+    "supplier.businessUnit.name",
+    "transportBooking"
   ];
   const defaultSelectedColumns = columns.filter((column) =>
     defaultSelectedAccessorKeys.includes(column.accessorKey)

@@ -36,6 +36,10 @@ const getAllOrders = async() => {
       return o
       })
 
+      // data.forEach(item => {
+      //   item.timestamp = formatDatetime(item.timestamp);
+      // });
+
       return data;
     } catch (error) {
       throw new Error('Error fetching orders: ' + error.message);
@@ -51,7 +55,7 @@ const getAllOrders = async() => {
     const minutes = datetime.getMinutes().toString().padStart(2, '0');
     const seconds = datetime.getSeconds().toString().padStart(2, '0');
     const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][datetime.getDay()];
-    return `${dayOfWeek}, ${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    return `${dayOfWeek}, ${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
   export default getAllOrders;
