@@ -54,11 +54,11 @@ const OrderTable = () => {
     },
     {
       header: "Eur Pallets",
-      accessorKey: "transportOrder.eurPalletQty",
+      accessorKey: "lines.0.palletQty",
     },
     {
       header: "Sea Pallets",
-      accessorKey: "transportOrder.seaPalletQty", //transportOrder.palletQty
+      accessorKey: "lines.0.palletQty",
     },
     {
       header: "Pallet Exch",
@@ -260,7 +260,7 @@ const OrderTable = () => {
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
                 <tr>
-                  <th className="border p-2 bg-white relative"></th>
+                  <th className="border p-2 bg-white relative w-32"></th>
                   {headerGroup.headers.map((header) => (
                     <th
                       className="border p-2 bg-white relative truncate"
