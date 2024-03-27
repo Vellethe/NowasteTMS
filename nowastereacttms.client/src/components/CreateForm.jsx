@@ -17,56 +17,25 @@ const CreateForm = () => {
   
 
   useEffect(() => {
-    const fetchSuppliers = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getAllSupplier();
-        setSuppliers(data);
+        const suppliersData = await getAllSupplier();
+        setSuppliers(suppliersData);
+  
+        const palletTypesData = await getPalletTypes();
+        setPalletTypes(palletTypesData);
+  
+        const customersData = await getAllCustomers();
+        setCustomers(customersData);
+  
+        const itemsData = await getItems();
+        setItems(itemsData);
       } catch (error) {
-        console.error("Error fetching suppliers:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    
-
-    fetchSuppliers();
-  }, []);
-
-  useEffect(() => {
-    const fetchPalletTypes = async () => {
-      try {
-        const data = await getPalletTypes();
-        console.log(data)
-        setPalletTypes(data);
-      } catch (error) {
-        console.error("Error fetching palletTypes:", error);
-      }
-    };
-    fetchPalletTypes();
-  }, []);
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const data = await getAllCustomers();
-        setCustomers(data);
-      } catch (error) {
-        console.error("Error fetching customers:", error);
-      }
-    };
-
-    fetchCustomers();
-  }, []);
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const data = await getItems();
-        setItems(data);
-      } catch (error) {
-        console.error("Error fetching items:", error);
-      }
-    };
-
-    fetchItems();
+  
+    fetchData();
   }, []);
 
   const {
