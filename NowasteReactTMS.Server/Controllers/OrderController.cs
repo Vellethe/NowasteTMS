@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NowasteReactTMS.Server.Models;
 using NowasteReactTMS.Server.Models.OrderDTOs;
+using NowasteReactTMS.Server.Repositories;
 using NowasteReactTMS.Server.Repositories.Interface;
 using NowasteTms.Model;
 
@@ -60,6 +61,7 @@ namespace NowasteReactTMS.Server.Controllers
         private readonly IOrderLineRepository _orderLineRepository;
         private readonly IPalletInventoryRepository _inventoryRepository;
         private readonly ITransportTypeRepository _transportTypeRepository;
+        private readonly IBusinessUnitRepository _businessUnitRepository;
 
         public OrderController(UserManager<ApplicationUser> userManager,
             IOrderRepository orderRepo,
@@ -71,7 +73,8 @@ namespace NowasteReactTMS.Server.Controllers
             IItemRepository itemRepository,
             IOrderLineRepository orderLineRepository,
             IPalletInventoryRepository inventoryRepository,
-            ITransportTypeRepository transportTypeRepository)
+            ITransportTypeRepository transportTypeRepository,
+            IBusinessUnitRepository businessUnitRepository)
         {
             _userManager = userManager;
             _orderRepo = orderRepo;
@@ -84,6 +87,7 @@ namespace NowasteReactTMS.Server.Controllers
             _inventoryRepository = inventoryRepository;
             _orderLineRepository = orderLineRepository;
             _transportTypeRepository = transportTypeRepository;
+            _businessUnitRepository = businessUnitRepository;
         }
         /// <summary>
         /// Returns order when searching for its PK
@@ -115,18 +119,45 @@ namespace NowasteReactTMS.Server.Controllers
 
             searchParameters.Filters.Add("historical", dto.Historical.ToString().ToLower());
 
-            var orders = await _orderRepo.SearchOrders(searchParameters);
-            var items = await _itemRepository.GetItems(); // TransportTemp/StorageTemp, itemID, Name och Company
-            var transport = await _transportTypeRepository.GetAll();
+            var response = await _orderRepo.SearchOrders(searchParameters);
+            await AddBusinessUnits(response.Orders);
+            await AddOrderLines(response.Orders);
 
-            var responseDTO = new
+            return Ok(response);
+        }
+
+        private async Task AddOrderLines(List<Order> orders)
+        {
+            var orderLines = await _orderLineRepository.Get(orders.Select(x => x.OrderPK).ToHashSet());
+
+            foreach (var order in orders)
             {
-                Orders = orders.Orders,
-                Items = items,
-                Transport = transport
-            };
+                if (orderLines.TryGetValue(order.OrderPK, out var lines))
+                {
+                    order.Lines = lines.ToList();
+                    continue;
+                }
 
-            return Ok(responseDTO);
+                order.Lines = new List<OrderLine>();
+            }
+        }
+
+        private async Task AddBusinessUnits(List<Order> orders)
+        {
+            var customerBUs = await _businessUnitRepository.Get(orders.Where(po => po.Customer != null)
+                .Select(po => po.Customer.BusinessUnitPK).Distinct());
+
+            var supplierBUs = await _businessUnitRepository.Get(orders.Where(po => po.Supplier != null)
+                .Select(po => po.Supplier.BusinessUnitPK).Distinct());
+
+            foreach (var order in orders)
+            {
+                if (order.Customer?.BusinessUnitPK != null)
+                    order.Customer.BusinessUnit = customerBUs.FirstOrDefault(bu => bu.BusinessUnitPK == order.Customer.BusinessUnitPK);
+
+                if (order.Supplier?.BusinessUnitPK != null)
+                    order.Supplier.BusinessUnit = supplierBUs.FirstOrDefault(bu => bu.BusinessUnitPK == order.Supplier.BusinessUnitPK);
+            }
         }
 
         /// <summary>
