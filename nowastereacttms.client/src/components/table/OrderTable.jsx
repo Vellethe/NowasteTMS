@@ -54,11 +54,11 @@ const OrderTable = () => {
     },
     {
       header: "Eur Pallets",
-      accessorKey: "lines.0.palletQty",
+      accessorKey: "euQty",
     },
     {
       header: "Sea Pallets",
-      accessorKey: "lines.0.palletQty",
+      accessorKey: "seaQty",
     },
     {
       header: "Pallet Exch",

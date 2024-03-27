@@ -14,6 +14,28 @@ const getAllOrders = async() => {
         throw new Error('Failed to fetch orders');
       }
       const data = await response.json();
+      
+      data.orders = data.orders.map(o => {
+      var euLines = o.lines.map(l => {
+        if (l.palletType.id === 2)
+        {
+          return l.palletQty
+        }
+        else return 0
+      })
+      o.euQty = euLines.reduce((a, b) => a + b);
+
+      var seaLines = o.lines.map(l => {
+        if (l.palletType.id === 8)
+        {
+          return l.palletQty
+        }
+        else return 0
+      })
+      o.seaQty = seaLines.reduce((a, b) => a + b);
+      return o
+      })
+
       return data;
     } catch (error) {
       throw new Error('Error fetching orders: ' + error.message);
