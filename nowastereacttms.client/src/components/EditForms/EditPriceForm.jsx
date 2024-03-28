@@ -25,11 +25,11 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
           {/* Input fields for each property */}
           <label className="block mb-2">
             From:
-            <input type="text" name="from" value={editedItem.price?.fromTransportZone.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="from" value={editedItem.price?.fromTransportZone.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             To:
-            <input type="text" name="to" value={editedItem.price?.toTransportZone.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="to" value={editedItem.price?.toTransportZone.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Price:
@@ -37,15 +37,15 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
           </label>
           <label className="block mb-2">
             Currency:
-            <input type="text" name="currency" value={editedItem.price?.currency.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="currency" value={editedItem.price?.currency.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Agent:
-            <input type="text" name="agent" value={editedItem.agent?.businessUnit.name || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="agent" value={editedItem.agent?.businessUnit.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Type:
-            <input type="text" name="type" value={editedItem.transportType?.description || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="type" value={editedItem.transportType?.description || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Valid from:
