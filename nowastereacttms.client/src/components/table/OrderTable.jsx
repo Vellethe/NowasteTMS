@@ -22,6 +22,7 @@ const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
+  const [tableData, setTableData] = useState([]);
  
   const columns = [
     {
@@ -142,6 +143,25 @@ const OrderTable = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllOrders();
+        const transformedData = data.orders.map(row => ({
+          ...row,
+          collectionDateWD: getWeekdayFromDate(row.collectionDate), // Pickup Weekday
+          DeliveryDateWD: getWeekdayFromDate(row.transportOrder.deliveryDate), // ETA Weekday
+          updatedWD: getWeekdayFromDate(row.updated) // Update Weekday
+        }));
+        setTableData(transformedData);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const fetchOrders = async () => {
     try {
       const orders = await getAllOrders();
@@ -231,15 +251,19 @@ const OrderTable = () => {
     for (const columnId in columnFilters) {
       const filterValue = columnFilters[columnId];
       const cellValue = row[columnId]
-        ? row[columnId].toString().toLowerCase()
+        ? row[columnId].toString()
         : "";
-      if (cellValue.indexOf(filterValue.toLowerCase()) === -1) {
+  
+      console.log("Filter Value:", filterValue);
+      console.log("Cell Value:", cellValue);
+  
+      if (cellValue.toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
         return false; // Do not include row if any filter does not match
       }
     }
     return true; // Include row if all filters match
   };
-
+  
   return (
     <div className="text-dark-green w-full">
       <div className="flex justify-between mb-3">
