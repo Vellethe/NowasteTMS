@@ -186,11 +186,11 @@ const ServiceTable = () => {
                   <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                     <td className=" border-b p-1 text-center flex gap-2 truncate">
                       <input
-                        className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                        className="accent-medium-green h-5 w-5 rounded-xl ml-1 cursor-pointer"
                         type="checkbox"
                       />
-                  <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
-                    <button className="appearance-none font-bold border rounded px-2">Details</button>
+                  <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5 cursor-pointer" onClick={() => handleEdit(row.original)}>Edit</button>
+                  <button className="appearance-none font-bold border rounded px-2 cursor-pointer">Details</button>
                     </td>
                     {row.getVisibleCells().map((cell) => (
                       <td className="border p-1 text-center truncate" key={cell.id}>
