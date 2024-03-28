@@ -79,6 +79,9 @@ const CreateForm = () => {
   function handleDateChange(event) {
     setCollectionDate(event.target.value);
   }
+  function handleDeliveryDateChange(event) {
+    setDeliveryDate(event.target.value);
+  }
 
   return (
     <div>
@@ -170,7 +173,7 @@ const CreateForm = () => {
               id="deliverydate"
               {...register("deliveryDate")}
               value={deliveryDate}
-              onChange={handleDateChange}
+              onChange={handleDeliveryDateChange}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             />
             {errors.deliverydate && (
