@@ -35,6 +35,14 @@ namespace NowasteReactTMS.Server.Controllers
             _inventoryRepo = inventoryRepo;
         }
 
+        [HttpGet("{pk}")]
+        public async Task<IActionResult> GetPrice(Guid pk)
+        {
+            var price = await _transportZonePriceRepo.Get(pk);
+
+            return Ok(price);
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetAllTransportZonePrices()
         {
@@ -62,8 +70,6 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
-
-
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTransportZonePriceDTO dto)
@@ -100,22 +106,22 @@ namespace NowasteReactTMS.Server.Controllers
         [HttpPut("{pk}")]
         public async Task<IActionResult> Edit(TransportPriceDTO dto)
         {
-            var updatePrice = await _transportZonePriceRepo.Get(dto.TransportZonePrice.TransportZonePricePK);
-            updatePrice.Price = dto.TransportZonePrice.Price;
-            updatePrice.Description = dto.TransportZonePrice.Description;
-            updatePrice.ValidFrom = dto.TransportZonePrice.ValidFrom;
-            updatePrice.ValidTo = dto.TransportZonePrice.ValidTo;
+            var updatePrice = await _transportZonePriceRepo.Get(dto.TransportZonePricePK);
+            updatePrice.Price = dto.Price;
+            updatePrice.Description = dto.Description;
+            updatePrice.ValidFrom = dto.ValidFrom;
+            updatePrice.ValidTo = dto.ValidTo;
 
             if (updatePrice.TransportType.Description == "Groupage")
             {
-                updatePrice.Price = dto.TransportZonePrice.TransportZonePriceLines.Sum(line => line.Price);
-                updatePrice.TransportZonePriceLines = dto.TransportZonePrice.TransportZonePriceLines.Select(line => new TransportZonePriceLine
+                updatePrice.Price = updatePrice.TransportZonePriceLines.Sum(line => line.Price);
+                updatePrice.TransportZonePriceLines = updatePrice.TransportZonePriceLines.Select(line => new TransportZonePriceLine
                 {
                     TransportZonePriceLinePK = line.TransportZonePriceLinePK,
                     Price = line.Price
                 }).ToList();
             }
-            await _transportZonePriceRepo.Update(dto.TransportZonePrice.TransportZonePricePK, updatePrice);
+            await _transportZonePriceRepo.Update(updatePrice.TransportZonePriceLine.TransportZonePricePK, updatePrice);
             return Ok("Succesfully edited");
         }
 

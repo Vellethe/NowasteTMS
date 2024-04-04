@@ -4,11 +4,11 @@ namespace NowasteReactTMS.Server.Models.TransportDTOs
 {
     public class TransportPriceDTO
     {
-        public TransportZonePrice TransportZonePrice { get; set; }
-
-        public Agent Agent { get; set; }
-        public List<Currency> Currencies { get; set; }
-        public PalletType PalletType { get; set; }
         public decimal Price { get; set; }
+        public DateTime ValidFrom { get; set; }
+        public DateTime ValidTo { get; set; }
+        public string Description { get; set; }
+        public Guid TransportZonePricePK { get; set; }
+        //public TransportZonePrice TransportZonePrice { get; set; }
     }
 }
