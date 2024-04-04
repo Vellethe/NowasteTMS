@@ -11,13 +11,13 @@ const createCustomer = async (customerData) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      throw new Error('Failed to create customer');
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating customer:', error);
     throw error;
   }
 };

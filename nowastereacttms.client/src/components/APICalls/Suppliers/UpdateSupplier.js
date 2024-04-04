@@ -14,10 +14,10 @@ const updateSupplier = async (id, updateSupplier) => {
         const data = await response.json();
         return data;
       } else {
-        throw new Error('Failed to update order');
+        throw new Error('Failed to update supplier');
       }
     } catch (error) {
-      throw new Error('Error updating order: ' + error.message);
+      throw new Error('Error updating supplier: ' + error.message);
     }
   };
   

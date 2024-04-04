@@ -11,13 +11,13 @@ const createAgent = async (agentData) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      throw new Error('Failed to create agent');
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating agent:', error);
     throw error;
   }
 };

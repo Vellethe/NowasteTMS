@@ -11,13 +11,13 @@ const createSupplier = async (supplierData) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      throw new Error('Failed to create supplier');
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('Error creating supplier:', error);
     throw error;
   }
 };
