@@ -1,7 +1,6 @@
 import React from 'react'
 import ServiceTable from '../../components/table/ServiceTable'
 
-
 const TransportOrderService = () => {
     return (
       <>

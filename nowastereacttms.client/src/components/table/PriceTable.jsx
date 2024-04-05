@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Select from 'react-select';
 import {
   useReactTable,
   getCoreRowModel,
@@ -17,7 +16,6 @@ import EditPriceForm from '../EditForms/EditPriceForm';
 
 const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([])
   const [editItem, setEditItem] = useState(null);

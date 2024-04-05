@@ -16,7 +16,6 @@ import SearchBar from '../Searchbar';
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const data = useMemo(() => [])
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */

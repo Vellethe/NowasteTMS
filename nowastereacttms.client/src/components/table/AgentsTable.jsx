@@ -18,10 +18,7 @@ const AgentTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
-  const [initialAgentData, SetInitialAgentData] = useState();
-  const [agentData, setAgentData] = useState(initialAgentData);
   const [editItem, setEditItem] = useState(null);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
