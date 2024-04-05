@@ -1,21 +1,21 @@
 var baseUrl ="https://localhost:7253/api";
 
-const getAllOrders = async() => {
+const getAllOrders = async () => {
     try {
         const response = await fetch(`${baseUrl}/Order`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({Size: 400, Page: 0, Filter: {}, Column: {}, "historical": true}),
+            body: JSON.stringify({ Size: 999999, Page: 0, Filter: {}, Column: {}, "historical": true }),
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to fetch orders');
         }
 
         const data = await response.json();
-        
+
         data.orders = data.orders.map(o => {
             var euLines = o.lines.map(l => {
                 if (l.palletType.id === 2) {
@@ -30,20 +30,53 @@ const getAllOrders = async() => {
                 } else return 0;
             })
             o.seaQty = seaLines.reduce((a, b) => a + b, 0);
-            return o;
-        });
 
-        // Format datetime fields and calculate weekdays
-        data.orders.forEach((item) => {
-            item.collectionDate = formatDatetime(item.collectionDate);
-            item.deliveryDate = formatDatetime(item.deliveryDate);
-            item.arrivalDate = formatDatetime(item.transportOrder.arrivalDate);
-            item.created = formatDatetime(item.created);
-            item.updated = formatDatetime(item.updated);
-            item.collectionDateWD = getWeekdayFromDate(item.collectionDate);
-            item.deliveryDateWD = getWeekdayFromDate(item.deliveryDate);
-            item.updatedWD = getWeekdayFromDate(item.updated);
+            let statusString;
+            if (o.status === 0) 
+            {
+                statusString = "Created";
+            } 
+            else if (o.status === 1) 
+            {
+                statusString = "Imported";
+            } 
+            else if (o.status === 2) 
+            {
+                statusString = "Processing";
+            } 
+            else if (o.status === 3) 
+            {
+                statusString = "Finished";
+            } 
+            else if (o.status === 4) 
+            {
+                statusString = "Exported";
+            } 
+            else if (o.status === 75) 
+            {
+                statusString = "Received";
+            } 
+            else if (o.status === 99) 
+            {
+                statusString = "Deleted";
+            } 
+            else 
+            {
+                statusString = "Unknown";
+            }            
+
+            // Format datetime fields and calculate weekdays
+            o.collectionDate = formatDatetime(o.collectionDate);
+            o.deliveryDate = formatDatetime(o.deliveryDate);
+            o.arrivalDate = formatDatetime(o.transportOrder.arrivalDate);
+            o.created = formatDatetime(o.created);
+            o.updated = formatDatetime(o.updated);
+            o.collectionDateWD = getWeekdayFromDate(o.collectionDate);
+            o.deliveryDateWD = getWeekdayFromDate(o.deliveryDate);
+            o.updatedWD = getWeekdayFromDate(o.updated);
+            o.statusString = statusString; // Assign the status string to each order
             // Add more fields if needed
+            return o;
         });
 
         return data;
