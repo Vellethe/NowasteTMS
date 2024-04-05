@@ -12,7 +12,7 @@ namespace NowasteReactTMS.Server.Models.OrderDTOs
         public DateTime CollectionDate { get; set; }
         public DateTime DeliveryDate { get; set; }
         public List<OrderLineDTO>? Lines { get; set; }
-
+        public OrderStatus Status { get; set; }
         public bool PalletExchange { get; set; }
 
         [Required]

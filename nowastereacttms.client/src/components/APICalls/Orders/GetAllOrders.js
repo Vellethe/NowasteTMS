@@ -7,7 +7,7 @@ const getAllOrders = async() => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({Size: 400, Page: 0, Filter: {}, Column: {}}),
+            body: JSON.stringify({Size: 400, Page: 0, Filter: {}, Column: {}, "historical": true}),
         });
         
         if (!response.ok) {
@@ -22,14 +22,14 @@ const getAllOrders = async() => {
                     return l.palletQty
                 } else return 0;
             })
-            o.euQty = euLines.reduce((a, b) => a + b);
+            o.euQty = euLines.reduce((a, b) => a + b, 0);
 
             var seaLines = o.lines.map(l => {
                 if (l.palletType.id === 8) {
                     return l.palletQty
                 } else return 0;
             })
-            o.seaQty = seaLines.reduce((a, b) => a + b);
+            o.seaQty = seaLines.reduce((a, b) => a + b, 0);
             return o;
         });
 
