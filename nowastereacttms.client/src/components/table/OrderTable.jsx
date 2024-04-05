@@ -16,6 +16,7 @@ import SearchBar from "../Searchbar";
 import getAllOrders from "../APICalls/Orders/GetAllOrders";
 // import updateOrder from './APICalls/Orders/UpdateOrder'
 
+
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
@@ -23,6 +24,7 @@ const OrderTable = () => {
   const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false)
  
   const columns = [
     {
@@ -162,6 +164,13 @@ const OrderTable = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }, []);
+
   const fetchOrders = async () => {
     try {
       const orders = await getAllOrders();
@@ -267,113 +276,126 @@ const OrderTable = () => {
   return (
     <div className="text-dark-green w-full">
       <div className="flex justify-between mb-3">
-      <Select
-        className="text-dark-green duration-500 cursor-pointer  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
-        options={options}
-        isMulti
-        onChange={handleColumnSelection}
-        placeholder="Columns"
-        defaultValue={selectedColumns.map((column) => ({
-          value: column.accessorKey,
-          label: column.header,
-        }))}
-      />
+        <Select
+          className="text-dark-green duration-500 cursor-pointer  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
+          options={options}
+          isMulti
+          onChange={handleColumnSelection}
+          placeholder="Columns"
+          defaultValue={selectedColumns.map((column) => ({
+            value: column.accessorKey,
+            label: column.header,
+          }))}
+        />
       </div>
 
-      <div className="mb-5">
-        <table ref={tableRef} className="table-fixed border-x border-b w-full">
-          <thead className="border ">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <React.Fragment key={headerGroup.id}>
-                <tr>
-                  <th className="border p-2 bg-white relative w-32"></th>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      className="border p-2 bg-white relative truncate"
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {
+      {loading ? (
+        <div className="top-1/2 left- h-screen w-screen z-50 flex justify-center items-top">
+          <div className="animate-spin rounded-full h-48 w-48 border-t-2 border-b-2 border-medium-green"></div>
+        </div>
+      ) : (
+        <div className="mb-5">
+          <table
+            ref={tableRef}
+            className="table-fixed border-x border-b w-full"
+          >
+            <thead className="border ">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <React.Fragment key={headerGroup.id}>
+                  <tr>
+                    <th className="border p-2 bg-white relative w-32"></th>
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        className="border p-2 bg-white relative truncate"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                         {
-                          asc: <FaArrowUp />,
-                          desc: <FaArrowDown />,
-                        }[header.column.getIsSorted()]
-                      }
-                    </th>
-                  ))}
-                </tr>
-                <tr>
-                  <th>
-                    <SearchBar disabled></SearchBar>
-                  </th>
-                  {headerGroup.headers.map((header) => (
-                    <th className=""key={header.id}>
-                      <SearchBar
-                        onFilterChange={(value) =>
-                          handleColumnFilterChange(header.id, value)
+                          {
+                            asc: <FaArrowUp />,
+                            desc: <FaArrowDown />,
+                          }[header.column.getIsSorted()]
                         }
-                      />
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th>
+                      <SearchBar disabled></SearchBar>
                     </th>
-                  ))}
-                </tr>
-              </React.Fragment>
-            ))}
-          </thead>
-          <tbody className="text-dark-green">
-            {table
-              .getRowModel()
-              .rows.filter((row) => filterData(row.original)) // Apply filtering
-              .map((row) => (
-                <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className=" border-b p-1 text-center flex gap-2 truncate">
-                    <input
-                      className="accent-medium-green h-5 w-5 rounded-xl ml-1"
-                      type="checkbox"
-                    />
-
-                    <div className="relative group">
-                      <IoIosWarning className="text-2xl text-red relative group text-blue cursor-pointer" />
-                      <span className="absolute top-5 left-5 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        This order has transport booking set to no in M3 and cannot be transport booked.
-                      </span>
-                    </div>
-
-                    <div className="relative group">
-                      <FaRegComment className="text-2xl relative group cursor-pointer" />
-                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded hover:border opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        Edit internal comment.
-                      </span>
-                    </div>
-                    <div className="relative group">
-                      <BiSolidPlusSquare className="text-2xl relative group text-blue cursor-pointer " />
-                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        Create new transport order.
-                      </span>
-                    </div>
-                    <div className="relative group">
-                      <MdOutlineStopCircle className="text-2xl" />
-                      <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
-                        Note! Order is already transport booked.
-                      </span>
-                    </div>
-                  </td>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center truncate" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
+                    {headerGroup.headers.map((header) => (
+                      <th className="" key={header.id}>
+                        <SearchBar
+                          onFilterChange={(value) =>
+                            handleColumnFilterChange(header.id, value)
+                          }
+                        />
+                      </th>
+                    ))}
+                  </tr>
+                </React.Fragment>
               ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="text-dark-green">
+              {table
+                .getRowModel()
+                .rows.filter((row) => filterData(row.original)) // Apply filtering
+                .map((row) => (
+                  <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
+                    <td className=" border-b p-1 text-center flex gap-2 truncate">
+                      <input
+                        className="accent-medium-green h-5 w-5 rounded-xl ml-1"
+                        type="checkbox"
+                      />
+
+                      <div className="relative group">
+                        <IoIosWarning className="text-2xl text-red relative group cursor-pointer" />
+                        <span className="absolute top-5 left-5 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                          This order has transport booking set to no in M3 and
+                          cannot be transport booked.
+                        </span>
+                      </div>
+
+                      <div className="relative group">
+                        <FaRegComment className="text-2xl relative group cursor-pointer" />
+                        <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded hover:border opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                          Edit internal comment.
+                        </span>
+                      </div>
+                      <div className="relative group">
+                        <BiSolidPlusSquare className="text-2xl relative group text-blue cursor-pointer " />
+                        <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                          Create new transport order.
+                        </span>
+                      </div>
+                      <div className="relative group">
+                        <MdOutlineStopCircle className="text-2xl" />
+                        <span className="absolute top-6 left-6 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
+                          Note! Order is already transport booked.
+                        </span>
+                      </div>
+                    </td>
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        className="border p-1 text-center truncate"
+                        key={cell.id}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="flex justify-center gap-3 mt-2">
         <button
@@ -408,10 +430,9 @@ const OrderTable = () => {
         >
           Last
         </button>
-     
       </div>
       <div className="flex justify-center mt-4">
-      <select
+        <select
           id="showbutton"
           className="cursor-pointer bg-medium-green duration-200 hover:bg-brown  py-2 rounded text-white text-center"
           value={table.getState().pagination.pageSize}
