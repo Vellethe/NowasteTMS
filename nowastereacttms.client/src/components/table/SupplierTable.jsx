@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
-import Select from 'react-select';
+import React, { useState, useEffect, useRef } from 'react'
 import {
   useReactTable,
   getCoreRowModel,

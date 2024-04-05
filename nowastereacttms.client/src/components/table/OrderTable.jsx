@@ -21,7 +21,6 @@ const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [columnFilters, setColumnFilters] = useState({});
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false)
