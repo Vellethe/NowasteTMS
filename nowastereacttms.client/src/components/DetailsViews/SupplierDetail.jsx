@@ -13,7 +13,7 @@ const SupplierDisplayView = ({ item, onCancel }) => {
           </div>
           <div className="mb-2">
             <span className="font-semibold mr-2">Country:</span>
-            <span>{item.country || ''}</span>
+            <span>{item.businessUnit.contactInformations[0].country || ''}</span>
           </div>
           <div className="mb-2">
             <span className="font-semibold mr-2">Currency:</span>
