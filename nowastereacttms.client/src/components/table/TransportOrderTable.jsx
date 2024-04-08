@@ -11,13 +11,13 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
-
+import getAllTransportOrders from '../APICalls/TransportOrders/GetAllTransportOrders';
 
 const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const data = useMemo(() => [])
-
+  const [data, setData] = useState([]);
+  
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
@@ -134,6 +134,15 @@ const OrderTable = () => {
     },
   ];
 
+  const fetchTransportOrders = async () => {
+    try {
+      const prices = await getAllTransportOrders();
+      setData(prices);
+    } catch (error) {
+      console.error('Error fetching transportorders: ', error.message);
+    }
+  };
+
   const table = useReactTable({
     data,
     columns: selectedColumns,
@@ -154,8 +163,9 @@ const OrderTable = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setSelectedColumns(defaultSelectedColumns);
-  }, []); //Empty dependency array so it only runs once
+    setSelectedColumns(columns);
+    fetchTransportOrders();
+  }, []); // Empty dependency array so it only runs once
 
   const defaultSelectedAccessorKeys = [ 'OrderIds', 'OrderTransportStatusString', 'Price', 'EtaTo', 'VehicleRegistrationPlate'];
   const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));

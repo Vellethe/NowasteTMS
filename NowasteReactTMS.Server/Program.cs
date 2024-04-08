@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using NowastePalletPortal.Extensions.Helpers;
 using NowasteReactTMS.Server;
@@ -65,8 +66,8 @@ builder.Services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 builder.Services.AddSingleton<IPalletInventoryRepository, PalletInventoryRepository>();
 builder.Services.AddSingleton<IBusinessUnitRepository, BusinessUnitRepository>();
-
-
+builder.Services.AddSingleton<IEmailHandler, EmailHandler>();
+builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
 
 var app = builder.Build();
 
