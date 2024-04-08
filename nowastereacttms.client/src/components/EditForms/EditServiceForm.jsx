@@ -20,7 +20,7 @@ const EditServiceForm = ({ item, onSave, onCancel }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-lg font-semibold mb-6">Edit Price</h2>
+        <h2 className="text-lg font-semibold mb-6">Edit Service</h2>
         <div>
           {/* Input fields for each property */}
           <label className="block mb-2">
