@@ -182,10 +182,6 @@ const OrderTable = () => {
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                 <td className=" border-b p-1 text-center flex gap-2 truncate">
-                  <input
-                    className="accent-medium-green h-5 w-5 rounded-xl ml-1"
-                    type="checkbox"
-                  />
               <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
               <button className="appearance-none font-bold border rounded px-2 cursor-pointer" onClick={() => handleDetails(row.original)}>Details</button>
                 </td>
