@@ -13,6 +13,7 @@ import SearchBar from '../Searchbar';
 import getAllAgents from '../APICalls/Agents/GetAllAgents';
 import updateAgent from '../APICalls/Agents/UpdateAgent';
 import EditAgentsForm from '../EditForms/EditAgentsForm';
+import AgentDisplayView from '../DetailsViews/AgentDetail';
 
 const AgentTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -21,6 +22,8 @@ const AgentTable = () => {
   const [columnFilters, setColumnFilters] = useState({});
   const [editItem, setEditItem] = useState(null);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [detailsItem, setDetailsItem] = useState(null);
+  const [isDetailsViewOpen, setIsDetailsViewOpen] = useState(false);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -45,6 +48,15 @@ const AgentTable = () => {
       accessorKey: "businessUnit.financeInformation.currency.shortName",
     },
   ];
+
+  const handleDetails = (item) => {
+    setDetailsItem(item);
+    setIsDetailsViewOpen(true);
+  };
+
+  const closeDetailsView = () => {
+    setIsDetailsViewOpen(false);
+  };
 
   const handleEdit = (item) => {
     setEditItem(item);
@@ -130,6 +142,9 @@ const AgentTable = () => {
       {isEditFormOpen && (
         <EditAgentsForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
       )}
+      {isDetailsViewOpen && (
+       <AgentDisplayView item={detailsItem} onClose={closeDetailsView} />
+      )}
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border ">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -184,7 +199,7 @@ const AgentTable = () => {
                     type="checkbox"
                   />
               <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
-                <button className="appearance-none font-bold border rounded px-2">Details</button>
+              <button className="appearance-none font-bold border rounded px-2 cursor-pointer" onClick={() => handleDetails(row.original)}>Details</button>
                 </td>
                 {row.getVisibleCells().map((cell) => (
                   <td className="border p-1 text-center truncate" key={cell.id}>
