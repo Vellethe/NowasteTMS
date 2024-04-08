@@ -15,7 +15,6 @@ const deletePrice = async (id) => {
       }
       
       const data = await response.json();
-      console.log(data); // "Deleted successfully"
     } catch (error) {
       console.error('Error:', error);
     }

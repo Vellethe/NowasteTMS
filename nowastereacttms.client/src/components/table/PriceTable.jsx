@@ -12,7 +12,9 @@ import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllPrices from '../APICalls/Prices/GetAllPrices';
 import updatePrice from '../APICalls/Prices/UpdatePrice';
+import deletePrice from '../APICalls/Prices/DeletePrice';
 import EditPriceForm from '../EditForms/EditPriceForm';
+import PriceDeleteForm from '../DetailsViews/PriceDelete';
 
 const OrderTable = () => {
   const [sorting, setSorting] = useState([]);
@@ -20,6 +22,8 @@ const OrderTable = () => {
   const [data, setData] = useState([])
   const [editItem, setEditItem] = useState(null);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
@@ -60,6 +64,16 @@ const OrderTable = () => {
       accessorKey: "price.description",
     },
   ];
+
+  const handleDelete = async (item) => {
+    try {
+      await deletePrice(item.id);
+      fetchPrices();
+      setShowDeleteForm(false);
+    } catch (error) {
+      console.error('Error deleting price: ', error.message);
+    }
+  };
 
   const handleEdit = (item) => {
     setEditItem(item);
@@ -143,8 +157,11 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green text-sm w-full">
-            {isEditFormOpen && (
+      {isEditFormOpen && (
         <EditPriceForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
+      )}
+      {showDeleteForm && (
+        <PriceDeleteForm item={selectedItem} onDelete={handleDelete} onCancel={handleCancel} />
       )}
       <div className="overflow-auto relative">
         <table ref={tableRef} className="border-x border-b w-full">
@@ -188,7 +205,7 @@ const OrderTable = () => {
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                 <td className=" border-b p-1 text-center flex gap-2 truncate">
               <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
-                <button className="appearance-none font-bold border rounded px-2">Delete</button>
+                <button className="appearance-none font-bold border rounded px-2" onClick={() => handleDelete(row.original)}>Delete</button>
                 </td>
                 {row.getVisibleCells().map((cell) => (
                   <td className="border p-1 text-center truncate" key={cell.id}>
