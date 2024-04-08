@@ -17,7 +17,7 @@ const OrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [data, setData] = useState([]);
-  
+
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
@@ -134,10 +134,29 @@ const OrderTable = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllTransportOrders();
+        const transformedData = data.transportOrders.map(row => ({
+          ...row,
+          collectionDateWD: getWeekdayFromDate(row.collectionDate), // Pickup Weekday
+          DeliveryDateWD: getWeekdayFromDate(row.transportOrder.deliveryDate), // ETA Weekday
+          updatedWD: getWeekdayFromDate(row.updated) // Update Weekday
+        }));
+        setTableData(transformedData);
+      } catch (error) {
+        console.error('Error fetching transportorder:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const fetchTransportOrders = async () => {
     try {
-      const prices = await getAllTransportOrders();
-      setData(prices);
+      const transportOrders = await getAllTransportOrders();
+      setData(transportOrders);
     } catch (error) {
       console.error('Error fetching transportorders: ', error.message);
     }
