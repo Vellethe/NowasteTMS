@@ -134,15 +134,15 @@ const OrderTable = () => {
   };
 
   return (
-    <div className="text-dark-green text-sm w-full">
+    <div className="text-dark-green w-full">
             {isEditFormOpen && (
         <EditSupplierForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
       )}
             {isDetailsViewOpen && (
        <SupplierDisplayView item={detailsItem} onClose={closeDetailsView} />
       )}
-      <div className="overflow-auto relative">
-        <table ref={tableRef} className="border-x border-b w-full">
+      <div className="mb-5">
+        <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
@@ -152,7 +152,7 @@ const OrderTable = () => {
                   </th>
                   {headerGroup.headers.map((header) => (
                     <th
-                      className="border p-2 bg-white relative"
+                      className="border p-2 bg-white relative truncate"
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                     >
