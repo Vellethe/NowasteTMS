@@ -67,14 +67,16 @@ const OrderTable = () => {
 
   const handleDelete = async (item) => {
     try {
-      await deletePrice(item.id);
+      const itemId = item.price.transportZonePricePK; // Extracting the PK from the price object
+      await deletePrice(itemId); // Pass the itemId to the deletePrice function
+      console.log(itemId);
       fetchPrices();
       setShowDeleteForm(false);
     } catch (error) {
       console.error('Error deleting price: ', error.message);
     }
   };
-
+  
   const handleEdit = (item) => {
     setEditItem(item);
     setIsEditFormOpen(true);
@@ -205,7 +207,7 @@ const OrderTable = () => {
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                 <td className=" border-b p-1 text-center flex gap-2 truncate">
               <button className="appearance-none font-bold border rounded px-2 mr-5 ml-5" onClick={() => handleEdit(row.original)}>Edit</button>
-                <button className="appearance-none font-bold border rounded px-2" onClick={() => handleDelete(row.original)}>Delete</button>
+              <button className="appearance-none font-bold border rounded px-2" onClick={() => handleDelete(row.original)}>Delete</button>
                 </td>
                 {row.getVisibleCells().map((cell) => (
                   <td className="border p-1 text-center truncate" key={cell.id}>
