@@ -1,4 +1,5 @@
 import React from 'react';
+//Show supplierName, Company, Phone, CellularPhone, Email, Fax, Address, Zipcode, City, Country
 
 const SupplierDisplayView = ({ item, onCancel }) => {
   return (

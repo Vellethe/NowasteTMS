@@ -1,4 +1,5 @@
 import React from 'react';
+//Show agentName, SelfBilling, Company, Currency, Phone, CellularPhone, Email, Fax, Address, Zipcode, City, Country
 
 const AgentDisplayView = ({ item, onClose }) => {
   return (

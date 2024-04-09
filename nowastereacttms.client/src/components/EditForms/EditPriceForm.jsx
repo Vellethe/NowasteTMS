@@ -33,6 +33,7 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
           </label>
           <label className="block mb-2">
             Price:
+            {/* Should be changing price for sea/eur pallet and not a "total" price */}
             <input type="number" name="price" value={editedItem.price?.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">

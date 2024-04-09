@@ -1,4 +1,5 @@
 import React from 'react';
+//Show customerName, Company, Currency, Phone, CellularPhone, Email, Fax, Address, Zipcode, City, Country
 
 const CustomerDisplayView = ({ item, onClose }) => {
   return (
