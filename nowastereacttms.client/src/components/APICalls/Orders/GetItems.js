@@ -1,5 +1,4 @@
-
-var baseUrl ="https://localhost:7253/api";
+import { baseUrl } from "../API";
 
 const getItems = async() => {
     try {

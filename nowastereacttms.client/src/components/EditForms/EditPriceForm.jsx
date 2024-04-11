@@ -5,17 +5,20 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
 
   // Update editedItem when item prop changes
   useEffect(() => {
+    console.log("Item prop changed:", item);
     setEditedItem({ ...item });
   }, [item]);
 
   const handleSave = () => {
+    console.log("Saving editedItem:", editedItem);
     onSave(editedItem);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Updating ${name} with value:`, value);
     setEditedItem({ ...editedItem, [name]: value });
-  };
+  };  
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">

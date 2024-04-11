@@ -15,7 +15,7 @@ const EditServiceForm = ({ item, onSave, onCancel }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedItem({ ...editedItem, [name]: value });
-  };
+  };  
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">

@@ -1,4 +1,4 @@
-var baseUrl ="https://localhost:7253";
+import { baseUrl } from "../API";
 
 const updateAgent = async (id, updateAgent) => {
   try {

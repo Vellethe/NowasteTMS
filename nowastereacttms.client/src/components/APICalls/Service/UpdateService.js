@@ -1,4 +1,4 @@
-var baseUrl ="https://localhost:7253/api";
+import { baseUrl } from "../API";
 
 const updateService = async (id, updatedService) => {
     try {

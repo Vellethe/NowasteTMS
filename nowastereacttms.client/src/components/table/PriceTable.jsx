@@ -67,15 +67,20 @@ const OrderTable = () => {
 
   const handleDelete = async (item) => {
     try {
-      const itemId = item.price.transportZonePricePK; // Extracting the PK from the price object
-      await deletePrice(itemId); // Pass the itemId to the deletePrice function
-      console.log(itemId);
-      fetchPrices();
-      setShowDeleteForm(false);
+      setSelectedItem(item)
+      setShowDeleteForm(true);
+      console.log(item);
     } catch (error) {
       console.error('Error deleting price: ', error.message);
     }
   };
+
+  const handleSaveDelete = async (item) => {
+    const itemId = item.price.transportZonePricePK;
+    await deletePrice(itemId);
+    setShowDeleteForm(false);
+    fetchPrices();
+  }
   
   const handleEdit = (item) => {
     setEditItem(item);
@@ -94,6 +99,7 @@ const OrderTable = () => {
 
   const handleCancel = () => {
     setIsEditFormOpen(false);
+    setShowDeleteForm(false)
   };
 
   const table = useReactTable({
@@ -163,7 +169,7 @@ const OrderTable = () => {
         <EditPriceForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
       )}
       {showDeleteForm && (
-        <PriceDeleteForm item={selectedItem} onDelete={handleDelete} onCancel={handleCancel} />
+        <PriceDeleteForm item={selectedItem} onDelete={handleSaveDelete} onCancel={handleCancel} />
       )}
       <div className="mb-5">
         <table ref={tableRef} className="table-fixed border-x border-b w-full">
