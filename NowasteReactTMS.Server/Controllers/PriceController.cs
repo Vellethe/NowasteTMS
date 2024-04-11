@@ -72,33 +72,11 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateTransportZonePriceDTO dto)
+        public async Task<IActionResult> Create(TransportPriceDTO dto)
         {
-            dto.TransportZonePrice.TransportZonePricePK = Guid.NewGuid();
 
-            if (dto.TransportZonePrice.TransportZonePriceLines != null)
-            {
-                var sumTotal = dto.TransportZonePrice.TransportZonePriceLines.Sum(line => line.Price);
-
-                if (sumTotal <= 0)
-                {
-                    sumTotal = dto.TransportZonePrice.Price;
-                }
-
-                dto.TransportZonePrice.Price = sumTotal;
-            }
-
-            await _transportZonePriceRepo.Add(dto.TransportZonePrice);
-
-            if (dto.TransportZonePrice.TransportZonePriceLines != null)
-            {
-                foreach (var lines in dto.TransportZonePrice.TransportZonePriceLines)
-                {
-                    lines.TransportZonePricePK = dto.TransportZonePrice.TransportZonePricePK;
-                    lines.TransportZonePriceLinePK = Guid.NewGuid();
-                    await _transportZonePriceLineRepo.Add(lines);
-                }
-            }
+            dto.TransportZonePricePK = Guid.NewGuid();
+            await _transportZonePriceRepo.Add(dto);
 
             return Ok("Created successfully");
         }

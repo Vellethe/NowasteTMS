@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using NowasteReactTMS.Server.Models.TransportDTOs;
 using NowasteTms.Model;
 using WMan.Data.ConnectionFactory;
 public class TransportZonePriceRepository : ITransportZonePriceRepository
@@ -86,7 +87,7 @@ public class TransportZonePriceRepository : ITransportZonePriceRepository
         }
     }
 
-    public async Task<int> Add(TransportZonePrice vmTransportZonePrice)
+    public async Task<int> Add(TransportPriceDTO dtoTransportPrice)
     {
         using (var connection = connectionFactory.CreateConnection())
         {
@@ -114,7 +115,7 @@ public class TransportZonePriceRepository : ITransportZonePriceRepository
                            ,@TransportTypePK
                            ,@ValidFrom
                            ,@ValidTo)",
-                vmTransportZonePrice);
+                dtoTransportPrice);
         }
     }
 
