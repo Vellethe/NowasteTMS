@@ -1,10 +1,11 @@
-﻿using NowasteTms.Model;
+﻿using NowasteReactTMS.Server.Models.TransportDTOs;
+using NowasteTms.Model;
 
 public interface ITransportZonePriceRepository
 {
     Task<List<TransportZonePrice>> GetAll(bool includeInactive = false);
     Task<int> Remove(Guid pk);
-    Task<int> Add(TransportZonePrice vmTransportZonePrice);
+    Task<int> Add(TransportPriceDTO dtoTransportPrice);
     Task<TransportZonePrice> Get(Guid id);
     Task<List<List<TransportZonePrice>>> Get(GetBestPricesQuery query);
     Task<List<List<TransportZonePrice>>> GetGrouped(GetBestPricesQuery query);
