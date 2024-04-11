@@ -1,8 +1,8 @@
-var baseUrl ="https://localhost:7253";
+import { baseUrl } from "../API";
 
 const deletePrice = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/Price/pk=${id}`, {
+    const response = await fetch(`${baseUrl}/Price/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

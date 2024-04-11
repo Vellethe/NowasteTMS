@@ -125,7 +125,7 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok("Succesfully edited");
         }
 
-        [HttpDelete]
+        [HttpDelete("{pk}")]
         public async Task<IActionResult> Delete(Guid pk)
         {
             await _transportZonePriceRepo.Remove(pk);

@@ -1,8 +1,8 @@
 import React from 'react';
 
 const PriceDeleteForm = ({ item, onDelete, onCancel }) => {
-  const handleDelete = () => {
-    onDelete(item);
+  const handleDelete = async () => {
+    await onDelete(item);
   };
 
   return (
@@ -11,7 +11,7 @@ const PriceDeleteForm = ({ item, onDelete, onCancel }) => {
         <h2 className="text-lg font-semibold mb-6">Delete Price</h2>
         <p>Are you sure you want to delete this price?</p>
         <div className="flex justify-end mt-5">
-          <button onClick={handleDelete} className="bg-red-500 text-white font-bold mr-3 rounded-md">Delete</button>
+          <button onClick={handleDelete} className="bg-red-500 text-black font-bold mr-3 rounded-md">Delete</button>
           <button onClick={onCancel} className="bg-gray-300 text-black font-bold rounded-md">Cancel</button>
         </div>
       </div>

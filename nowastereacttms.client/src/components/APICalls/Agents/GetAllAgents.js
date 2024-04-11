@@ -1,4 +1,4 @@
-var baseUrl ="https://localhost:7253/api";
+import { baseUrl } from "../API";
 
 const getAllAgents = async (includeInactive = false) => {
     try {

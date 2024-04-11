@@ -1,4 +1,4 @@
-var baseUrl ="https://localhost:7253/api";
+import { baseUrl } from "../API";
 
 const updateTransportOrder = async (id, updateSupplier) => {
     try {
