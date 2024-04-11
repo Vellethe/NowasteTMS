@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link } from "react-router-dom";
 import {
   useReactTable,
   getCoreRowModel,
@@ -165,6 +166,15 @@ const OrderTable = () => {
 
   return (
     <div className="text-dark-green w-full">
+<div className="flex gap-3">
+<div className="flex-grow"></div> {/* This div will push the button to the right */}
+  <Link
+    to="/Price/create"
+    className=" mb-3 text-xl flex justify-end p-1 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
+  >
+    Create New
+  </Link>
+</div>
       {isEditFormOpen && (
         <EditPriceForm item={editItem} onSave={handleSave} onCancel={handleCancel} />
       )}

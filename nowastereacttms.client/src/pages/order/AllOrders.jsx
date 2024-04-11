@@ -15,7 +15,7 @@ const AllOrders = () => {
     <>
       <div className="m-4">
         <div className="text-3xl text-center text-dark-green">Orders</div>
-        <div className=" m-3 text-xl flex justify-end  text-medium-green">
+        <div className="text-xl flex justify-end text-medium-green">
 
 <div className="flex gap-3">
   <Link

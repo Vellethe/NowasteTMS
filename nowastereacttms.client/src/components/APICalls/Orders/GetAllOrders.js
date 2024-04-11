@@ -7,7 +7,7 @@ const getAllOrders = async () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ Size: 999999, Page: 0, Filter: {}, Column: {}, "historical": true }),
+            body: JSON.stringify({ Size: 999999, Page: 0, Filter: {}, Column: {}, "historical": false }),
         });
 
         if (!response.ok) {
