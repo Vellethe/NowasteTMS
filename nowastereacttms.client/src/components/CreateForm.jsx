@@ -30,6 +30,7 @@ const CreateForm = () => {
   
         const itemsData = await getItems();
         setItems(itemsData);
+        console.log(items.itemPK)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -260,7 +261,7 @@ const CreateForm = () => {
                   <input
                     type="text"
                     {...register(`lines[${index}].itemqty`)}
-                    defaultValue={line.itemqty}
+                    // defaultValue={line.itemqty}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
@@ -268,7 +269,7 @@ const CreateForm = () => {
                   <input
                     type="text"
                     {...register(`lines[${index}].itemno`)}
-                    defaultValue={line.itemID}
+                    // defaultValue={line.itemID}
                     className="w-full h-8 border rounded pl-2 text-center"
                     list="itemList"
                     onChange={(e) => {
@@ -277,7 +278,7 @@ const CreateForm = () => {
                         (item) => item.itemID === selectedItemID
                       );
                       if (selectedItem) {
-                        setValue(`lines[${index}].name`, selectedItem.name);
+                        setValue(`lines[${index}].ItemName`, selectedItem.name);
                       }
                     }}
                   />
@@ -290,8 +291,8 @@ const CreateForm = () => {
                 <td>
                   <input
                     type="text"
-                    defaultValue={line.name}
-                    {...register(`lines[${index}].name`)}
+                    // defaultValue={line.name}
+                    {...register(`lines[${index}].ItemName`)}
                     className="w-full h-8 border rounded pl-2 text-center text-sm"
                     list="itemName"
                     onChange={(e) => {
@@ -300,9 +301,10 @@ const CreateForm = () => {
                         (item) => item.name === selectedName
                       );
                       if (selectedItem) {
-                        setValue(`lines[${index}].itemno`, selectedItem.itemID);
+                        setValue(`lines[${index}].ItemName`, selectedItem.name);
                       }
                     }}
+                  
                   />
                   <datalist id="itemName">
                     {items.map((item) => (
@@ -314,14 +316,14 @@ const CreateForm = () => {
                   <input
                     type="text"
                     {...register(`lines[${index}].palletqty`)}
-                    defaultValue={line.palletqty}
+                    // defaultValue={line.palletqty}
                     className="w-full h-8 border rounded pl-2 text-center"
                   />
                 </td>
                 <td>
                   <select
                     {...register(`lines[${index}].PalletTypeId`)}
-                    defaultValue={line.palletType}
+                    // defaultValue={line.palletType}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
                     
@@ -353,9 +355,10 @@ const CreateForm = () => {
               append({
                 itemqty: "",
                 itemno: "",
-                name: "",
+                ItemName: "",
                 palletqty: "",
-                PalletTypeId: "",
+                PalletTypeId: ""
+                
               })
             }
           >
