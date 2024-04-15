@@ -370,7 +370,7 @@ const CreateForm = () => {
         {/* Buttons */}
         <div className="flex gap-5 justify-center m-6 ">
         <button
-            className="hover:bg-medium-green hover:text-white border-2 mt-3 text-dark-green py-1 px-2 rounded w-full"
+            className="hover:bg-medium-green hover:text-white border mt-3 text-dark-green py-1 px-2 rounded"
             type="submit"
           >
             Save
