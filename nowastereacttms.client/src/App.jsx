@@ -13,6 +13,7 @@ import Prices from './pages/Transport/Prices';
 import Suppliers from './pages/Transport/Suppliers';
 import TransportOrderService from './pages/Transport/TransportOrderService';
 import Home from "./pages/Home/Home";
+import CreatePrice from "./pages/Transport/CreatePrice";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             element={<AllHistoricalTransportOrders />}
           />
           <Route path="/Transport/TransportZonePrices" element={<Prices />} />
+          <Route path="/Transport/Prices/CreatePrice" element={<CreatePrice />} />
           <Route path="/Transport/Agents/AllAgents" element={<Agents />} />
           <Route
             path="/Transport/Customers/AllCustomers"

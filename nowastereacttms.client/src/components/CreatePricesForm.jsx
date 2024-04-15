@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import createPrice from "../APICalls/Prices/CreatePrice";
+import createPrice from "./APICalls/Prices/CreatePrice";
 
 const CreatePriceForm = () => {
   const [fromZone, setFromZone] = useState([]);
@@ -39,71 +39,8 @@ const CreatePriceForm = () => {
         <div className="w-full bg-gray h-12 text-center font-bold mb-3 pt-3">
           Price details
         </div>
-        
-        <div className="flex flex-wrap mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="fromZone">From Zone</label>
-            <input
-              type="text"
-              id="fromZone"
-              {...register("fromTransportZone.name", { required: true })}
-              value={fromZone}
-              onChange={(e) => setFromZone(e.target.value)}
-              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.fromTransportZone && (
-              <p className="text-sm text-red">From Zone is required</p>
-            )}
-          </div>
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="toZone">To Zone</label>
-            <input
-              type="text"
-              id="toZone"
-              {...register("toTransportZone.name", { required: true })}
-              value={toZone}
-              onChange={(e) => setToZone(e.target.value)}
-              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.toTransportZone && (
-              <p className="text-sm text-red">To Zone is required</p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-wrap mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              id="price"
-              {...register("price", { required: true })}
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.price && (
-              <p className="text-sm text-red">Price is required</p>
-            )}
-          </div>
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="currency">Currency</label>
-            <input
-              type="text"
-              id="currency"
-              {...register("currency.name", { required: true })}
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.currency && (
-              <p className="text-sm text-red">Currency is required</p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-wrap mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+        <div className="flex flex-wrap mx-3 mb-4">
+        <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="agent">Agent</label>
             <input
               type="text"
@@ -131,9 +68,40 @@ const CreatePriceForm = () => {
               <p className="text-sm text-red">Transport Type is required</p>
             )}
           </div>
+          </div>
+        
+        <div className="flex flex-wrap mx-3 mb-4">
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="fromZone">From</label>
+            <input
+              type="text"
+              id="fromZone"
+              {...register("fromTransportZone.name", { required: true })}
+              value={fromZone}
+              onChange={(e) => setFromZone(e.target.value)}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            />
+            {errors.fromTransportZone && (
+              <p className="text-sm text-red">From Zone is required</p>
+            )}
+          </div>
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="toZone">To</label>
+            <input
+              type="text"
+              id="toZone"
+              {...register("toTransportZone.name", { required: true })}
+              value={toZone}
+              onChange={(e) => setToZone(e.target.value)}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            />
+            {errors.toTransportZone && (
+              <p className="text-sm text-red">To Zone is required</p>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-wrap mx-3 mb-6">
+        <div className="flex flex-wrap mx-3 mb-4">
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="validFrom">Valid From</label>
             <input
@@ -164,6 +132,37 @@ const CreatePriceForm = () => {
           </div>
         </div>
 
+        <div className="flex flex-wrap mx-3 mb-4">
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="price">Price</label>
+            <input
+              type="number"
+              id="price"
+              {...register("price", { required: true })}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            />
+            {errors.price && (
+              <p className="text-sm text-red">Price is required</p>
+            )}
+          </div>
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
+            <label htmlFor="currency">Currency</label>
+            <input
+              type="text"
+              id="currency"
+              {...register("currency.name", { required: true })}
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
+            />
+            {errors.currency && (
+              <p className="text-sm text-red">Currency is required</p>
+            )}
+          </div>
+        </div>
+
         <div className="m-6 text-center font-bold">
           <label htmlFor="description">Description</label>
           <textarea
@@ -178,18 +177,18 @@ const CreatePriceForm = () => {
 
         {/* Buttons */}
         <div className="flex gap-5 justify-center m-6 ">
-          <button
-            className="hover:bg-medium-green hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
-            type="button"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </button>
-          <button
+        <button
             className="hover:bg-medium-green hover:text-white border mt-3 text-dark-green py-1 px-2 rounded"
             type="submit"
           >
             Save
+          </button>
+          <button
+            className="hover:hover:bg-red hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
+            type="button"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
           </button>
         </div>
       </form>

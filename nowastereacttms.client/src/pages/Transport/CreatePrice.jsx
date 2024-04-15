@@ -1,5 +1,5 @@
 import React from 'react'
-import CreatePriceForm from '../../components/CreatePriceForm'
+import CreatePriceForm from '../../components/CreatePricesForm';
 
 const CreatePrice = () => {
   return (

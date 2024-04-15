@@ -369,18 +369,18 @@ const CreateForm = () => {
 
         {/* Buttons */}
         <div className="flex gap-5 justify-center m-6 ">
-          <button
-            className="bg-gray border-2 mt-3 text-dark-green py-1 px-2 rounded w-full"
-            type="button"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </button>
-          <button
+        <button
             className="hover:bg-medium-green hover:text-white border-2 mt-3 text-dark-green py-1 px-2 rounded w-full"
             type="submit"
           >
             Save
+          </button>
+          <button
+            className="hover:hover:bg-red hover:text-white bg-gray border mt-3 text-dark-green py-1 px-2 rounded"
+            type="button"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
           </button>
         </div>
       </form>

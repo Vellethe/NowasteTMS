@@ -169,7 +169,7 @@ const OrderTable = () => {
 <div className="flex gap-3">
 <div className="flex-grow"></div> {/* This div will push the button to the right */}
   <Link
-    to="/Price/create"
+    to="/Transport/Prices/CreatePrice"
     className=" mb-3 text-xl flex justify-end p-1 duration-200 hover:bg-medium-green hover:text-white rounded-lg"
   >
     Create New
