@@ -27,6 +27,7 @@ namespace NowasteReactTMS.Server.Controllers
         private readonly IAgentRepository _agentRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderLineRepository _orderLineRepository;
+        private readonly ITransportZoneRepository _transportZoneRepo;
         private readonly IEmailHandler _emailHandler;
         private readonly IMemoryCache _memoryCache;
         public static string[] ColumnNames = [
@@ -75,6 +76,7 @@ namespace NowasteReactTMS.Server.Controllers
             IAgentRepository agentRepository,
             IOrderRepository orderRepository,
             IOrderLineRepository orderLineRepository,
+            ITransportZoneRepository transportZoneRepository,
             IEmailHandler emailHandler,
             IMemoryCache memoryCache)
         {
@@ -87,6 +89,7 @@ namespace NowasteReactTMS.Server.Controllers
             _agentRepository = agentRepository;
             _orderRepository = orderRepository;
             _orderLineRepository = orderLineRepository;
+            _transportZoneRepo = transportZoneRepository;
             _emailHandler = emailHandler;
             _memoryCache = memoryCache;
         }
@@ -167,6 +170,17 @@ namespace NowasteReactTMS.Server.Controllers
         {
             await _transportOrderRepo.Delete(pk);
             return Ok("Successfully deleted");
+        }
+
+        [HttpGet]
+        public async Task<List<TransportZoneDTO>> GetAllZones()
+        {
+            var transportZones = await _transportZoneRepo.GetAll();
+            return transportZones.Select(tz => new TransportZoneDTO
+            {
+                TransportZonePK = tz.TransportZonePK,
+                Name = tz.Name
+            }).ToList();
         }
 
         /// <summary>

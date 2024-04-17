@@ -2,17 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import createPrice from "./APICalls/Prices/CreatePrice";
+import getAllPrices from "./APICalls/Prices/GetAllPrices";
+import getAllAgents from "./APICalls/Agents/GetAllAgents";
+import fetchAllLocations from "./APICalls/AllLocations";
 
 const CreatePriceForm = () => {
-  const [fromZone, setFromZone] = useState([]);
-  const [toZone, setToZone] = useState([]);
-  const [price, setPrice] = useState([]);
-  const [currency, setCurrency] = useState([]);
-  const [agent, setAgent] = useState([]);
-  const [transportType, setTransportType] = useState([]);
-  const [validFrom, setValidFrom] = useState([]);
-  const [validTo, setValidTo] = useState([]);
-  const [description, setDescription] = useState([]);
+  const [agents, setAgents] = useState([]);
+  const [fromZone, setFromZone] = useState("");
+  const [toZone, setToZone] = useState("");
+  const [uniqueAllZones, setUniqueAllZones] = useState([]);
+  const [currency, setCurrency] = useState("");
+  const [transportTypes, setTransportTypes] = useState([]);
+  const [validFrom, setValidFrom] = useState("");
+  const [validTo, setValidTo] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
 
   const {
     register,
@@ -21,6 +25,41 @@ const CreatePriceForm = () => {
   } = useForm();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const agentsData = await getAllAgents();
+        const uniqueAgents = agentsData.map((agent) => ({
+          agentPK: agent.agentPK,
+          name: agent.businessUnit?.name || "",
+        }));
+
+        const priceData = await getAllPrices();
+        const currencies = priceData.map((item) => item?.price?.currency || "");
+        const uniqueTransportTypes = [...new Map(priceData.map(item => [item.transportType.transportTypePK, item.transportType])).values()];
+        const validFromDates = priceData.map((item) => item?.validFrom || "");
+        const validToDates = priceData.map((item) => item?.validTo || "");
+
+        const allLocations = await fetchAllLocations();
+        const uniqueAllZones = Array.from(new Set(allLocations.map(location => location.name)));
+        
+        console.log("Fetched Content:", uniqueAllZones);
+
+        setAgents(uniqueAgents);
+        setUniqueAllZones(uniqueAllZones);
+        setCurrency(currencies[0]);
+        setTransportTypes(uniqueTransportTypes);
+        setValidFrom(validFromDates[0]);
+        setValidTo(validToDates[0]);
+
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -40,31 +79,42 @@ const CreatePriceForm = () => {
           Price details
         </div>
         <div className="flex flex-wrap mx-3 mb-4">
-        <div className="w-full md:w-1/2 px-3 text-center font-bold">
+          <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="agent">Agent</label>
-            <input
-              type="text"
+            <select
               id="agent"
-              {...register("agent.businessUnit.name", { required: true })}
-              value={agent}
-              onChange={(e) => setAgent(e.target.value)}
+              {...register("agent")}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
+            >
+              {agents.map((agent) => (
+                <option key={agent.agentPK} value={agent.agentPK}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
             {errors.agent && (
               <p className="text-sm text-red">Agent is required</p>
             )}
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="transportType">Transport Type</label>
-            <input
-              type="text"
+            <select
               id="transportType"
-              {...register("transportType.description", { required: true })}
-              value={transportType}
-              onChange={(e) => setTransportType(e.target.value)}
+              {...register("transportType.transportTypePK")}
+              value={transportTypes?.transportTypePK || ""}
+              onChange={(e) => {
+                const selectedTransportType = transportTypes.find(type => type.transportTypePK === e.target.value);
+                setTransportTypes(selectedTransportType?.transportTypePK || "");
+              }}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.transportType && (
+            >
+              {transportTypes.map((type) => (
+                <option key={type.transportTypePK} value={type.transportTypePK}>
+                  {type.description}
+                </option>
+              ))}
+            </select>
+            {errors.transportTypes?.transportTypePK && (
               <p className="text-sm text-red">Transport Type is required</p>
             )}
           </div>
@@ -72,29 +122,39 @@ const CreatePriceForm = () => {
         
         <div className="flex flex-wrap mx-3 mb-4">
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
-            <label htmlFor="fromZone">From</label>
-            <input
-              type="text"
+            <label htmlFor="fromZone">From Zone</label>
+            <select
               id="fromZone"
-              {...register("fromTransportZone.name", { required: true })}
+              {...register("name")}
               value={fromZone}
               onChange={(e) => setFromZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
-            {errors.fromTransportZone && (
+            >
+              {uniqueAllZones.map((zone, index) => (
+                <option key={index} value={zone}>
+                  {zone}
+                </option>
+              ))}
+            </select>
+            {errors.price?.fromTransportZone && (
               <p className="text-sm text-red">From Zone is required</p>
             )}
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="toZone">To</label>
-            <input
-              type="text"
+            <select
               id="toZone"
-              {...register("toTransportZone.name", { required: true })}
+              {...register("name")}
               value={toZone}
               onChange={(e) => setToZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
+            >
+              {uniqueAllZones.map((zone, index) => (
+                <option key={index} value={zone}>
+                  {zone}
+                </option>
+              ))}
+            </select>
             {errors.toTransportZone && (
               <p className="text-sm text-red">To Zone is required</p>
             )}
