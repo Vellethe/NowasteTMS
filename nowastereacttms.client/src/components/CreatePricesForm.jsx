@@ -94,7 +94,7 @@ const CreatePriceForm = () => {
               {...register("agent")}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {agents.map((agent) => (
+              {agents.sort((a, b) => a.name.localeCompare(b.name)).map((agent) => (
                 <option key={agent.agentPK} value={agent.agentPK}>
                   {agent.name}
                 </option>
@@ -135,7 +135,7 @@ const CreatePriceForm = () => {
               onChange={(e) => setFromZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {fromZoneList.map((zone, index) => (
+              {fromZoneList.sort().map((zone, index) => (
                 <option key={index} value={zone}>
                   {zone}
                 </option>
@@ -154,7 +154,7 @@ const CreatePriceForm = () => {
               onChange={(e) => setToZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {toZoneList.map((zone, index) => (
+              {toZoneList.sort().map((zone, index) => (
                 <option key={index} value={zone}>
                   {zone}
                 </option>
