@@ -17,8 +17,9 @@ const updatePrice = async (id, updatePrice) => {
       throw new Error('Failed to update price');
     }
   } catch (error) {
+    console.error('Error updating price:', error.message);
     throw new Error('Error updating price: ' + error.message);
   }
 };
 
-  export default updatePrice;
+export default updatePrice;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import updatePrice from '../APICalls/Prices/UpdatePrice';
 
 const EditPriceForm = ({ item, onSave, onCancel }) => {
   const [editedItem, setEditedItem] = useState({});
@@ -11,7 +12,7 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
 
   const handleSave = () => {
     const { price, validFrom, validTo, description } = editedItem.price;
-
+  
     const formatDatetime = (datetime) => {
       const date = new Date(datetime);
       return date.toISOString();
@@ -19,28 +20,22 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
   
     const updatedData = {
       price: parseFloat(price),
-      currencyPK: editedItem.price.currencyPK, 
+      currencyPK: editedItem.price.currencyPK,
       validFrom: formatDatetime(validFrom),
       validTo: formatDatetime(validTo),
-      fromTransportZonePK: editedItem.price.fromTransportZonePK, 
-      toTransportZonePK: editedItem.price.toTransportZonePK, 
-      transportTypePK: editedItem.price.transportTypePK, 
+      fromTransportZonePK: editedItem.price.fromTransportZonePK,
+      toTransportZonePK: editedItem.price.toTransportZonePK,
+      transportTypePK: editedItem.price.transportTypePK,
       description: description,
-      transportZonePricePK: editedItem.price.transportZonePricePK, 
-      agentPK: editedItem.agent?.agentPK || '' 
+      transportZonePricePK: editedItem.price.transportZonePricePK,
+      agentPK: editedItem.agent?.agentPK || ''
     };
-  
-    console.log("Preparing to send data:", updatedData); // Log data before sending
-
-  onSave(updatedData)
-    .then(response => {
-      console.log("API response:", response); // Log API response
-    })
-    .catch(error => {
-      console.error("API error:", error); // Log API error
+    
+    return updatePrice(editedItem.price.transportZonePricePK, updatedData)
+    .then(() => {
+      window.alert("Price edited");
     });
-};
-  
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
