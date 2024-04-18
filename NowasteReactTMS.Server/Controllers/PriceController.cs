@@ -82,26 +82,38 @@ namespace NowasteReactTMS.Server.Controllers
         }
 
         [HttpPut("{pk}")]
-        public async Task<IActionResult> Edit(TransportPriceDTO dto)
+        public async Task<IActionResult> Edit(Guid pk, TransportPriceDTO dto)
         {
-            var updatePrice = await _transportZonePriceRepo.Get(dto.TransportZonePricePK);
-            updatePrice.Price = dto.Price;
-            updatePrice.Description = dto.Description;
-            updatePrice.ValidFrom = dto.ValidFrom;
-            updatePrice.ValidTo = dto.ValidTo;
-
-            if (updatePrice.TransportType.Description == "Groupage")
+            try
             {
-                updatePrice.Price = updatePrice.TransportZonePriceLines.Sum(line => line.Price);
-                updatePrice.TransportZonePriceLines = updatePrice.TransportZonePriceLines.Select(line => new TransportZonePriceLine
+                var updatePrice = await _transportZonePriceRepo.Get(pk);
+
+                if (updatePrice == null)
                 {
-                    TransportZonePriceLinePK = line.TransportZonePriceLinePK,
-                    Price = line.Price
-                }).ToList();
+                    return NotFound("Price not found");
+                }
+
+                updatePrice.Price = dto.Price;
+                updatePrice.Description = dto.Description;
+                updatePrice.ValidFrom = dto.ValidFrom;
+                updatePrice.ValidTo = dto.ValidTo;
+
+                if (updatePrice.TransportType.Description == "Groupage")
+                {
+                    updatePrice.Price = updatePrice.TransportZonePriceLines.Sum(line => line.Price);
+                }
+
+                await _transportZonePriceRepo.Update(pk, updatePrice);
+
+                return Ok("Successfully edited");
             }
-            await _transportZonePriceRepo.Update(updatePrice.TransportZonePriceLine.TransportZonePricePK, updatePrice);
-            return Ok("Succesfully edited");
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating price: {ex.Message}");
+            }
         }
+
+
 
         [HttpDelete("{pk}")]
         public async Task<IActionResult> Delete(Guid pk)

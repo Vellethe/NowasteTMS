@@ -42,7 +42,7 @@ const OrderTable = () => {
     },
     {
       header: "Currency",
-      accessorKey: "price.currency.name", //shortName
+      accessorKey: "price.currency.shortName",
     },
     {
       header: "Agent",

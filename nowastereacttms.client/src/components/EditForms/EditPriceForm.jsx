@@ -10,15 +10,54 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
   }, [item]);
 
   const handleSave = () => {
-    console.log("Saving editedItem:", editedItem);
-    onSave(editedItem);
-  };
+    const { price, validFrom, validTo, description } = editedItem.price;
+
+    const formatDatetime = (datetime) => {
+      const date = new Date(datetime);
+      return date.toISOString();
+    };
+  
+    const updatedData = {
+      price: parseFloat(price),
+      currencyPK: editedItem.price.currencyPK, 
+      validFrom: formatDatetime(validFrom),
+      validTo: formatDatetime(validTo),
+      fromTransportZonePK: editedItem.price.fromTransportZonePK, 
+      toTransportZonePK: editedItem.price.toTransportZonePK, 
+      transportTypePK: editedItem.price.transportTypePK, 
+      description: description,
+      transportZonePricePK: editedItem.price.transportZonePricePK, 
+      agentPK: editedItem.agent?.agentPK || '' 
+    };
+  
+    console.log("Preparing to send data:", updatedData); // Log data before sending
+
+  onSave(updatedData)
+    .then(response => {
+      console.log("API response:", response); // Log API response
+    })
+    .catch(error => {
+      console.error("API error:", error); // Log API error
+    });
+};
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Updating ${name} with value:`, value);
-    setEditedItem({ ...editedItem, [name]: value });
-  };  
+    if (name === 'price' || name === 'validFrom' || name === 'validTo' || name === 'description') {
+      let parsedValue = value;
+      if (name === 'price') {
+        parsedValue = parseFloat(value); // Parse to float
+      }
+      setEditedItem(prevState => ({
+        ...prevState,
+        price: {
+          ...prevState.price,
+          [name]: parsedValue
+        }
+      }));
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
@@ -28,36 +67,35 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
           {/* Input fields for each property */}
           <label className="block mb-2">
             From:
-            <input type="text" name="from" value={editedItem.price?.fromTransportZone.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="from" value={editedItem.price?.fromTransportZone.name || ''} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             To:
-            <input type="text" name="to" value={editedItem.price?.toTransportZone.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="to" value={editedItem.price?.toTransportZone.name || ''} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Price:
-            {/* Should be changing price for sea/eur pallet and not a "total" price */}
             <input type="number" name="price" value={editedItem.price?.price || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Currency:
-            <input type="text" name="currency" value={editedItem.price?.currency.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="currency" value={editedItem.price?.currency.name || ''} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Agent:
-            <input type="text" name="agent" value={editedItem.agent?.businessUnit.name || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="agent" value={editedItem.agent?.businessUnit.name || ''} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Type:
-            <input type="text" name="type" value={editedItem.transportType?.description || ''} onChange={handleChange} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="text" name="type" value={editedItem.transportType?.description || ''} disabled className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Valid from:
-            <input type="datetime" name="validFrom" value={editedItem.price?.validFrom || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="datetime-local" name="validFrom" value={editedItem.price?.validFrom || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Valid to:
-            <input type="datetime" name="validTo" value={editedItem.price?.validTo || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
+            <input type="datetime-local" name="validTo" value={editedItem.price?.validTo || ''} onChange={handleChange} className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full" />
           </label>
           <label className="block mb-2">
             Description:
