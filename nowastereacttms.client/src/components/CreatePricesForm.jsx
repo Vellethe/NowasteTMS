@@ -5,14 +5,19 @@ import createPrice from "./APICalls/Prices/CreatePrice";
 import getAllPrices from "./APICalls/Prices/GetAllPrices";
 import getAllAgents from "./APICalls/Agents/GetAllAgents";
 import fetchAllLocations from "./APICalls/AllLocations";
+import fetchAllCurrencies from "./APICalls/AllCurrencies";
 
 const CreatePriceForm = () => {
   const [agents, setAgents] = useState([]);
   const [fromZone, setFromZone] = useState("");
+  const [fromZoneList, setFromZoneList] = useState([]);
   const [toZone, setToZone] = useState("");
+  const [toZoneList, setToZoneList] = useState([]);
   const [uniqueAllZones, setUniqueAllZones] = useState([]);
   const [currency, setCurrency] = useState("");
-  const [transportTypes, setTransportTypes] = useState([]);
+  const [currencyList, setCurrencyList] = useState([]);
+  const [transportTypes, setTransportTypes] = useState("");
+  const [transportTypeList, setTransportTypeList] = useState([])
   const [validFrom, setValidFrom] = useState("");
   const [validTo, setValidTo] = useState("");
   const [price, setPrice] = useState("");
@@ -36,20 +41,23 @@ const CreatePriceForm = () => {
         }));
 
         const priceData = await getAllPrices();
-        const currencies = priceData.map((item) => item?.price?.currency || "");
         const uniqueTransportTypes = [...new Map(priceData.map(item => [item.transportType.transportTypePK, item.transportType])).values()];
         const validFromDates = priceData.map((item) => item?.validFrom || "");
         const validToDates = priceData.map((item) => item?.validTo || "");
 
         const allLocations = await fetchAllLocations();
         const uniqueAllZones = Array.from(new Set(allLocations.map(location => location.name)));
+
+        const currencies = await fetchAllCurrencies();
         
-        console.log("Fetched Content:", uniqueAllZones);
+        console.log("Fetched Content:", transportTypeList);
 
         setAgents(uniqueAgents);
         setUniqueAllZones(uniqueAllZones);
-        setCurrency(currencies[0]);
-        setTransportTypes(uniqueTransportTypes);
+        setFromZoneList(uniqueAllZones);
+        setToZoneList(uniqueAllZones);
+        setCurrencyList(currencies);
+        setTransportTypeList(uniqueTransportTypes);
         setValidFrom(validFromDates[0]);
         setValidTo(validToDates[0]);
 
@@ -101,14 +109,11 @@ const CreatePriceForm = () => {
             <select
               id="transportType"
               {...register("transportType.transportTypePK")}
-              value={transportTypes?.transportTypePK || ""}
-              onChange={(e) => {
-                const selectedTransportType = transportTypes.find(type => type.transportTypePK === e.target.value);
-                setTransportTypes(selectedTransportType?.transportTypePK || "");
-              }}
+              value={transportTypes?.transportTypePK}
+              onChange={(e) => setTransportTypes(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {transportTypes.map((type) => (
+              {transportTypeList.map((type) => (
                 <option key={type.transportTypePK} value={type.transportTypePK}>
                   {type.description}
                 </option>
@@ -125,12 +130,12 @@ const CreatePriceForm = () => {
             <label htmlFor="fromZone">From Zone</label>
             <select
               id="fromZone"
-              {...register("name")}
+              {...register("fromZoneName")}
               value={fromZone}
               onChange={(e) => setFromZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {uniqueAllZones.map((zone, index) => (
+              {fromZoneList.map((zone, index) => (
                 <option key={index} value={zone}>
                   {zone}
                 </option>
@@ -144,12 +149,12 @@ const CreatePriceForm = () => {
             <label htmlFor="toZone">To</label>
             <select
               id="toZone"
-              {...register("name")}
+              {...register("toZoneName")}
               value={toZone}
               onChange={(e) => setToZone(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
             >
-              {uniqueAllZones.map((zone, index) => (
+              {toZoneList.map((zone, index) => (
                 <option key={index} value={zone}>
                   {zone}
                 </option>
@@ -209,14 +214,19 @@ const CreatePriceForm = () => {
           </div>
           <div className="w-full md:w-1/2 px-3 text-center font-bold">
             <label htmlFor="currency">Currency</label>
-            <input
-              type="text"
+            <select
               id="currency"
-              {...register("currency.name", { required: true })}
-              value={currency}
+              {...register("name", { required: true })}
+              value={currency.name}
               onChange={(e) => setCurrency(e.target.value)}
               className="appearance-none block w-full border rounded py-3 px-4 mb-2 leading-tight focus:bg-white text-center"
-            />
+            >
+              {currencyList.map((zone, index) => (
+                <option key={index} value={zone.name}>
+                  {zone.name}
+                </option>
+              ))}
+            </select>
             {errors.currency && (
               <p className="text-sm text-red">Currency is required</p>
             )}

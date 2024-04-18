@@ -172,7 +172,7 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok("Successfully deleted");
         }
 
-        [HttpGet]
+        [HttpGet("zones")]
         public async Task<List<TransportZoneDTO>> GetAllZones()
         {
             var transportZones = await _transportZoneRepo.GetAll();
@@ -180,6 +180,17 @@ namespace NowasteReactTMS.Server.Controllers
             {
                 TransportZonePK = tz.TransportZonePK,
                 Name = tz.Name
+            }).ToList();
+        }
+
+        [HttpGet("currency")]
+        public async Task<List<Currency>> GetAllCurrencies()
+        {
+            var currencies = await _currencyRepo.GetAll();
+            return currencies.Select(c => new Currency
+            {
+                CurrencyPK = c.CurrencyPK,
+                Name = c.Name
             }).ToList();
         }
 
