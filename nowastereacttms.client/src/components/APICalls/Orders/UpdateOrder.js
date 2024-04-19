@@ -22,4 +22,3 @@ const updateOrder = async (id, updatedOrder) => {
   };
   
   export default updateOrder;
-  

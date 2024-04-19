@@ -38,7 +38,7 @@ const AllOrders = () => {
         <hr className="m-4"></hr>
         <div className="flex justify-between">
   <Link
-    to="/Transport/Order/Create"
+    to="/Transport/Order/Editorder"
     className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg ml-6 text-2xl border border-medium-green"
   >
     Edit Order

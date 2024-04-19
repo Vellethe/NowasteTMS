@@ -14,6 +14,7 @@ import Suppliers from './pages/Transport/Suppliers';
 import TransportOrderService from './pages/Transport/TransportOrderService';
 import Home from "./pages/Home/Home";
 import CreatePrice from "./pages/Transport/CreatePrice";
+import EditOrderForm from "./pages/order/EditOrder";
 
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/Transport/TransportOrder/AllTransportOrders"
             element={<AllTransportOrder />}
+          />
+          <Route
+            path="/Transport/Order/Editorder"
+            element={<EditOrderForm />}
           />
           <Route
             path="/Transport/TransportOrder/AllHistoricalTransportOrders"
