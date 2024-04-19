@@ -11,11 +11,13 @@ namespace NowasteReactTMS.Server.Controllers
     {
         private readonly IAgentRepository _agentRepo;
         private readonly ICurrencyRepository _currencyRepo;
+        private readonly IContactInformationRepository _contactInformationRepo;
 
-        public AgentController(IAgentRepository agentRepository, ICurrencyRepository currencyRepo)
+        public AgentController(IAgentRepository agentRepository, ICurrencyRepository currencyRepo, IContactInformationRepository contactInformationRepo)
         {
             _agentRepo = agentRepository;
             _currencyRepo = currencyRepo;
+            _contactInformationRepo = contactInformationRepo;
         }
         /// <summary>
         /// Create a new Agent with all the needed parameters
@@ -53,6 +55,13 @@ namespace NowasteReactTMS.Server.Controllers
                 Console.WriteLine($"An error occurred while creating the agent: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the agent.");
             }
+        }
+
+        [HttpGet("Contacts")]
+        public async Task<IActionResult> GetContacts()
+        {
+            var contacts = await _contactInformationRepo.GetAll();
+            return Ok(contacts);
         }
 
         /// <summary>

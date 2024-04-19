@@ -31,40 +31,6 @@ const getAllOrders = async () => {
             })
             o.seaQty = seaLines.reduce((a, b) => a + b, 0);
 
-            let statusString;
-            if (o.status === 0) 
-            {
-                statusString = "Created";
-            } 
-            else if (o.status === 1) 
-            {
-                statusString = "Imported";
-            } 
-            else if (o.status === 2) 
-            {
-                statusString = "Processing";
-            } 
-            else if (o.status === 3) 
-            {
-                statusString = "Finished";
-            } 
-            else if (o.status === 4) 
-            {
-                statusString = "Exported";
-            } 
-            else if (o.status === 75) 
-            {
-                statusString = "Received";
-            } 
-            else if (o.status === 99) 
-            {
-                statusString = "Deleted";
-            } 
-            else 
-            {
-                statusString = "Unknown";
-            }            
-
             // Format datetime fields and calculate weekdays
             o.collectionDate = formatDatetime(o.collectionDate);
             o.deliveryDate = formatDatetime(o.deliveryDate);
@@ -74,7 +40,6 @@ const getAllOrders = async () => {
             o.collectionDateWD = getWeekdayFromDate(o.collectionDate);
             o.deliveryDateWD = getWeekdayFromDate(o.deliveryDate);
             o.updatedWD = getWeekdayFromDate(o.updated);
-            o.statusString = statusString; // Assign the status string to each order
             // Add more fields if needed
             return o;
         });
