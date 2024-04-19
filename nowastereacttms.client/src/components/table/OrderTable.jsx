@@ -22,9 +22,10 @@ const OrderTable = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState({});
+  const [selectedRow, setSelectedRow] = useState(null);
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false)
- 
+
   const columns = [
     {
       header: "Status",
@@ -179,6 +180,18 @@ const OrderTable = () => {
     }
   };
 
+  const toggleRowSelection = (orderPK) => {
+    if (selectedRow === orderPK) {
+      setSelectedRow(null);
+    } else {
+      setSelectedRow(orderPK);
+    }
+  };
+
+  useEffect(() => {
+    console.log("RowID:", selectedRow);
+  }, [selectedRow]);
+
   const table = useReactTable({
     data,
     columns: selectedColumns,
@@ -261,17 +274,17 @@ const OrderTable = () => {
       const cellValue = row[columnId]
         ? row[columnId].toString()
         : "";
-  
+
       console.log("Filter Value:", filterValue);
       console.log("Cell Value:", cellValue);
-  
+
       if (cellValue.toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
         return false; // Do not include row if any filter does not match
       }
     }
     return true; // Include row if all filters match
   };
-  
+
   return (
     <div className="text-dark-green w-full">
       <div className="flex justify-between mb-3">
@@ -349,8 +362,9 @@ const OrderTable = () => {
                       <input
                         className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                         type="checkbox"
+                        checked={selectedRow === row.original.orderPK}
+                        onChange={() => toggleRowSelection(row.original.orderPK)}
                       />
-
                       <div className="relative group">
                         <IoIosWarning className="text-2xl text-red relative group cursor-pointer" />
                         <span className="absolute top-5 left-5 bg-white border w-40 text-dark-green p-2 rounded opacity-0 transition-opacity duration-700 group-hover:opacity-100 z-10">
