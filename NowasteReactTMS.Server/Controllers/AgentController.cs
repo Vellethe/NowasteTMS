@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using NowasteReactTMS.Server.Models;
+using NowasteReactTMS.Server.Models.AgentDTOs;
 using NowasteTms.Model;
 
 namespace NowasteReactTMS.Server.Controllers
@@ -118,12 +119,21 @@ namespace NowasteReactTMS.Server.Controllers
         {
             try
             {
+                var agentDTO = new AgentDTO
+                {
+                    AgentPK = pk,
+                    AgentID = updatedAgent.AgentID,
+                    IsSelfBilling = updatedAgent.IsSelfBilling,
+                    IsActive = updatedAgent.IsActive,
+                    BusinessUnit = updatedAgent.BusinessUnit
+                };
+
                 if (pk != updatedAgent.AgentPK)
                 {
                     return BadRequest("Agent ID in the URL does not match the one in the request body.");
                 }
 
-                var result = await _agentRepo.UpdateAgent(pk, updatedAgent);
+                var result = await _agentRepo.UpdateAgent(pk, agentDTO);
 
                 if (result == null)
                 {
@@ -139,6 +149,7 @@ namespace NowasteReactTMS.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the agent.");
             }
         }
+
         /// <summary>
         /// Puts an Agent into isActive=0 when "deleting" them using their PK
         /// </summary>

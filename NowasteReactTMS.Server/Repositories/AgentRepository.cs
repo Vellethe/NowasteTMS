@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using NowasteReactTMS.Server.Models.AgentDTOs;
 using NowasteTms.Model;
 using System.Transactions;
 using WMan.Data.ConnectionFactory;
@@ -75,7 +76,7 @@ public class AgentRepository : IAgentRepository
         }
     }
 
-    public async Task<Agent> UpdateAgent(Guid id, Agent agent)
+    public async Task<AgentDTO> UpdateAgent(Guid id, AgentDTO agent)
     {
         using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         using (var connection = connectionFactory.CreateConnection())

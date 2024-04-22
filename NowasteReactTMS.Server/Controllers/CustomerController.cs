@@ -29,6 +29,14 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok(customer);
         }
 
+        [HttpGet("CustomerList")]
+        public async Task<IActionResult> GetAllCustomers()
+        {
+            var customer = await _customerRepo.GetCustomerList();
+
+            return Ok(customer);
+        }
+
         /// <summary>
         /// Displays all active Customers
         /// </summary>
