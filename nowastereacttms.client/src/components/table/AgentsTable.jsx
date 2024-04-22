@@ -60,19 +60,25 @@ const AgentTable = () => {
   };
 
   const handleEdit = (item) => {
+    console.log("ID", item.agentPK);
     setEditItem(item);
     setIsEditFormOpen(true);
   };
 
   const handleSave = async (updatedItem) => {
     try {
-      await updateAgent(updatedItem.id, updatedItem);
+      const agentPK = updatedItem.agentPK || updatedItem.id;  
+      if (!agentPK) {
+        throw new Error('AgentPK is missing');
+      }
+      await updateAgent(agentPK, updatedItem);
       fetchAgents();
       setIsEditFormOpen(false);
     } catch (error) {
       console.error('Error updating agent: ', error.message);
     }
   };
+  
 
   const handleCancel = () => {
     setIsEditFormOpen(false);

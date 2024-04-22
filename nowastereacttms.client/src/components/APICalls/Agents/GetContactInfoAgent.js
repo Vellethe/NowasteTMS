@@ -14,7 +14,6 @@ const getContactInformation = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     throw new Error('Error fetching contact information: ' + error.message);
