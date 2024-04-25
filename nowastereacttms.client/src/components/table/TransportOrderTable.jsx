@@ -12,11 +12,13 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllTransportOrders from '../APICalls/TransportOrders/GetAllTransportOrders';
+import getAllServices from '../APICalls/Service/GetAllServices';
 
 const TransportOrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [data, setData] = useState([]);
+  const [services, setServices] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [columnFilters, setColumnFilters] = useState({});
 
@@ -48,27 +50,27 @@ const TransportOrderTable = () => {
     },
     {
       header: "From Country",
-      accessorKey: "transportOrderLines[0].fromContactInformation.country",
+      accessorKey: "transportOrderLines.0.fromContactInformation.country",
     },
     {
       header: "From City",
-      accessorKey: "transportOrderLines[0].fromContactInformation.city",
+      accessorKey: "transportOrderLines.0.fromContactInformation.city",
     },
     {
       header: "Lines",
       accessorKey: "transportOrderLines.length",
     },
     {
-      header: "Sea Pallets",
-      accessorKey: "PalletQty",
-    },
-    {
       header: "Eur Pallets",
       accessorKey: "eurPalletQty",
     },
     {
+      header: "Sea Pallets",
+      accessorKey: "PalletQty",
+    },
+    {
       header: "Transporter",
-      accessorKey: "transportOrderLines.[0]agent.businessUnit.name",
+      accessorKey: "transportOrderLines.0.agent.businessUnit.name",
     },
     {
       header: "Vehicle",
@@ -92,7 +94,7 @@ const TransportOrderTable = () => {
     },
     {
       header: "ETA To",
-      accessorKey: "dDeliveryDate",
+      accessorKey: "DdeliveryDate",
     },
     {
       header: "ETA Weekday",
@@ -100,23 +102,23 @@ const TransportOrderTable = () => {
     },
     {
       header: "To Country",
-      accessorKey: "transportOrderLines[0].toContactInformation.country",
+      accessorKey: "transportOrderLines.0.toContactInformation.country",
     },
     {
       header: "To City",
-      accessorKey: "transportOrderLines[0].toContactInformation.city",
+      accessorKey: "transportOrderLines.0.toContactInformation.city",
     },
     {
       header: "Customer Name",
-      accessorKey: "ToCustomerName",
+      accessorKey: "transportOrderLines.0.toCustomerName",
     },
     {
       header: "Supplier name",
-      accessorKey: "FromSupplierName",
+      accessorKey: "transportOrderLines.0.fromSupplierName",
     },
     {
       header: "Internal comment",
-      accessorKey: "InternalComment",
+      accessorKey: "internalComment",
     },
     {
       header: "Updated by",
@@ -137,11 +139,12 @@ const TransportOrderTable = () => {
   ];
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         const response = await getAllTransportOrders();
+        const serviceResponse = await getAllServices();
         setData(response.transportOrders); // Set the fetched transport orders to data
+        setServices(serviceResponse);
       } catch (error) {
         console.error('Error fetching transportorders:', error);
       }
@@ -257,7 +260,10 @@ const TransportOrderTable = () => {
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                     >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header, 
+                        header.getContext()
+                      )}
                       {
                         {
                           asc: <FaArrowUp />,
@@ -289,11 +295,9 @@ const TransportOrderTable = () => {
               .filter((row) => filterData(row.original)) // Apply filtering
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                  <td className="border p-1 text-center">
-                    <input type="checkbox" />
-                  </td>
+                  <td className=""></td>
                   {row.getVisibleCells().map((cell) => (
-                    <td className="border p-1 text-center" key={cell.id}>
+                    <td className="border p-1 text-center truncate" key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

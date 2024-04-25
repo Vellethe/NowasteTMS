@@ -311,7 +311,7 @@ const OrderTable = () => {
             ref={tableRef}
             className="table-fixed border-x border-b w-full"
           >
-            <thead className="border ">
+            <thead className="border">
               {table.getHeaderGroups().map((headerGroup) => (
                 <React.Fragment key={headerGroup.id}>
                   <tr>
@@ -358,7 +358,7 @@ const OrderTable = () => {
                 .rows.filter((row) => filterData(row.original)) // Apply filtering
                 .map((row) => (
                   <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
-                    <td className=" border-b p-1 text-center flex gap-2 truncate">
+                    <td className="border-b p-1 text-center flex gap-2 truncate">
                       <input
                         className="accent-medium-green h-5 w-5 rounded-xl ml-1"
                         type="checkbox"
