@@ -7,34 +7,36 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from "@tanstack/react-table";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import SearchBar from '../Searchbar';
 import getAllTransportOrders from '../APICalls/TransportOrders/GetAllTransportOrders';
 
-const OrderTable = () => {
+const TransportOrderTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [data, setData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [columnFilters, setColumnFilters] = useState({});
 
   /**@type import('@tanstack/react-table').ColumnDef<any> */
   const columns = [
     {
       header: "OrderId",
-      accessorKey: "OrderIds",
+      accessorKey: "order.orderId",
     },
     {
       header: "Status",
-      accessorKey: "OrderStatusString",
+      accessorKey: "orderstatus",
     },
     {
       header: "Pickup from ",
-      accessorKey: "CollectionDate",
+      accessorKey: "collectionDate",
     },
     {
       header: "Pickup to",
-      accessorKey: "CollectionDateTo",
+      accessorKey: "originalDeliveryDate",
     },
     {
       header: "Pickup weekday",
@@ -42,19 +44,19 @@ const OrderTable = () => {
     },
     {
       header: "Ref",
-      accessorKey: "TransportOrderID",
+      accessorKey: "transportOrderID",
     },
     {
       header: "From Country",
-      accessorKey: "FromCountry",
+      accessorKey: "transportOrderLines[0].fromContactInformation.country",
     },
     {
       header: "From City",
-      accessorKey: "FromCity",
+      accessorKey: "transportOrderLines[0].fromContactInformation.city",
     },
     {
       header: "Lines",
-      accessorKey: "TransportOrderLineCount",
+      accessorKey: "transportOrderLines.length",
     },
     {
       header: "Sea Pallets",
@@ -62,15 +64,15 @@ const OrderTable = () => {
     },
     {
       header: "Eur Pallets",
-      accessorKey: "EurPalletQty",
+      accessorKey: "eurPalletQty",
     },
     {
       header: "Transporter",
-      accessorKey: "AgentName",
+      accessorKey: "transportOrderLines.[0]agent.businessUnit.name",
     },
     {
       header: "Vehicle",
-      accessorKey: "VehicleRegistrationPlate",
+      accessorKey: "vehicleRegistrationPlate",
     },
     {
       header: "Services",
@@ -78,19 +80,19 @@ const OrderTable = () => {
     },
     {
       header: "Price",
-      accessorKey: "Price",
+      accessorKey: "price",
     },
     {
       header: "Currency",
-      accessorKey: "TOCurrencyShortName",
+      accessorKey: "currency.shortName",
     },
     {
       header: "ETA From",
-      accessorKey: "DeliveryDate",
+      accessorKey: "deliveryDate",
     },
     {
       header: "ETA To",
-      accessorKey: "EtaTo",
+      accessorKey: "dDeliveryDate",
     },
     {
       header: "ETA Weekday",
@@ -98,11 +100,11 @@ const OrderTable = () => {
     },
     {
       header: "To Country",
-      accessorKey: "ToCountry",
+      accessorKey: "transportOrderLines[0].toContactInformation.country",
     },
     {
       header: "To City",
-      accessorKey: "ToCity",
+      accessorKey: "transportOrderLines[0].toContactInformation.city",
     },
     {
       header: "Customer Name",
@@ -118,15 +120,15 @@ const OrderTable = () => {
     },
     {
       header: "Updated by",
-      accessorKey: "Email",
+      accessorKey: "updatedByUserId",
     },
     {
       header: "Update from",
-      accessorKey: "Updated",
+      accessorKey: "updated",
     },
     {
       header: "Update to",
-      accessorKey: "UpdateTo",
+      accessorKey: "updateds",
     },
     {
       header: "Update Week Day",
@@ -135,32 +137,18 @@ const OrderTable = () => {
   ];
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
-        const data = await getAllTransportOrders();
-        const transformedData = data.transportOrders.map(row => ({
-          ...row,
-          collectionDateWD: getWeekdayFromDate(row.collectionDate), // Pickup Weekday
-          DeliveryDateWD: getWeekdayFromDate(row.transportOrder.deliveryDate), // ETA Weekday
-          updatedWD: getWeekdayFromDate(row.updated) // Update Weekday
-        }));
-        setTableData(transformedData);
+        const response = await getAllTransportOrders();
+        setData(response.transportOrders); // Set the fetched transport orders to data
       } catch (error) {
-        console.error('Error fetching transportorder:', error);
+        console.error('Error fetching transportorders:', error);
       }
     };
 
     fetchData();
   }, []);
-
-  const fetchTransportOrders = async () => {
-    try {
-      const transportOrders = await getAllTransportOrders();
-      setData(transportOrders);
-    } catch (error) {
-      console.error('Error fetching transportorders: ', error.message);
-    }
-  };
 
   const table = useReactTable({
     data,
@@ -183,10 +171,9 @@ const OrderTable = () => {
 
   useEffect(() => {
     setSelectedColumns(columns);
-    fetchTransportOrders();
   }, []); // Empty dependency array so it only runs once
 
-  const defaultSelectedAccessorKeys = [ 'OrderIds', 'OrderTransportStatusString', 'Price', 'EtaTo', 'VehicleRegistrationPlate'];
+  const defaultSelectedAccessorKeys = ['OrderIds', 'OrderTransportStatusString', 'Price', 'EtaTo', 'VehicleRegistrationPlate'];
   const defaultSelectedColumns = columns.filter(column => defaultSelectedAccessorKeys.includes(column.accessorKey));
 
   const handleColumnSelection = (selectedOptions) => {
@@ -205,7 +192,7 @@ const OrderTable = () => {
       .map(option => columns.find(column => column && column.accessorKey === option.value))
       .filter(column => column); // Filter out undefined or null columns
 
-    // Merge default  columns with new columns
+    // Merge default columns with new columns
     const updatedSelectedColumns = [...defaultSelectedColumns, ...selectedColumns];
     setSelectedColumns(updatedSelectedColumns);
   };
@@ -222,8 +209,6 @@ const OrderTable = () => {
     XLSX.utils.book_append_sheet(wb, ws, "TransportOrders");
     XLSX.writeFile(wb, "TransportOrders.xlsx");
   };
-
-  const [columnFilters, setColumnFilters] = useState({});
 
   // Function to update filter value for a column
   const handleColumnFilterChange = (columnId, value) => {
@@ -245,41 +230,40 @@ const OrderTable = () => {
   };
 
   return (
-    <div className="text-dark-green text-sm w-full">
-      <button
-        className="text-medium-blue duration-200 bg-blue hover:bg-medium-green focus:ring-2 focus:outline-none focus:ring-dark-green mb-3 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center"
-        type="button"
-      >
-        Columns
+    <div className="text-dark-green w-full">
+      <div className="flex justify-between mb-3">
         <Select
+          className="text-dark-green duration-500 cursor-pointer ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
           options={options}
           isMulti
           onChange={handleColumnSelection}
-          defaultValue={selectedColumns.map(column => ({
+          placeholder="Columns"
+          defaultValue={selectedColumns.map((column) => ({
             value: column.accessorKey,
             label: column.header,
           }))}
         />
-      </button>
+      </div>
       <div className="overflow-auto relative">
-        <table ref={tableRef} className="border-x border-b w-full">
+        <table ref={tableRef} className="table-fixed border-x border-b w-full">
           <thead className="border">
             {table.getHeaderGroups().map((headerGroup) => (
               <React.Fragment key={headerGroup.id}>
                 <tr>
-                  <th className="border p-2 bg-white relative">
-                    <p>Buttons</p>
-                  </th>
+                  <th className="border p-2 bg-white relative w-32"></th>
                   {headerGroup.headers.map((header) => (
                     <th
-                      className="border p-2 bg-white relative"
+                      className="border p-2 bg-white relative truncate"
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      {({ asc: <LuChevronsUpDown />, desc: <LuChevronsUpDown /> })[
-                        header.column.getIsSorted()
-                      ]}
+                      {
+                        {
+                          asc: <FaArrowUp />,
+                          desc: <FaArrowDown />,
+                        }[header.column.getIsSorted()]
+                      }
                     </th>
                   ))}
                 </tr>
@@ -288,8 +272,12 @@ const OrderTable = () => {
                     <SearchBar disabled></SearchBar>
                   </th>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      <SearchBar onFilterChange={(value) => handleColumnFilterChange(header.id, value)} />
+                    <th className="" key={header.id}>
+                      <SearchBar
+                        onFilterChange={(value) =>
+                          handleColumnFilterChange(header.id, value)
+                        }
+                      />
                     </th>
                   ))}
                 </tr>
@@ -302,8 +290,6 @@ const OrderTable = () => {
               .map((row) => (
                 <tr className="odd:bg-gray hover:bg-brown" key={row.id}>
                   <td className="border p-1 text-center">
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 1</button>
-                    <button className="appearance-none font-bold border rounded px-2 mr-10">Button 2</button>
                     <input type="checkbox" />
                   </td>
                   {row.getVisibleCells().map((cell) => (
@@ -316,7 +302,6 @@ const OrderTable = () => {
           </tbody>
         </table>
       </div>
-
       <div className="flex justify-center gap-3 mt-2">
         <button
           onClick={() => table.setPageIndex(0)}
@@ -333,8 +318,7 @@ const OrderTable = () => {
         </button>
         <span className="flex items-center gap-1">
           <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
           </strong>
         </span>
         <button
@@ -364,15 +348,14 @@ const OrderTable = () => {
             </option>
           ))}
         </select>
-
       </div>
       <div className="flex gap-2 justify-end mr-2">
         <button onClick={exportToExcel} className="flex items-center gap-2 text-2xl">
           <SiMicrosoftexcel />
-          Excel {/*  Detta kan tas bort eller bytas mot en tydligare excel icon*/}
+          Excel {/* Detta kan tas bort eller bytas mot en tydligare excel icon */}
         </button>
       </div>
     </div>
   );
 }
-export default OrderTable;
+export default TransportOrderTable;

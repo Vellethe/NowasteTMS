@@ -24,7 +24,7 @@ const OrderTable = () => {
   const [columnFilters, setColumnFilters] = useState({});
   const [selectedRow, setSelectedRow] = useState(null);
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     {
@@ -289,7 +289,7 @@ const OrderTable = () => {
     <div className="text-dark-green w-full">
       <div className="flex justify-between mb-3">
         <Select
-          className="text-dark-green duration-500 cursor-pointer  ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
+          className="text-dark-green duration-500 cursor-pointer ring-medium-green ring-2 bg-medium-green font-medium rounded text-xl mb-2 inline-flex "
           options={options}
           isMulti
           onChange={handleColumnSelection}

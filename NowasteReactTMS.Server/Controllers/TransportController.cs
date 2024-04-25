@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure;
+using Humanizer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
@@ -9,6 +11,7 @@ using NowasteReactTMS.Server.Models;
 using NowasteReactTMS.Server.Models.TransportDTOs;
 using NowasteReactTMS.Server.Repositories.Interface;
 using NowasteTms.Model;
+using NuGet.Protocol.Core.Types;
 using NuGet.Protocol.Plugins;
 using System.Globalization;
 
@@ -199,75 +202,97 @@ namespace NowasteReactTMS.Server.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        //public async Task<IActionResult> SearchTransportOrders(SearchOrderDTO dto)
-        //{
-        //    var searchParameters = new SearchParameters
-        //    {
-        //        Limit = dto.Size,
-        //        Offset = dto.Page * dto.Size,
-        //        Filters = dto.Filter,
-        //        SortOrders = dto.Column
-        //    };
-
-        //    var user = await _userManager.GetUserAsync(User);
-
-        //    List<TransportOrder> transportOrders = new List<TransportOrder>();
-
-        //    if (User.IsInRole(Constants.ROLE_ADMIN) || User.IsInRole(Constants.ROLE_SUPERUSER) || User.IsInRole(Constants.ROLE_STANDARDUSER))
-        //    {
-        //        var response = await _transportOrderRepo.SearchOrders(searchParameters, null, dto.Historical);
-        //        transportOrders.AddRange(response.TransportOrders);
-        //    }
-        //    else if (User.IsInRole(Constants.ROLE_AGENT) && user.BusinessUnitId != null)
-        //    {
-        //        var response = await _transportOrderRepo.SearchOrders(searchParameters, user.BusinessUnitId, dto.Historical);
-        //        transportOrders.AddRange(response.TransportOrders);
-        //    }
-
-        //    return Ok(transportOrders);
-        //}
         [HttpPost]
-        public async Task<IActionResult> Consolidate(TransportViewDTO dto)
+        public async Task<IActionResult> SearchTransportOrders(SearchOrderDTO dto)
         {
-            var transportOrderPks = dto.CheckedTransportOrderPKs.Split(",");
-            var transportOrders = transportOrderPks.Select(async x => await _transportOrderRepo.Get(new Guid(x))).Select(x => x.Result);
-            var orders = transportOrders.SelectMany(x => x.OrderTransportOrders.Select(y => y.OrderPK)).Select(async x => await _orderRepository.GetOrder(x)).Select(x => x.Result);
-            var allServices = await _transportOrderServiceRepo.GetAllTransportOrderServices(transportOrders.First().TransportOrderLines.First().AgentPK, true);
-            var selectedServicePKs = transportOrders.SelectMany(x => x.TransportOrderLines)
-                .SelectMany(x => x.TransportOrderLineTransportOrderServices).Select(x => x.TransportOrderServicePK);
-            var commonAgentForAllOrderLines = await _agentRepository.GetAgent(transportOrders.First().TransportOrderLines.First().AgentPK.Value);
-
-            var cdto = new ConsolidateDTO
+            try
             {
-                TransportOrders = transportOrders.ToList(),
-                Orders = orders.ToList(),
-                Services = allServices,
-                TotalFullTruckPrice = transportOrders.Sum(x => x.Price),
-                CurrencyPK = transportOrders.First().CurrencyPK,
-                AgentEmailAddresses = _emailHandler.GetListOfAgentsEmailAddresses(commonAgentForAllOrderLines),
-                AgentPK = commonAgentForAllOrderLines.AgentPK,
-                ConsolidateServicesViewModel = new ConsolidateServiceDTO
+                var searchParameters = new SearchParameters
                 {
-                    UnselectedServices = allServices.Where(x => x.isActive && !selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
-                    {
-                        Id = x.CurrencyPK,
-                        Name = x.Name,
-                        Currency = x.Currency,
-                        Price = x.Price
-                    }).ToList(),
-                    SelectedServices = allServices.Where(x => selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
-                    {
-                        Id = x.TransportOrderServicePK,
-                        Name = x.Name,
-                        Currency = x.Currency,
-                        Price = x.Price
-                    }).ToList()
-                }
-            };
+                    Limit = dto.Size,
+                    Offset = dto.Page * dto.Size,
+                    Filters = dto.Filter,
+                    SortOrders = dto.Column
+                };
 
-            cdto.TransportOrders = cdto.TransportOrders.OrderBy(p => p.TransportOrderID).ToList();
+                var response = await _transportOrderRepo.SearchOrders(searchParameters, null, dto.Historical);
 
-            return Ok(cdto);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
     }
+    //{
+    //    var searchParameters = new SearchParameters
+    //    {
+    //        Limit = dto.Size,
+    //        Offset = dto.Page * dto.Size,
+    //        Filters = dto.Filter,
+    //        SortOrders = dto.Column
+    //    };
+
+    //    var user = await _userManager.GetUserAsync(User);
+
+    //var transportOrders = new List<TransportOrder>();
+    //var count = 0;
+
+    //    if (User.IsInRole(Constants.ROLE_ADMIN) || User.IsInRole(Constants.ROLE_SUPERUSER) || User.IsInRole(Constants.ROLE_STANDARDUSER))
+    //    {
+    //        var response = await _transportOrderRepo.SearchOrders(searchParameters, null, dto.Historical);
+    //        transportOrders.AddRange(response.TransportOrders);
+    //    }
+    //    else if (User.IsInRole(Constants.ROLE_AGENT) && user.BusinessUnitId != null)
+    //    {
+    //        var response = await _transportOrderRepo.SearchOrders(searchParameters, user.BusinessUnitId, dto.Historical);
+    //        transportOrders.AddRange(response.TransportOrders);
+    //    }
+
+    //    return Ok(transportOrders);
+    //}
+    //[HttpPost]
+    //public async Task<IActionResult> Consolidate(TransportViewDTO dto)
+    //{
+    //    var transportOrderPks = dto.CheckedTransportOrderPKs.Split(",");
+    //    var transportOrders = transportOrderPks.Select(async x => await _transportOrderRepo.Get(new Guid(x))).Select(x => x.Result);
+    //    var orders = transportOrders.SelectMany(x => x.OrderTransportOrders.Select(y => y.OrderPK)).Select(async x => await _orderRepository.GetOrder(x)).Select(x => x.Result);
+    //    var allServices = await _transportOrderServiceRepo.GetAllTransportOrderServices(transportOrders.First().TransportOrderLines.First().AgentPK, true);
+    //    var selectedServicePKs = transportOrders.SelectMany(x => x.TransportOrderLines)
+    //        .SelectMany(x => x.TransportOrderLineTransportOrderServices).Select(x => x.TransportOrderServicePK);
+    //    var commonAgentForAllOrderLines = await _agentRepository.GetAgent(transportOrders.First().TransportOrderLines.First().AgentPK.Value);
+
+    //    var cdto = new ConsolidateDTO
+    //    {
+    //        TransportOrders = transportOrders.ToList(),
+    //        Orders = orders.ToList(),
+    //        Services = allServices,
+    //        TotalFullTruckPrice = transportOrders.Sum(x => x.Price),
+    //        CurrencyPK = transportOrders.First().CurrencyPK,
+    //        AgentEmailAddresses = _emailHandler.GetListOfAgentsEmailAddresses(commonAgentForAllOrderLines),
+    //        AgentPK = commonAgentForAllOrderLines.AgentPK,
+    //        ConsolidateServicesViewModel = new ConsolidateServiceDTO
+    //        {
+    //            UnselectedServices = allServices.Where(x => x.isActive && !selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
+    //            {
+    //                Id = x.CurrencyPK,
+    //                Name = x.Name,
+    //                Currency = x.Currency,
+    //                Price = x.Price
+    //            }).ToList(),
+    //            SelectedServices = allServices.Where(x => selectedServicePKs.Contains(x.TransportOrderServicePK)).Select(x => new TransportOrderServiceDTO
+    //            {
+    //                Id = x.TransportOrderServicePK,
+    //                Name = x.Name,
+    //                Currency = x.Currency,
+    //                Price = x.Price
+    //            }).ToList()
+    //        }
+    //    };
+
+    //    cdto.TransportOrders = cdto.TransportOrders.OrderBy(p => p.TransportOrderID).ToList();
+
+    //    return Ok(cdto);
+    //}
 }
