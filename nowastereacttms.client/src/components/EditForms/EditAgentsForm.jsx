@@ -11,10 +11,9 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
     setEditedItem({ ...item });
     const fetchContactInfo = async () => {
       try {
-        console.log("Item:", item)
         const data = await getContactInformation(item.businessUnit.businessUnitPK);
         setContactInfo(data);
-        setExpandedContacts(Array(data.length).fill(false));
+        setExpandedContacts(Array(data.length).fill(true)); //false to show customers closed, true if you show them opened
       } catch (error) {
         console.error('Error fetching contact information:', error.message);
       }
@@ -23,9 +22,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
   }, [item]);
 
   const handleSave = async () => {
-    console.log("Edited ID:", editedItem);
+    console.log("Edited Item:", editedItem);
+    console.log ("Edited ID:", editedItem.agentPK);
     try {
-      const updatedData = await updateAgent(editedItem.id, editedItem);
+      const updatedData = await updateAgent(editedItem.agentPK, editedItem);
       console.log("Updated ID:", updatedData);
       onSave(updatedData);
     } catch (error) {
