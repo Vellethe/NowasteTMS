@@ -8,6 +8,8 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { SiMicrosoftexcel } from "react-icons/si";
+import * as XLSX from "xlsx";
 import { IoIosWarning } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa6";
 import { MdOutlineStopCircle } from "react-icons/md";
@@ -164,6 +166,13 @@ const OrderTable = () => {
 
     fetchData();
   }, []);
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Orders");
+    XLSX.writeFile(wb, "Orders.xlsx");
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -446,12 +455,6 @@ const OrderTable = () => {
         </button>
       </div>
       <div className="flex justify-center mt-4">
-      <Link
-            to={`/Transport/Order/Editorder?selectedIds=${selectedRow || ''}`}
-            className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg ml-6 text-2xl border border-medium-green"
-          >
-            Edit Order
-          </Link>
         <select
           id="showbutton"
           className="cursor-pointer bg-medium-green duration-200 hover:bg-brown  py-2 rounded text-white text-center"
@@ -467,7 +470,33 @@ const OrderTable = () => {
           ))}
         </select>
       </div>
+      <hr className="m-4"></hr>
+        <div className="flex justify-between">
+          <Link
+            to={`/Transport/Order/Editorder?selectedIds=${selectedRow || ''}`}
+            className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg ml-6 text-2xl border border-medium-green"
+          >
+            Edit Order
+          </Link>
+          <div className="flex gap-2">
+            <button
+              onClick={exportToExcel}
+              className="p-2 duration-200 hover:bg-medium-green hover:text-white rounded-lg mr-3 text-2xl border border-medium-green flex items-center"
+            >
+              <SiMicrosoftexcel className="mr-2" />
+              Excel
+            </button>
+
+            <Link
+              to="/Transport/OrderDetails/Details"
+              className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg mr-6 text-2xl border border-medium-green"
+            >
+              Group
+            </Link>
+          </div>
+        </div>
     </div>
+    
   );
 };
 export default OrderTable;
