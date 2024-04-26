@@ -14,7 +14,6 @@ import getAllAgents from '../APICalls/Agents/GetAllAgents';
 import updateAgent from '../APICalls/Agents/UpdateAgent';
 import EditAgentsForm from '../EditForms/EditAgentsForm';
 import AgentDisplayView from '../DetailsViews/AgentDetail';
-import getContactInformation from '../APICalls/Agents/GetContactInfoAgent';
 
 const AgentTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -115,7 +114,6 @@ const AgentTable = () => {
   useEffect(() => {
     setSelectedColumns(columns);
     fetchAgents();
-    getContactInformation();
   }, []); // Empty dependency array so it only runs once
 
   const exportToExcel = () => {

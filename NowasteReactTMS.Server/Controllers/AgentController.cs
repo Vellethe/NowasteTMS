@@ -65,6 +65,13 @@ namespace NowasteReactTMS.Server.Controllers
             return Ok(contacts);
         }
 
+        [HttpGet("BusinessUnitPK")]
+        public async Task<IActionResult> BusinessUnitContactInfoForAgent(Guid businessUnitPK)
+        {
+            var contact = await _contactInformationRepo.GetForBusinessUnits([businessUnitPK]);
+            return Ok(contact);
+        }
+
         /// <summary>
         /// Display one Agents details by searching on their PK
         /// </summary>

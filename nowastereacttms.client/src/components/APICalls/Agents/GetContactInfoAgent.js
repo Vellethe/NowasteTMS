@@ -1,8 +1,8 @@
 import { baseUrl } from "../API";
 
-const getContactInformation = async () => {
+const getContactInformation = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/Agent/Contacts`, {
+    const response = await fetch(`${baseUrl}/Agent/BusinessUnitPK?businessUnitPK=${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

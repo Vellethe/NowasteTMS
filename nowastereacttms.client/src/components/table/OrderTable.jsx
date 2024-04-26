@@ -14,6 +14,7 @@ import { MdOutlineStopCircle } from "react-icons/md";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import SearchBar from "../Searchbar";
 import getAllOrders from "../APICalls/Orders/GetAllOrders";
+import { Link } from "react-router-dom";
 // import updateOrder from './APICalls/Orders/UpdateOrder'
 
 
@@ -445,6 +446,12 @@ const OrderTable = () => {
         </button>
       </div>
       <div className="flex justify-center mt-4">
+      <Link
+            to={`/Transport/Order/Editorder?selectedIds=${selectedRow || ''}`}
+            className="p-2 duration-300 hover:bg-medium-green hover:text-white rounded-lg ml-6 text-2xl border border-medium-green"
+          >
+            Edit Order
+          </Link>
         <select
           id="showbutton"
           className="cursor-pointer bg-medium-green duration-200 hover:bg-brown  py-2 rounded text-white text-center"

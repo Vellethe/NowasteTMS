@@ -105,7 +105,7 @@ namespace NowasteReactTMS.Server.Controllers
 
                 await _transportZonePriceRepo.Update(pk, updatePrice);
 
-                return Ok();
+                return Ok(new { status = "Order edited" });
             }
             catch (Exception ex)
             {

@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import updateAgent from '../APICalls/Agents/UpdateAgent';
+import getContactInformation from '../APICalls/Agents/GetContactInfoAgent'
 
 const EditAgentsForm = ({ item, onSave, onCancel }) => {
   const [editedItem, setEditedItem] = useState({});
+  const [contactInfo, setContactInfo] = useState(null);
 
   useEffect(() => {
-    console.log("Item:", item);
     setEditedItem({ ...item });
+    
+    const fetchContactInfo = async () => {
+      try {
+          console.log("Item:", item)
+          const data = await getContactInformation(item.businessUnit.businessUnitPK);
+          setContactInfo(data);
+        } catch (error) {
+          console.error('Error fetching contact information:', error.message);
+        }
+      };
+      fetchContactInfo();
   }, [item]);
 
   const handleSave = async () => {
@@ -70,7 +82,7 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
           </label>
           </div>
           <h3 className="text-lg text-center font-semibold mt-4 mb-4">Contact Information</h3>
-          {editedItem.businessUnit?.contactInformations?.map((contact, index) => (
+          {contactInfo?.map((contact, index) => (
             <div key={index} className="mb-4">
               <div className="flex justify-between mb-2">
                 <label className="w-1/2 mr-2">
@@ -82,10 +94,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, phone: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -101,10 +113,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, cellularPhone: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -122,10 +134,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, email: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -141,10 +153,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, fax: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -163,10 +175,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, address: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -182,10 +194,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, zipcode: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -203,10 +215,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, city: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
@@ -222,10 +234,10 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
                       ...editedItem,
                       businessUnit: {
                         ...editedItem.businessUnit,
-                        contactInformations: [
-                          ...editedItem.businessUnit.contactInformations.slice(0, index),
+                        contactInfo: [
+                          ...contactInfo.slice(0, index),
                           { ...contact, country: e.target.value },
-                          ...editedItem.businessUnit.contactInformations.slice(index + 1),
+                          ...contactInfo.slice(index + 1),
                         ],
                       },
                     })}
