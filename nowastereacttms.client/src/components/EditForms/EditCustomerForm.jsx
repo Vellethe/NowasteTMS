@@ -14,17 +14,26 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
         const data = await getContactInformation(item.businessUnit.businessUnitPK);
         setContactInfo(data);
         setExpandedContacts(Array(data.length).fill(true)); //false to show customers closed, true if you show them opened
+        setEditedItem(prevItem => ({
+          ...prevItem,
+          businessUnit: {
+            ...prevItem.businessUnit,
+            contactInformations: data
+          }
+        }))
       } catch (error) {
         console.error("Error fetching contact information". error.message);
       }
     };
     fetchContactInfo();
+    setEditedItem({ ...item });
   }, [item]);
 
   const handleSave = async () => {
     console.log("Edited ID:", editedItem);
+    console.log ("Edited ID:", editedItem.customerPK);
     try {
-      const updatedData = await updateCustomer(editedItem.id, editedItem);
+      const updatedData = await updateCustomer(editedItem.customerPK, editedItem);
       console.log("Updated ID:", updatedData);
       onSave(updatedData);
     } catch (error) {
