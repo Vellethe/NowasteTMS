@@ -1,6 +1,23 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import getContactInformation from '../APICalls/Agents/GetContactInfoAgent';
 
 const AgentDisplayView = ({ item, onClose }) => {
+  const [contactInfo, setContactInfo] = useState([]);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const contactData = await getContactInformation(item.businessUnit?.businessUnitPK);
+        setContactInfo(contactData);
+        console.log("businessUnit", contactData);
+      } catch (error) {
+        console.error('Error fetching contact information:', error);
+      }
+    };
+    
+    fetchContactInfo();
+  }, [item.businessUnit?.businessUnitPK]);
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg w-1/3">
@@ -24,39 +41,39 @@ const AgentDisplayView = ({ item, onClose }) => {
           </div>
 
           <h3 className="text-lg font-semibold mt-4 mb-4">Contact Information</h3>
-          {item.businessUnit?.contactInformations?.map((contact, index) => (
+          {contactInfo.map((contact, index) => (
             <div key={index} className="mb-4">
               <div className="mb-2">
                 <span className="font-semibold mr-2">Phone:</span>
-                <span>{contact.phone || ''}</span>
+                <span>{contact.phone || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Cellular Phone:</span>
-                <span>{contact.cellularPhone || ''}</span>
+                <span>{contact.cellularPhone || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Email:</span>
-                <span>{contact.email || ''}</span>
+                <span>{contact.email || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Fax:</span>
-                <span>{contact.fax || ''}</span>
+                <span>{contact.fax || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Address:</span>
-                <span>{contact.address || ''}</span>
+                <span>{contact.address || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Zipcode:</span>
-                <span>{contact.zipcode || ''}</span>
+                <span>{contact.zipcode || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">City:</span>
-                <span>{contact.city || ''}</span>
+                <span>{contact.city || "None"}</span>
               </div>
               <div className="mb-2">
                 <span className="font-semibold mr-2">Country:</span>
-                <span>{contact.country || ''}</span>
+                <span>{contact.country || "None"}</span>
               </div>
             </div>
           ))}
