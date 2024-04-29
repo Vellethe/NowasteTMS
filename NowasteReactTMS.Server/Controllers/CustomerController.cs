@@ -132,65 +132,31 @@ namespace NowasteReactTMS.Server.Controllers
         /// <param name="pk"></param>
         /// <returns></returns>
         [HttpPut("{pk}")]
-        public async Task<IActionResult> EditCustomer(CustomerDTO customerViewModel, Guid pk)
+        public async Task<IActionResult> EditCustomer(Guid pk, [FromBody] Customer updatedCustomer)
         {
-            var ci = new List<ContactInformation>();
-
-            if (customerViewModel.BusinessUnit?.ContactInformations != null)
+            try
             {
-                foreach (var c in customerViewModel.BusinessUnit.ContactInformations)
+                if (pk != updatedCustomer.CustomerPK)
                 {
-                    if (c != null)
-                    {
-                        ci.Add(new ContactInformation
-                        {
-                            BusinessUnitPK = c.BusinessUnitPK,
-                            IsDefault = c.IsDefault,
-                            References = c.References,
-                            ContactInformationPK = c.ContactInformationPK,
-                            Email = c.Email,
-                            Phone = c.Phone,
-                            CellularPhone = c.CellularPhone,
-                            Fax = c.Fax,
-                            Address = c.Address,
-                            Zipcode = c.Zipcode,
-                            City = c.City,
-                            Country = c.Country,
-                            IsActive = c.IsActive,
-                            ExternalId = c.ExternalId,
-                            Description = c.Description,
-                            IsEditable = c.IsEditable
-                        });
-                    }
+                    return BadRequest("Customer ID in the URL does not match the one in the request body.");
                 }
+
+                    updatedCustomer.BusinessUnit.Company = "1";
+                    updatedCustomer.BusinessUnit.FinanceInformation.VAT = null;
+
+                // Update the customer information in the repository
+                await _customerRepo.UpdateCustomer(pk, updatedCustomer);
+
+                return Ok(new { message = "Edit successful" });
             }
-
-            var customer = new Customer
+            catch (Exception ex)
             {
-                CustomerPK = customerViewModel.CustomerPK,
-                CustomerID = customerViewModel.CustomerID,
-                BusinessUnitPK = customerViewModel.BusinessUnitPK,
-                BusinessUnit = new BusinessUnit
-                {
-                    Name = customerViewModel.BusinessUnit.Name,
-                    IsEditable = customerViewModel.BusinessUnit.IsEditable,
-                    Company = customerViewModel.BusinessUnit.Company,
-                    BusinessUnitPK = customerViewModel.BusinessUnit.BusinessUnitPK,
-                    FinanceInformation = new FinanceInformation
-                    {
-                        FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK,
-                        CurrencyPK = customerViewModel.BusinessUnit.FinanceInformation.Currency.CurrencyPK,
-                        VAT = customerViewModel.BusinessUnit.FinanceInformation.VAT
-                    },
-                    ContactInformations = ci.AsEnumerable(),
-                    FinanceInformationPK = customerViewModel.BusinessUnit.FinanceInformationPK
-                }
-            };
-
-            await _customerRepo.UpdateCustomer(pk, customer);
-
-            return Ok(new { message = "Edit successful" });
+                // Log the exception
+                Console.WriteLine($"An error occurred while updating the customer: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the customer.");
+            }
         }
+
         /// <summary>
         /// Deletes a existing Customer (put isActive status to 0)
         /// </summary>

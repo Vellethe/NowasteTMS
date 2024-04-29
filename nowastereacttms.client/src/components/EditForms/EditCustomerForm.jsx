@@ -26,7 +26,6 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
       }
     };
     fetchContactInfo();
-    setEditedItem({ ...item });
   }, [item]);
 
   const handleSave = async () => {
@@ -35,7 +34,8 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
     try {
       const updatedData = await updateCustomer(editedItem.customerPK, editedItem);
       console.log("Updated ID:", updatedData);
-      onSave(updatedData);
+      onSave(editedItem); //Skickar med hela payload men error 400
+      onSave(updatedData); //Skickar med message: "Edit successful" som payload, också error 400
     } catch (error) {
       console.error('Error updating customer:', error.message);
     }
