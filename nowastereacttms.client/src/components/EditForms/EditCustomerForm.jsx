@@ -8,7 +8,6 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
   const [expandedContacts, setExpandedContacts] = useState([]);
 
   useEffect(() => {
-    setEditedItem({ ...item });
     const fetchContactInfo = async () => {
       try {
         const data = await getContactInformation(item.businessUnit.businessUnitPK);
@@ -26,6 +25,7 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
       }
     };
     fetchContactInfo();
+    setEditedItem({ ...item });
   }, [item]);
 
   const handleSave = async () => {
@@ -33,9 +33,7 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
     console.log ("Edited ID:", editedItem.customerPK);
     try {
       const updatedData = await updateCustomer(editedItem.customerPK, editedItem);
-      console.log("Updated ID:", updatedData);
-      onSave(editedItem); //Skickar med hela payload men error 400
-      onSave(updatedData); //Skickar med message: "Edit successful" som payload, också error 400
+      onSave(updatedData); //Failed to update order: undefined (funkar ändå)
     } catch (error) {
       console.error('Error updating customer:', error.message);
     }
