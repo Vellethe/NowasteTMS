@@ -8,7 +8,7 @@ const getAllTransportOrders = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ Size: 35, Page: 0, Filter: {}, Column: {}, "historical": true }),
+      body: JSON.stringify({ Size: 999999, Page: 0, Filter: {}, Column: {}, "historical": true }),
     });
 
     console.log('Response status:', response.status);

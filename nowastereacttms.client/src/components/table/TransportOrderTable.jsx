@@ -34,15 +34,15 @@ const TransportOrderTable = () => {
     },
     {
       header: "Pickup from ",
-      accessorKey: "collectionDate",
+      accessorKey: "arrivalDate",
     },
     {
       header: "Pickup to",
-      accessorKey: "originalDeliveryDate",
+      accessorKey: "collectionDate",
     },
     {
       header: "Pickup weekday",
-      accessorKey: "CollectionDateWD",
+      accessorKey: "collectionDateWD",
     },
     {
       header: "Ref",
@@ -90,15 +90,15 @@ const TransportOrderTable = () => {
     },
     {
       header: "ETA From",
-      accessorKey: "deliveryDate",
+      accessorKey: "createdOn",
     },
     {
       header: "ETA To",
-      accessorKey: "DdeliveryDate",
+      accessorKey: "deliveryDate",
     },
     {
       header: "ETA Weekday",
-      accessorKey: "EtaWeekDay",
+      accessorKey: "deliveryDateWD",
     },
     {
       header: "To Country",
@@ -126,15 +126,15 @@ const TransportOrderTable = () => {
     },
     {
       header: "Update from",
-      accessorKey: "updated",
+      accessorKey: "originalDeliveryDate",
     },
     {
       header: "Update to",
-      accessorKey: "updateds",
+      accessorKey: "updated",
     },
     {
       header: "Update Week Day",
-      accessorKey: "UpdateWeekDay",
+      accessorKey: "updatedWD",
     },
   ];
 
