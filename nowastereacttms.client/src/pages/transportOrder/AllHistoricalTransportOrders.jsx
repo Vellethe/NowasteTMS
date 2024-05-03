@@ -1,4 +1,4 @@
-import TransportOrderTable from '../../components/table/TransportOrderTable'
+import HistoricalTransportOrderTable from '../../components/table/HistoricalTransportOrderTable'
 import { Link } from "react-router-dom";
 
 const AllHistoricalTransportOrders = () => {
@@ -16,7 +16,7 @@ const AllHistoricalTransportOrders = () => {
           </Link>
         </div>
       </div>
-      <TransportOrderTable />
+      <HistoricalTransportOrderTable />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import OrderTable from "../../components/table/OrderTable";
+import HistoricalOrderTable from "../../components/table/HistoricalOrderTable";
 
 const AllHistoricalOrders = () => {
 
@@ -23,7 +23,7 @@ const AllHistoricalOrders = () => {
           </Link>
         </div>
       </div>
-      <OrderTable />
+      <HistoricalOrderTable />
     </div>
     
   );
