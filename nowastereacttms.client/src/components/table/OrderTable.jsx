@@ -222,7 +222,7 @@ const OrderTable = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setSelectedColumns(columns);
+    setSelectedColumns(defaultSelectedColumns);
     fetchOrders();
   }, []); // Empty dependency array so it only runs once
 
