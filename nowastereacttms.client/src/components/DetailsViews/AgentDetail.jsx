@@ -4,6 +4,7 @@ import getContactInformation from '../APICalls/Agents/GetContactInfoAgent';
 const AgentDisplayView = ({ item, onClose }) => {
   const [contactInfo, setContactInfo] = useState([]);
   const [expandedContacts, setExpandedContacts] = useState([]);
+  const [data, setData] =useState([]);
 
   useEffect(() => {
     const fetchContactInfo = async () => {

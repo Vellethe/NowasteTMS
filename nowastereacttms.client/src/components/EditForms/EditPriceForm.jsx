@@ -6,7 +6,6 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
 
   // Update editedItem when item prop changes
   useEffect(() => {
-    console.log("Item prop changed:", item);
     setEditedItem({ ...item });
   }, [item]);
 

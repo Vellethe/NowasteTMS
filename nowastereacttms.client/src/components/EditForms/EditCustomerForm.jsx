@@ -29,8 +29,6 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
   }, [item]);
 
   const handleSave = async () => {
-    console.log("Edited ID:", editedItem);
-    console.log ("Edited ID:", editedItem.customerPK);
     try {
       const updatedData = await updateCustomer(editedItem.customerPK, editedItem);
       onSave(updatedData); //Failed to update order: undefined (funkar ändå)

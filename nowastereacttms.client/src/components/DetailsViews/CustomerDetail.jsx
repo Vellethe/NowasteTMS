@@ -3,7 +3,8 @@ import getContactInformation from '../APICalls/Agents/GetContactInfoAgent';
 
 const CustomerDisplayView = ({ item, onClose }) => {
   const [contactInfo, setContactInfo] = useState([]);
-  const [expandedContacts, setExpandedContacts] = useState([]);
+  const [expandedContacts, setExpandedContacts] = useState([]);  
+  const [data, setData] =useState([]);
 
   useEffect(() => {
     const fetchContactInfo = async () => {

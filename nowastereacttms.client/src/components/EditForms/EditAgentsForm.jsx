@@ -31,7 +31,6 @@ const EditAgentsForm = ({ item, onSave, onCancel }) => {
   const handleSave = async () => {
     try {
       const updatedData = await updateAgent(editedItem.agentPK, editedItem);
-      console.log("Updated ID:", updatedData);
       onSave(updatedData);
     } catch (error) {
       console.error('Error updating agent:', error.message);
