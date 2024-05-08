@@ -14,7 +14,6 @@ const getItems = async() => {
         throw new Error('Failed to fetch items');
       }
       const data = await response.json();
-      console.log(data)
       return data;
     } catch (error) {
       throw new Error('Error fetching itemss: ' + error.message);

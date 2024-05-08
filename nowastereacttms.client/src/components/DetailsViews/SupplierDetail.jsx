@@ -1,7 +1,7 @@
 import React from 'react';
 //Show supplierName, Company, Phone, CellularPhone, Email, Fax, Address, Zipcode, City, Country
 
-const SupplierDisplayView = ({ item, onCancel }) => {
+const SupplierDisplayView = ({ item, onClose }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg w-96">
@@ -22,7 +22,7 @@ const SupplierDisplayView = ({ item, onCancel }) => {
           </div>
         </div>
         <div className="flex justify-end mt-5">
-          <button onClick={onCancel} className="bg-gray-300 text-black font-bold rounded-md">Close</button>
+          <button onClick={onClose} className="bg-gray-300 text-black font-bold rounded-md">Close</button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import updateOrder from "../APICalls/Orders/UpdateOrder";
 import getOrderById from "../APICalls/Orders/GetOrderById";
 import getAllSupplier from "../APICalls/Suppliers/GetAllSuppliers";
@@ -9,7 +9,8 @@ import getItems from "../APICalls/Orders/GetItems";
 import getPalletTypes from "../APICalls/Orders/GetPalletTypes";
 
 const EditOrderForm = () => {
-  const { id } = useParams();
+  const [id, SetId] = useState();
+  const [searchparams, setSearchParams] = useSearchParams();
   const [suppliers, setSuppliers] = useState([]);
   const [customer, setCustomers] = useState([]);
   const [collectionDate, setCollectionDate] = useState(getTodayDate());
@@ -21,7 +22,7 @@ const EditOrderForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const orderData = await getOrderById(id);
+        const orderData = await getOrderById(searchparams.get("selectedIds"));
         setOrder(orderData);
 
         const suppliersData = await getAllSupplier();

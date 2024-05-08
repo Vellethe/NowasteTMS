@@ -30,7 +30,6 @@ const CreateForm = () => {
   
         const itemsData = await getItems();
         setItems(itemsData);
-        console.log(items.itemPK)
       } catch (error) {
         console.error("Error fetching data:", error);
       }

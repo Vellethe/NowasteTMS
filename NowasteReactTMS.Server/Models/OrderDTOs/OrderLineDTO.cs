@@ -13,7 +13,5 @@ namespace NowasteReactTMS.Server.Models.OrderDTOs
         [Range(1, int.MaxValue)] public int ItemQty { get; set; }
 
         [Range(1, 100)] public int PalletQty { get; set; }
-
-        public ItemDTO Item { get; set; } // Referens till ItemDTO
     }
 }

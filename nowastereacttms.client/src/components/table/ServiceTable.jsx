@@ -14,7 +14,6 @@ import getAllServices from '../APICalls/Service/GetAllServices';
 import updateService from '../APICalls/Service/UpdateService';
 import EditServiceForm from '../EditForms/EditServiceForm';
 import ServiceDisplayView from '../DetailsViews/ServiceDetail';
-import getAllAgents from '../APICalls/Agents/GetAllAgents';
 
 const ServiceTable = () => {
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -34,7 +33,7 @@ const ServiceTable = () => {
     },
     {
       header: "Agent",
-      accessorKey: "agent.name",
+      accessorKey: "",
     },
     {
       header: "Price",
@@ -86,16 +85,7 @@ const ServiceTable = () => {
   const fetchServices = async () => {
     try {
       const services = await getAllServices();
-      const agents = await getAllAgents();
-      const servicesWithAgents = services.map(service => {
-        const agent = agents.find(agent => agent.id === service.agentPK);
-        return {
-          ...service,
-          agent: agent ? agent : { name: "Unknown Agent"}
-        };
-      });
-      console.log("Mixedmatch", servicesWithAgents);
-      setData(servicesWithAgents);
+      setData(services);
     } catch (error) {
       console.error('Error fetching services: ', error.message);
     }
