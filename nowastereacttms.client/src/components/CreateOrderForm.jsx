@@ -278,6 +278,7 @@ const CreateForm = () => {
                       );
                       if (selectedItem) {
                         setValue(`lines[${index}].ItemName`, selectedItem.name);
+                        setValue(`lines[${index}].ItemPK`, selectedItem.itemPK);
                       }
                     }}
                   />
@@ -301,6 +302,7 @@ const CreateForm = () => {
                       );
                       if (selectedItem) {
                         setValue(`lines[${index}].ItemName`, selectedItem.name);
+                        setValue(`lines[${index}].ItemPK`, selectedItem.itemPK);
                       }
                     }}
                   
@@ -356,8 +358,8 @@ const CreateForm = () => {
                 itemno: "",
                 ItemName: "",
                 palletqty: "",
-                PalletTypeId: ""
-                
+                PalletTypeId: "",
+                ItemPK: ""
               })
             }
           >
