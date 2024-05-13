@@ -14,27 +14,27 @@ const CreateForm = () => {
   const [deliveryDate, setDeliveryDate] = useState(getTodayDate());
   const [items, setItems] = useState([]);
   const [palletTypes, setPalletTypes] = useState([]);
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const suppliersData = await getAllSupplier();
         setSuppliers(suppliersData);
-  
+
         const palletTypesData = await getPalletTypes();
         setPalletTypes(palletTypesData);
-  
+
         const customersData = await getAllCustomers();
         setCustomers(customersData);
-  
+
         const itemsData = await getItems();
         setItems(itemsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -53,10 +53,7 @@ const CreateForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       const pk = await createOrder(data);
-
-      console.log("Order created with primary key:", pk);
       window.alert("Order created");
       navigate("/Transport/Order/AllOrders");
     } catch (error) {
@@ -305,7 +302,7 @@ const CreateForm = () => {
                         setValue(`lines[${index}].ItemPK`, selectedItem.itemPK);
                       }
                     }}
-                  
+
                   />
                   <datalist id="itemName">
                     {items.map((item) => (
@@ -327,7 +324,7 @@ const CreateForm = () => {
                     // defaultValue={line.palletType}
                     className="w-full h-8 border rounded pl-2 text-center"
                   >
-                    
+
                     {palletTypes.map((palletType) => (
                       <option key={palletType.id} value={palletType.id}>
                         {palletType.description}
@@ -370,7 +367,7 @@ const CreateForm = () => {
 
         {/* Buttons */}
         <div className="flex gap-5 justify-center m-6 ">
-        <button
+          <button
             className="hover:bg-medium-green hover:text-white border mt-3 text-dark-green py-1 px-2 rounded"
             type="submit"
           >
