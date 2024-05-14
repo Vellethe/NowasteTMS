@@ -28,8 +28,13 @@ const EditSupplierForm = ({ item, onSave, onCancel }) => {
     setEditedItem({ ...item });
   }, [item]);
 
-  const handleSave = () => {
-    onSave(editedItem);
+  const handleSave = async () => {
+    try {
+      const updatedData = await updateSupplier(editedItem.supplierPK, editedItem);
+      onSave(updatedData);
+    } catch (error) {
+      console.error("Error updating supplier", error.message);
+    }
   };
 
   const toggleContact = (index) => {

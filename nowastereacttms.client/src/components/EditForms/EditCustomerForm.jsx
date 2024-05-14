@@ -31,7 +31,7 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
   const handleSave = async () => {
     try {
       const updatedData = await updateCustomer(editedItem.customerPK, editedItem);
-      onSave(updatedData); //Failed to update order: undefined (funkar ändå)
+      onSave(updatedData);
     } catch (error) {
       console.error('Error updating customer:', error.message);
     }
