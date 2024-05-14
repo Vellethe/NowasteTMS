@@ -21,7 +21,7 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
           }
         }))
       } catch (error) {
-        console.error("Error fetching contact information". error.message);
+        console.error("Error fetching contact information".error.message);
       }
     };
     fetchContactInfo();
@@ -126,17 +126,17 @@ const EditCustomerForm = ({ item, onSave, onCancel }) => {
                         onChange={(e) => {
                           const userInput = e.target.value;
                           if (/^[0-9+]*$/.test(userInput)) {
-                          const newContactInfo = [...contactInfo];
-                          newContactInfo[index].cellularPhone = e.target.value;
-                          setEditedItem((prevItem) => ({
-                            ...prevItem,
-                            businessUnit: {
-                              ...prevItem.businessUnit,
-                              contactInfo: newContactInfo,
-                            },
-                          }));
-                        }
-                      }}
+                            const newContactInfo = [...contactInfo];
+                            newContactInfo[index].cellularPhone = e.target.value;
+                            setEditedItem((prevItem) => ({
+                              ...prevItem,
+                              businessUnit: {
+                                ...prevItem.businessUnit,
+                                contactInfo: newContactInfo,
+                              },
+                            }));
+                          }
+                        }}
                         className="border-gray-400 border rounded-md px-4 py-2 mt-1 block w-full"
                       />
                     </label>
