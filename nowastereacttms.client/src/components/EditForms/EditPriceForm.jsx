@@ -33,6 +33,7 @@ const EditPriceForm = ({ item, onSave, onCancel }) => {
     return updatePrice(editedItem.price.transportZonePricePK, updatedData)
     .then(() => {
       window.alert("Price edited");
+      window.location.reload();
     });
   };
 
