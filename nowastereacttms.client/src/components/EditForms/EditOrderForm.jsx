@@ -9,7 +9,7 @@ import getItems from "../APICalls/Orders/GetItems";
 import getPalletTypes from "../APICalls/Orders/GetPalletTypes";
 
 const EditOrderForm = () => {
-  const [id, SetId] = useState();
+  const [selectedIds, SetselectedIds] = useState();
   const [searchparams, setSearchParams] = useSearchParams();
   const [suppliers, setSuppliers] = useState([]);
   const [customer, setCustomers] = useState([]);
@@ -42,7 +42,7 @@ const EditOrderForm = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [selectedIds]);
 
   const {
     register,
